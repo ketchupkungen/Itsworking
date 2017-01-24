@@ -1,23 +1,14 @@
 module.exports = class Restrouter {
   
-  constructor(expressApp,_class,className){
+  constructor(expressApp,model,routerName){
 
     this.app = expressApp;
-    this._class = _class;
+    this._class = model;
     
-    // get the class name
-//    var className = _class.name;
-     var className = className;
+    var className = routerName;
     
-    console.log("className: " + className);
-    
-    // for classes created with mongoosefromclass
-    // we need to get the class name like this
-//    if(_class.name == "model" && _class.orgClass){
-//       className = _class.orgClass.name;
-//       console.log("lkdladklas: " + className);
-//    }
-    
+    console.log("routerName: " + className);
+   
     // a base rest route
     this.baseRoute = '/rest/' + className.toLowerCase() + '/';
     console.log("baseRoute: " + this.baseRoute);
@@ -64,8 +55,8 @@ module.exports = class Restrouter {
       var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
       var searchObj;
       eval('searchObj = ' + searchStr);
-      console.log(searchStr);
-      console.log(searchObj);
+//      console.log(searchStr);
+//      console.log(searchObj);
       _class.find(searchObj,function(err,result){
         res.json(err || result);
       });

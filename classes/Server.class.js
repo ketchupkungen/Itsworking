@@ -43,26 +43,64 @@ module.exports = class Server {
 //==============================================================================
         
 var mongoose = require('mongoose');
-var catNames = require('./cats.json');
-var Model = require('./Cats.model')(mongoose);
 
-//Link examples
-// localhost:3000/rest/catsrouter - get all
-// localhost:3000/rest/catsrouter/find/{name:"Zorro"}
+var studentsJson = require('./json/students.json');
+var studentModel = require('./tables/Student.model')(mongoose);
+
+var educationsJson = require('./json/educations.json');
+var educationModel = require('./tables/Education.model')(mongoose);
+
 var Restrouter = require('./restrouter.class');
-new Restrouter(this.app,Model,"CatsRouter");
+new Restrouter(this.app,studentModel,"student");
+new Restrouter(this.app,educationModel,"edu");
 
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 
 db.once('open', function (){
     console.log("Connected to MongoDB");
-    connected();
+//    testStudents();
+    testEducations();
 });
 
+function testEducations(){
+     educationModel.deleteAll(function(err, resp){
+        //
+       console.log("schema cleared: " + resp);
+       //
+       educationModel.createFromJsonWithNotify(educationsJson,function(err,resp){
+           console.log("created: " + resp.toString());
+           
+       });
+       //
+    });
+}
+
 // To make sometihing only after connecting to the DB
-function connected(){
-  
+function testStudents(){
+  studentModel.deleteAll(function(err, resp){
+        //
+       console.log("schema cleared: " + resp);
+       //
+       studentModel.createFromJsonWithNotify(studentsJson,function(err,resp){
+           console.log("created: " + resp.toString());
+           
+           
+//            studentModel.findOne({name:"john doe"},function (err,doc){
+//                doc.findSimilar(function (err,docs){
+//                    docs[0].remove();
+//                });
+//            });
+           
+//            studentModel.findOne({name:"john doe"},function (err,doc){
+//                console.log("doc: " + doc.name);
+//                doc.utb_id = "fdf343dsf";
+//                doc.save();
+//            });
+           
+       });
+       //
+    });
 }
 
 
