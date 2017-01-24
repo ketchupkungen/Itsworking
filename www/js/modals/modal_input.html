@@ -1,0 +1,38 @@
+<style type="text/css">
+    #modal-input-text {
+        border: medium none;
+        border-radius: 0;
+        box-shadow: 0 -1px 0 #ddd inset;
+        font-size: 16px;
+        padding: 0;
+    }
+
+    #modal-input-text:focus{
+        box-shadow: 0 -2px 0 #2196f3 inset;
+    }
+</style>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="gridSystemModalLabel" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Title</h4>
+            </div>
+            <div class="modal-body">
+                <p class="body-title"></p>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" id="modal-input-text">
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-input-abort-btn">Abort</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-input-ok-btn">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
