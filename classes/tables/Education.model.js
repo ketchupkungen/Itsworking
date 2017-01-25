@@ -3,7 +3,7 @@ module.exports = function (mongoose) {
     // Mongoose Schema, One-to-Few relation
     var shema = mongoose.Schema({
         name: String,
-        teacher_ids: [{ type: String, ref: 'teacher' }]
+        teachers: [{ type: String, ref: 'teacher' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'educations'} // sets the name of Collection in Database
     );
@@ -20,8 +20,8 @@ module.exports = function (mongoose) {
                 name: act.name
             });
             //
-            act.teacher_ids.forEach(function(act){
-                education.teacher_ids.push(act.id);
+            act.teachers.forEach(function(act){
+                education.teachers.push(act.id);
             });
             //
             education.save(function (err, cat) {

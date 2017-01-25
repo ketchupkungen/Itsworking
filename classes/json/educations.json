@@ -1,7 +1,7 @@
 [
     {
         "name": "suw16",
-        "teacher_ids": [
+        "teachers": [
             {
                 "id": "78"
             },
@@ -15,7 +15,7 @@
     },
     {
         "name": "suw17",
-        "teacher_ids": [
+        "teachers": [
             {
                 "id": "98"
             }
@@ -23,7 +23,7 @@
     },
     {
         "name": "suw18",
-        "teacher_ids": [
+        "teachers": [
             {
                 "id": "55"
             }

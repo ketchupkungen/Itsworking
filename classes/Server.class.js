@@ -44,6 +44,9 @@ module.exports = class Server {
         
 var mongoose = require('mongoose');
 
+//Stop mongoose from using an old promise library
+mongoose.Promise = Promise;
+
 var studentsJson = require('./json/students.json');
 var studentModel = require('./tables/Student.model')(mongoose);
 
@@ -60,8 +63,20 @@ var db = mongoose.connection;
 db.once('open', function (){
     console.log("Connected to MongoDB");
 //    testStudents();
-    testEducations();
+//    testEducations();
+    testPopulations();
 });
+
+function testPopulations(){
+    studentModel.findOne({ name: 'john doe' })
+        .populate('education') //OBS! not Shema name but the name of property
+        .exec(function (err, student) {
+          if (err) return handleError(err);
+          console.log("Pop student: " + student);
+          console.log('Populate: %s', student.education);
+          // prints "The creator is Aaron"
+    });
+}
 
 function testEducations(){
      educationModel.deleteAll(function(err, resp){
@@ -71,7 +86,17 @@ function testEducations(){
        educationModel.createFromJsonWithNotify(educationsJson,function(err,resp){
            console.log("created: " + resp.toString());
            
-       });
+           //set students education
+           educationModel.findOne({name:"suw16"},function(err,edu){
+               studentModel.find({},function(err,studs){
+                   studs.forEach(function (stud) {
+                        stud.education = edu._id;
+                        stud.save();
+                        console.log("id set for: " + stud.name  + " : " + edu._id);
+                   });
+               });
+           });
+        });
        //
     });
 }
@@ -84,7 +109,6 @@ function testStudents(){
        //
        studentModel.createFromJsonWithNotify(studentsJson,function(err,resp){
            console.log("created: " + resp.toString());
-           
            
 //            studentModel.findOne({name:"john doe"},function (err,doc){
 //                doc.findSimilar(function (err,docs){
