@@ -1,0 +1,21 @@
+[
+    {
+        "name": "tomas frank",
+        "pnr": "650115-5566",
+        "epost": "tfrank@gmail.com",
+        "educations": []
+    },
+    {
+        "name": "benjamin andersson",
+        "pnr": "560115-5566",
+        "epost": "benja@gmail.com",
+        "educations": []
+    },
+    {
+        "name": "hugo nillson",
+        "pnr": "380115-5566",
+        "epost": "hn@gmail.com",
+        "educations": []
+    }
+    
+]

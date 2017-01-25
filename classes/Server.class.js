@@ -53,9 +53,14 @@ var studentModel = require('./tables/Student.model')(mongoose);
 var educationsJson = require('./json/educations.json');
 var educationModel = require('./tables/Education.model')(mongoose);
 
+var teachersJson = require('./json/teachers.json');
+var teacherModel = require('./tables/Teacher.model')(mongoose);
+
 var Restrouter = require('./restrouter.class');
+
 new Restrouter(this.app,studentModel,"student");
 new Restrouter(this.app,educationModel,"edu");
+new Restrouter(this.app,teacherModel,"teach");
 
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
@@ -64,17 +69,41 @@ db.once('open', function (){
     console.log("Connected to MongoDB");
 //    testStudents();
 //    testEducations();
-    testPopulations();
+    testTeachers();
+//    testPopulations();
 });
 
 function testPopulations(){
     studentModel.findOne({ name: 'john doe' })
-        .populate('education') //OBS! not Shema name but the name of property
+        .populate('education') //OBS! not Shema name but the name of property in the StudentModel
         .exec(function (err, student) {
           if (err) return handleError(err);
-          console.log("Pop student: " + student);
-          console.log('Populate: %s', student.education);
+//          console.log("Pop student: " + student);
+          console.log('Populate: %s', student.education.name);
           // prints "The creator is Aaron"
+    });
+}
+
+function testTeachers(){
+       teacherModel.deleteAll(function(err, resp){
+        //
+       console.log("schema cleared: " + resp);
+       //
+       teacherModel.createFromJsonWithNotify(teachersJson,function(err,resp){
+           console.log("created: " + resp.toString());           
+        });
+           //set education for teachers 
+           educationModel.findOne({name:"suw16"},function(err,edu){
+               teacherModel.find({},function(err,teachers){
+                   teachers.forEach(function (teacher) {
+                        teacher.educations.push(edu._id);
+                        teacher.save();
+                        console.log("id set for: " + teacher.name  + " : " + edu._id);
+                   });
+               });
+           });
+           
+            //set teachers for education
     });
 }
 

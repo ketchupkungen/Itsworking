@@ -5,7 +5,7 @@ module.exports = function (mongoose) {
         name:  {type:String,required: true},
         pnr:   {type:String,required: true},
         epost: {type:String,required: true},
-        education: {type:mongoose.Schema.Types.ObjectId, ref: 'educations'} // "foreignkey"  type:mongoose.Schema.Types.ObjectId
+        education: {type:mongoose.Schema.Types.ObjectId, ref: 'education'} // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'students'} // sets the name of Collection in Database
     );
@@ -50,12 +50,12 @@ module.exports = function (mongoose) {
      * @returns {array}
      */
     shema.methods.findSimilar = function (cb) {
-        return this.model('students').find({name: this.name}, cb);
+        return this.model('student').find({name: this.name}, cb);
     };
     
 
     // Compile the schema to a model
     // it will result in a new collection in the database
-    Model = mongoose.model('students', shema);
+    Model = mongoose.model('student', shema);
     return Model;
 };
