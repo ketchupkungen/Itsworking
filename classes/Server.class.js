@@ -8,10 +8,7 @@ module.exports = class Server {
     // add express to this
     this.app = m.express();
     
-    var bodyparser =  require('body-parser');
     
-    this.app.use(bodyparser.json());
-    this.app.use(bodyparser.urlencoded({ extended: false }));
 
     // run the setup method
     this.setup();
@@ -46,116 +43,61 @@ var mongoose = require('mongoose');
 
 //Stop mongoose from using an old promise library
 mongoose.Promise = Promise;
-
+//
 var studentsJson = require('./json/students.json');
-var studentModel = require('./tables/Student.model')(mongoose);
-
 var educationsJson = require('./json/educations.json');
-var educationModel = require('./tables/Education.model')(mongoose);
-
 var teachersJson = require('./json/teachers.json');
+//
+var studentModel = require('./tables/Student.model')(mongoose);
+var educationModel = require('./tables/Education.model')(mongoose);
 var teacherModel = require('./tables/Teacher.model')(mongoose);
-
+//
+var models = [studentModel,educationModel,teacherModel];
+var jsons = [studentsJson,educationsJson,teachersJson];
+//
+var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
+//
+var bodyparser =  require('body-parser'); //Used for Restrouter
+this.app.use(bodyparser.json());
+this.app.use(bodyparser.urlencoded({ extended: false }));
+//
 var Restrouter = require('./restrouter.class');
-
+//
 new Restrouter(this.app,studentModel,"student");
 new Restrouter(this.app,educationModel,"edu");
 new Restrouter(this.app,teacherModel,"teach");
-
+//
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
-
+//
 db.once('open', function (){
     console.log("Connected to MongoDB");
-//    testStudents();
-//    testEducations();
-    testTeachers();
-//    testPopulations();
+    testPopulations();
+//  JSONLoader.fillData();
 });
 
 function testPopulations(){
+    
+    //Find education which belongs to student
     studentModel.findOne({ name: 'john doe' })
-        .populate('education') //OBS! not Shema name but the name of property in the StudentModel
+        .populate('_education') //OBS! not Shema name but the name of property in the Model
         .exec(function (err, student) {
           if (err) return handleError(err);
 //          console.log("Pop student: " + student);
-          console.log('Populate: %s', student.education.name);
+          console.log('Populate: %s', student._education.name);
+          // prints "The creator is Aaron"
+    });
+    
+    //Find educations which a teacher has
+     teacherModel.findOne({ name: 'tomas frank' })
+        .populate('_educations') //OBS! not Shema name but the name of property in the Model
+        .exec(function (err, teacher) {
+          if (err) return handleError(err);
+          console.log("Populate teacher: " + teacher);
+          console.log('Populate: %s', teacher._educations[0].name);
           // prints "The creator is Aaron"
     });
 }
-
-function testTeachers(){
-       teacherModel.deleteAll(function(err, resp){
-        //
-       console.log("schema cleared: " + resp);
-       //
-       teacherModel.createFromJsonWithNotify(teachersJson,function(err,resp){
-           console.log("created: " + resp.toString());           
-        });
-           //set education for teachers 
-           educationModel.findOne({name:"suw16"},function(err,edu){
-               teacherModel.find({},function(err,teachers){
-                   teachers.forEach(function (teacher) {
-                        teacher.educations.push(edu._id);
-                        teacher.save();
-                        console.log("id set for: " + teacher.name  + " : " + edu._id);
-                   });
-               });
-           });
-           
-            //set teachers for education
-    });
-}
-
-function testEducations(){
-     educationModel.deleteAll(function(err, resp){
-        //
-       console.log("schema cleared: " + resp);
-       //
-       educationModel.createFromJsonWithNotify(educationsJson,function(err,resp){
-           console.log("created: " + resp.toString());
-           
-           //set students education
-           educationModel.findOne({name:"suw16"},function(err,edu){
-               studentModel.find({},function(err,studs){
-                   studs.forEach(function (stud) {
-                        stud.education = edu._id;
-                        stud.save();
-                        console.log("id set for: " + stud.name  + " : " + edu._id);
-                   });
-               });
-           });
-        });
-       //
-    });
-}
-
-// To make sometihing only after connecting to the DB
-function testStudents(){
-  studentModel.deleteAll(function(err, resp){
-        //
-       console.log("schema cleared: " + resp);
-       //
-       studentModel.createFromJsonWithNotify(studentsJson,function(err,resp){
-           console.log("created: " + resp.toString());
-           
-//            studentModel.findOne({name:"john doe"},function (err,doc){
-//                doc.findSimilar(function (err,docs){
-//                    docs[0].remove();
-//                });
-//            });
-           
-//            studentModel.findOne({name:"john doe"},function (err,doc){
-//                console.log("doc: " + doc.name);
-//                doc.utb_id = "fdf343dsf";
-//                doc.save();
-//            });
-           
-       });
-       //
-    });
-}
-
 
 //==============================================================================
 //==============================================================================

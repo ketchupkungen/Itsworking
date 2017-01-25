@@ -1,33 +1,19 @@
 [
     {
         "name": "suw16",
-        "teachers": [
-            {
-                "id": "78"
-            },
-            {
-                "id": "98"
-            },
-            {
-                "id": "55"
-            }
-        ]
+        "score": 400,
+        "info": "Utbildningen passar dig som har viss förkunskap i programmering och vill utvecklas genom att lära dig den senaste",
+        "teachers": []    
     },
     {
         "name": "suw17",
-        "teachers": [
-            {
-                "id": "98"
-            }
-        ]
+        "score": 200,
+        "teachers": []
     },
     {
         "name": "suw18",
-        "teachers": [
-            {
-                "id": "55"
-            }
-        ]
+        "score": 600,
+        "teachers": []
     }
 
 ]

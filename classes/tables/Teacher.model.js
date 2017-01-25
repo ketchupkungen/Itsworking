@@ -5,7 +5,7 @@ module.exports = function (mongoose) {
         name:  {type:String,required: true},
         pnr:   {type:String,required: true},
         epost: {type:String,required: true},
-        educations: [{type:mongoose.Schema.Types.ObjectId, ref: 'education' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
+        _educations: [{type:mongoose.Schema.Types.ObjectId, ref: 'education' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'teachers'} // sets the name of Collection in Database
     );
@@ -38,11 +38,6 @@ module.exports = function (mongoose) {
     return this.remove({}, cb);
   };
   
-  shema.methods.addEducation = function(educationsId){
-        this.educations.push(educationsId);
-        this.save();
-  };
-
     /**
      *
      * @returns {array}

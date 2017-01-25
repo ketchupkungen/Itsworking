@@ -2,8 +2,10 @@ module.exports = function (mongoose) {
 
     // Mongoose Schema, One-to-Few relation
     var shema = mongoose.Schema({
-        name: String,
-        teachers: [{ type: String, ref: 'teacher' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
+        name:  {type:String,required: true},
+        score: {type:Number,min: 10, max: 600},
+        info:  {type:String,default: "Kurs info:"},
+        _teachers: [{ type: String, ref: 'teacher' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'educations'} // sets the name of Collection in Database
     );
@@ -17,11 +19,9 @@ module.exports = function (mongoose) {
         json.forEach(function (act) {
             //
             var education = new me({
-                name: act.name
-            });
-            //
-            act.teachers.forEach(function(act){
-                education.teachers.push(act.id);
+                name: act.name,
+                score: act.score,
+                info: act.info
             });
             //
             education.save(function (err, cat) {
