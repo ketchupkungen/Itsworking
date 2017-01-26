@@ -47,13 +47,20 @@ mongoose.Promise = Promise;
 var studentsJson = require('./json/students.json');
 var educationsJson = require('./json/educations.json');
 var teachersJson = require('./json/teachers.json');
+var bookingsJson = require('./json/bookings.json');
+var classroomsJson = require('./json/classrooms.json');
+var loginsJson = require('./json/logins.json');
 //
 var studentModel = require('./tables/Student.model')(mongoose);
 var educationModel = require('./tables/Education.model')(mongoose);
 var teacherModel = require('./tables/Teacher.model')(mongoose);
+var bookingModel = require('./tables/Booking.model')(mongoose);
+var classModel = require('./tables/Classroom.model')(mongoose);
+var loginModel = require('./tables/Login.model')(mongoose);
 //
-var models = [studentModel,educationModel,teacherModel];
-var jsons = [studentsJson,educationsJson,teachersJson];
+var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+var jsons = [studentsJson,educationsJson,teachersJson,bookingsJson,classroomsJson,loginsJson];
+//
 //
 var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
 //
@@ -72,8 +79,8 @@ var db = mongoose.connection;
 //
 db.once('open', function (){
     console.log("Connected to MongoDB");
-    testPopulations();
-//  JSONLoader.fillData();
+//    testPopulations();
+  JSONLoader.fillData();
 });
 
 function testPopulations(){

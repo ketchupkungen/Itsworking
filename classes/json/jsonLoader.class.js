@@ -4,6 +4,7 @@ module.exports = function JSONLoader(jsons, models) {
     this.studentModel = this.models[0];
     this.educationModel = this.models[1];
     this.teacherModel = this.models[2];
+    this.bookingModel = this.models[3];
 
     this.fillData = function() {
 
@@ -56,7 +57,7 @@ module.exports = function JSONLoader(jsons, models) {
 
         //bind teachers to educations
         this.teacherModel.find({}, function (err, teachers) {
-            educationModel.find({}, function (err, educations) {
+            this.educationModel.find({}, function (err, educations) {
                 educations.forEach(function (edu) {
                     var randomTeacher = getRandom(teachers);
                     edu._teachers.push(randomTeacher._id);
@@ -69,7 +70,7 @@ module.exports = function JSONLoader(jsons, models) {
 
         //bind educations to teachers 
         this.educationModel.find({}, function (err, educations) {
-            teacherModel.find({}, function (err, teachers) {
+            this.teacherModel.find({}, function (err, teachers) {
                 teachers.forEach(function (teacher) {
                     var randomEdu = getRandom(educations);
                     teacher._educations.push(randomEdu._id);
@@ -78,6 +79,19 @@ module.exports = function JSONLoader(jsons, models) {
                 });
             });
         });
+        
+        //bind educations to booking 
+        this.educationModel.find({}, function (err, educations) {
+            this.bookingModel.find({}, function (err, bookings) {
+                bookings.forEach(function (booking) {
+                    var randomEdu = getRandom(educations);
+                    booking._education = randomEdu._id;
+                    booking.save();
+                    console.log("D:_id set for, booking: " + booking.name + " : " + randomEdu._id);
+                });
+            });
+        });
+        
     }
 
     function getRandom(arr) {
