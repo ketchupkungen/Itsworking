@@ -85,8 +85,8 @@ var db = mongoose.connection;
 //
 db.once('open', function (){
     console.log("Connected to MongoDB");
-//    testPopulations();
-  JSONLoader.fillData();
+    testPopulations();
+//  JSONLoader.fillData();
 });
 
 function testPopulations(){
@@ -108,6 +108,21 @@ function testPopulations(){
           if (err) return handleError(err);
           console.log("Populate teacher: " + teacher);
           console.log('Populate: %s', teacher._educations[0].name);
+          // prints "The creator is Aaron"
+    });
+    
+    //Find students which a education has
+     studentModel.find({})
+        .populate({
+            path: '_education',
+            match: {name:'suw16'},
+            select: 'name',
+            options: { sort: { name: -1 }}
+          })
+        .exec(function (err, students) {
+          if (err) return handleError(err);
+//          console.log("Populate teacher: " + students);
+          console.log('Populate: %s', students);
           // prints "The creator is Aaron"
     });
 }

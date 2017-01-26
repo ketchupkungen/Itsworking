@@ -48,8 +48,8 @@ function addListenerGetBtn() {
         $.ajax({
             async: true,
             type: "GET",
-              url: "http://localhost:3000/rest/book",
-//            url: "http://localhost:3000/rest/student",
+//              url: "http://localhost:3000/rest/book",
+            url: "http://localhost:3000/rest/student",
 //            url: "http://localhost:3000/rest/student/find/{epost:'jdoe@gmail.com'}",
             success: function (data, textStatus, jqXHR) {
                 $('#output').text(JSON.stringify(data,null,1));
