@@ -5,7 +5,7 @@ module.exports = function (mongoose) {
         name:  {type:String,required: true},
         date:   {type:Date,default:Date.now,required: false},
         _education: {type:mongoose.Schema.Types.ObjectId, ref: 'education'}, // "foreignkey"  type:mongoose.Schema.Types.ObjectId
-        _classroom: {type:mongoose.Schema.Types.ObjectId, ref: 'education'}
+        _classroom: {type:mongoose.Schema.Types.ObjectId, ref: 'classroom'}
     },
        {collection: 'bookings'} // sets the name of Collection in Database
     );

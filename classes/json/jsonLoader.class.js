@@ -5,6 +5,7 @@ module.exports = function JSONLoader(jsons, models) {
     this.educationModel = this.models[1];
     this.teacherModel = this.models[2];
     this.bookingModel = this.models[3];
+    this.classModel = this.models[4];
 
     this.fillData = function() {
 
@@ -88,6 +89,18 @@ module.exports = function JSONLoader(jsons, models) {
                     booking._education = randomEdu._id;
                     booking.save();
                     console.log("D:_id set for, booking: " + booking.name + " : " + randomEdu._id);
+                });
+            });
+        });
+        
+        //bind classrooms to booking 
+        this.classModel.find({}, function (err, classrooms) {
+            this.bookingModel.find({}, function (err, bookings) {
+                bookings.forEach(function (booking) {
+                    var randomClass = getRandom(classrooms);
+                    booking._classroom = randomClass._id;
+                    booking.save();
+                    console.log("E:_id set for, booking: " + booking.name + " : " + randomClass._id);
                 });
             });
         });

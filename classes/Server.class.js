@@ -68,11 +68,17 @@ var bodyparser =  require('body-parser'); //Used for Restrouter
 this.app.use(bodyparser.json());
 this.app.use(bodyparser.urlencoded({ extended: false }));
 //
-var Restrouter = require('./restrouter.class');
+var Restrouter = require('./restrouterP.class');
 //
-new Restrouter(this.app,studentModel,"student");
-new Restrouter(this.app,educationModel,"edu");
-new Restrouter(this.app,teacherModel,"teach");
+//
+var pop2booking = [{path:'_education'},{path:'_classroom'}];
+//
+new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
+new Restrouter(this.app,educationModel,"edu",'_teachers');
+new Restrouter(this.app,teacherModel,"teach",'_educations');
+new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several
+new Restrouter(this.app,classModel,"class");
+new Restrouter(this.app,loginModel,"login");
 //
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;

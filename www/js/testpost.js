@@ -13,9 +13,9 @@ function addListenerPostBtn() {
             type: "POST",
             dataType: "json",
             url: "http://localhost:3000/rest/student",
-            data: {name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com",utb_id:"n/a"},
+            data: {name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com"},
             success: function (data, textStatus, jqXHR) {
-                $('#output').text(JSON.stringify(data));
+                $('#output').text(JSON.stringify(data,null,1));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Send message failed");
@@ -33,7 +33,7 @@ function addListenerPutBtn() {
             url: "http://localhost:3000/rest/student/find/{epost:'jdoe@gmail.com'}",
             data: {name: "jonny doue", pnr: "750121-9632"},
             success: function (data, textStatus, jqXHR) {
-                $('#output').text(JSON.stringify(data));
+                $('#output').text(JSON.stringify(data,null,1));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Send message failed");
@@ -48,11 +48,11 @@ function addListenerGetBtn() {
         $.ajax({
             async: true,
             type: "GET",
-              url: "http://localhost:3000/rest/edu",
+              url: "http://localhost:3000/rest/book",
 //            url: "http://localhost:3000/rest/student",
 //            url: "http://localhost:3000/rest/student/find/{epost:'jdoe@gmail.com'}",
             success: function (data, textStatus, jqXHR) {
-                $('#output').text(JSON.stringify(data));
+                $('#output').text(JSON.stringify(data,null,1));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Send message failed");
@@ -70,7 +70,7 @@ function addListenerDeleteBtn() {
             type: "DELETE",
             url: "http://localhost:3000/rest/student/find/{epost:'jdoe@gmail.com'}",
             success: function (data, textStatus, jqXHR) {
-                $('#output').text(JSON.stringify(data));
+                $('#output').text(JSON.stringify(data,null,1));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log("Send message failed");

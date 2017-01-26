@@ -1,0 +1,6 @@
+
+//Populate if a shema has 2 references
+var populateQueryExample = [{path:'_education', select:'title pages'}, {path:'_teachers', select:'director'}];
+
+//populate & select name only, selct several not working with {}
+var pqStud = [{path:'_education', select:'name'}];
