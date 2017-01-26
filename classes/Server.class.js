@@ -91,25 +91,25 @@ db.once('open', function (){
 
 function testPopulations(){
     
-    //Find education which belongs to student
-    studentModel.findOne({ name: 'john doe' })
-        .populate('_education') //OBS! not Shema name but the name of property in the Model
-        .exec(function (err, student) {
-          if (err) return handleError(err);
-//          console.log("Pop student: " + student);
-          console.log('Populate: %s', student._education.name);
-          // prints "The creator is Aaron"
-    });
-    
-    //Find educations which a teacher has
-     teacherModel.findOne({ name: 'tomas frank' })
-        .populate('_educations') //OBS! not Shema name but the name of property in the Model
-        .exec(function (err, teacher) {
-          if (err) return handleError(err);
-          console.log("Populate teacher: " + teacher);
-          console.log('Populate: %s', teacher._educations[0].name);
-          // prints "The creator is Aaron"
-    });
+//    //Find education which belongs to student
+//    studentModel.findOne({ name: 'john doe' })
+//        .populate('_education') //OBS! not Shema name but the name of property in the Model
+//        .exec(function (err, student) {
+//          if (err) return handleError(err);
+////          console.log("Pop student: " + student);
+//          console.log('Populate: %s', student._education.name);
+//          // prints "The creator is Aaron"
+//    });
+//    
+//    //Find educations which a teacher has
+//     teacherModel.findOne({ name: 'tomas frank' })
+//        .populate('_educations') //OBS! not Shema name but the name of property in the Model
+//        .exec(function (err, teacher) {
+//          if (err) return handleError(err);
+//          console.log("Populate teacher: " + teacher);
+//          console.log('Populate: %s', teacher._educations[0].name);
+//          // prints "The creator is Aaron"
+//    });
     
     //Find students which a education has
      studentModel.find({})
@@ -120,11 +120,18 @@ function testPopulations(){
             options: { sort: { name: -1 }}
           })
         .exec(function (err, students) {
+             students = students.filter(function(doc){
+                  console.log('Populate: %s', doc._education);
+//                return doc.tags.length;
+            });
           if (err) return handleError(err);
 //          console.log("Populate teacher: " + students);
-          console.log('Populate: %s', students);
-          // prints "The creator is Aaron"
+         
     });
+    
+//    function filtering(eduName){
+//        return eduName === 'suw16'
+//    }
 }
 
 //==============================================================================
