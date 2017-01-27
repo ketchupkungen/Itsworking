@@ -47,13 +47,6 @@ if(mset.connect === 'true'){
     //Stop mongoose from using an old promise library
     mongoose.Promise = Promise;
     //
-    var studentsJson = require('./json/students.json');
-    var educationsJson = require('./json/educations.json');
-    var teachersJson = require('./json/teachers.json');
-    var bookingsJson = require('./json/bookings.json');
-    var classroomsJson = require('./json/classrooms.json');
-    var loginsJson = require('./json/logins.json');
-    //
     var studentModel = require('./tables/Student.model')(mongoose);
     var educationModel = require('./tables/Education.model')(mongoose);
     var teacherModel = require('./tables/Teacher.model')(mongoose);
@@ -62,10 +55,9 @@ if(mset.connect === 'true'){
     var loginModel = require('./tables/Login.model')(mongoose);
     //
     var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
-    var jsons = [studentsJson,educationsJson,teachersJson,bookingsJson,classroomsJson,loginsJson];
     //
     //
-    var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
+    var JSONLoader = require('./json/jsonLoader.class')(models);
     //
     var bodyparser =  require('body-parser'); //Used for Restrouter
     this.app.use(bodyparser.json());
@@ -83,10 +75,6 @@ if(mset.connect === 'true'){
     new Restrouter(this.app,classModel,"class");
     new Restrouter(this.app,loginModel,"login");
     //
-    //
-
-    //
-
     mongoose.connect('mongodb://' + mset.host + '/' + mset.database);
     var db = mongoose.connection;
     //
@@ -99,7 +87,7 @@ if(mset.connect === 'true'){
 
 function testPopulations(){
     
-//    //Find education which belongs to student
+//    //Find education which belongs to student -> select * from educations where Strudent.name = 'john doe'
 //    studentModel.findOne({ name: 'john doe' })
 //        .populate('_education') //OBS! not Shema name but the name of property in the Model
 //        .exec(function (err, student) {
@@ -109,7 +97,7 @@ function testPopulations(){
 //          // prints "The creator is Aaron"
 //    });
 //    
-//    //Find educations which a teacher has
+//    //Find educations which a teacher has -> select * from educations where Teacher.name = 'tomas frank'
 //     teacherModel.findOne({ name: 'tomas frank' })
 //        .populate('_educations') //OBS! not Shema name but the name of property in the Model
 //        .exec(function (err, teacher) {
@@ -119,7 +107,7 @@ function testPopulations(){
 //          // prints "The creator is Aaron"
 //    });
     
-    //Find students which a education has
+    //Find students which a education has -> select * from students where Education.name = 'suw16'
      studentModel.find({})
         .populate({
             path: '_education',
