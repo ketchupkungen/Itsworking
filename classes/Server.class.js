@@ -127,18 +127,16 @@ function testPopulations(){
             select: 'name'
           })
         .exec(function (err, students) {
-             students = students.filter(function(doc){
-                  console.log('Populate: %s', doc._education);
-//                return doc.tags.length;
-            });
+            students = students.filter(filtering);
+            console.log(students);
           if (err) return handleError(err);
-//          console.log("Populate teacher: " + students);
-         
     });
     
-//    function filtering(eduName){
-//        return eduName === 'suw16'
-//    }
+    function filtering(element, index, array){
+        if(element._education){
+           return element._education.name === 'suw16'  
+        }
+    }
 }
 
 //==============================================================================
