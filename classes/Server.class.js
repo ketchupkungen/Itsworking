@@ -68,6 +68,7 @@ if(mset.connect === 'true'){
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //
+    //Set up basic routes
     new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
     new Restrouter(this.app,educationModel,"edu",'_teachers');
     new Restrouter(this.app,teacherModel,"teach",'_educations');
@@ -80,8 +81,8 @@ if(mset.connect === 'true'){
     //
     db.once('open', function (){
         console.log("Connected to MongoDB");
-        testPopulations();
-//      JSONLoader.fillData();
+//        testPopulations();
+         JSONLoader.fillData();
     });
 }//mset.connect
 
