@@ -32,11 +32,11 @@ module.exports = function (mongoose) {
                 epost: act.epost
             });
             //
-            error = obj.validateSync();
-            //
-            if(error){
-                console.log("----------Teacher Shema------------>"+error);
-            }
+//            error = obj.validateSync();
+//            //
+//            if(error){
+//                console.log("----------Teacher Shema------------>"+error);
+//            }
             //
             obj.save(function (err, data) {
                 leftToSave--;

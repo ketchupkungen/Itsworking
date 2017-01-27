@@ -38,56 +38,64 @@ module.exports = class Server {
     
 //==============================================================================
 //==============================================================================
-        
-var mongoose = require('mongoose');
+var mset = g.settings.MONGOOSE;//se 'settingsConstr.js'
 
-//Stop mongoose from using an old promise library
-mongoose.Promise = Promise;
-//
-var studentsJson = require('./json/students.json');
-var educationsJson = require('./json/educations.json');
-var teachersJson = require('./json/teachers.json');
-var bookingsJson = require('./json/bookings.json');
-var classroomsJson = require('./json/classrooms.json');
-var loginsJson = require('./json/logins.json');
-//
-var studentModel = require('./tables/Student.model')(mongoose);
-var educationModel = require('./tables/Education.model')(mongoose);
-var teacherModel = require('./tables/Teacher.model')(mongoose);
-var bookingModel = require('./tables/Booking.model')(mongoose);
-var classModel = require('./tables/Classroom.model')(mongoose);
-var loginModel = require('./tables/Login.model')(mongoose);
-//
-var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
-var jsons = [studentsJson,educationsJson,teachersJson,bookingsJson,classroomsJson,loginsJson];
-//
-//
-var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
-//
-var bodyparser =  require('body-parser'); //Used for Restrouter
-this.app.use(bodyparser.json());
-this.app.use(bodyparser.urlencoded({ extended: false }));
-//
-var Restrouter = require('./restrouterP.class');
-//
-//
-var pop2booking = [{path:'_education'},{path:'_classroom'}];
-//
-new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
-new Restrouter(this.app,educationModel,"edu",'_teachers');
-new Restrouter(this.app,teacherModel,"teach",'_educations');
-new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several
-new Restrouter(this.app,classModel,"class");
-new Restrouter(this.app,loginModel,"login");
-//
-mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
-//
-db.once('open', function (){
-    console.log("Connected to MongoDB");
-    testPopulations();
-//  JSONLoader.fillData();
-});
+if(mset.connect === 'true'){  
+    console.log("Connecting");
+    var mongoose = require('mongoose');
+
+    //Stop mongoose from using an old promise library
+    mongoose.Promise = Promise;
+    //
+    var studentsJson = require('./json/students.json');
+    var educationsJson = require('./json/educations.json');
+    var teachersJson = require('./json/teachers.json');
+    var bookingsJson = require('./json/bookings.json');
+    var classroomsJson = require('./json/classrooms.json');
+    var loginsJson = require('./json/logins.json');
+    //
+    var studentModel = require('./tables/Student.model')(mongoose);
+    var educationModel = require('./tables/Education.model')(mongoose);
+    var teacherModel = require('./tables/Teacher.model')(mongoose);
+    var bookingModel = require('./tables/Booking.model')(mongoose);
+    var classModel = require('./tables/Classroom.model')(mongoose);
+    var loginModel = require('./tables/Login.model')(mongoose);
+    //
+    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+    var jsons = [studentsJson,educationsJson,teachersJson,bookingsJson,classroomsJson,loginsJson];
+    //
+    //
+    var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
+    //
+    var bodyparser =  require('body-parser'); //Used for Restrouter
+    this.app.use(bodyparser.json());
+    this.app.use(bodyparser.urlencoded({ extended: false }));
+    //
+    var Restrouter = require('./restrouterP.class');
+    //
+    //
+    var pop2booking = [{path:'_education'},{path:'_classroom'}];
+    //
+    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
+    new Restrouter(this.app,educationModel,"edu",'_teachers');
+    new Restrouter(this.app,teacherModel,"teach",'_educations');
+    new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several
+    new Restrouter(this.app,classModel,"class");
+    new Restrouter(this.app,loginModel,"login");
+    //
+    //
+
+    //
+
+    mongoose.connect('mongodb://' + mset.host + '/' + mset.database);
+    var db = mongoose.connection;
+    //
+    db.once('open', function (){
+        console.log("Connected to MongoDB");
+        testPopulations();
+//      JSONLoader.fillData();
+    });
+}//mset.connect
 
 function testPopulations(){
     
@@ -116,8 +124,7 @@ function testPopulations(){
         .populate({
             path: '_education',
             match: {name:'suw16'},
-            select: 'name',
-            options: { sort: { name: -1 }}
+            select: 'name'
           })
         .exec(function (err, students) {
              students = students.filter(function(doc){

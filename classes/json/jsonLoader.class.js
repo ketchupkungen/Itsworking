@@ -8,7 +8,6 @@ module.exports = function JSONLoader(jsons, models) {
     this.classModel = this.models[4];
 
     this.fillData = function() {
-
         deleteAll(function (err, resp) {
             console.log(resp + " / " + err);
             //
@@ -36,17 +35,18 @@ module.exports = function JSONLoader(jsons, models) {
         this.jsons.forEach(function (currJson, index) {
             this.models[index].createFromJsonWithNotify(currJson, function (err, resp) {
                 console.log("schema created: " + resp.toString());
-                if (index === (models.length - 1)) {
-                    cb(err, "All shemas created");
+                if (index === (this.models.length - 1)) {
+                    cb(err, "All shemas created ");
                 }
             });
         });
     }
 
     function bindKeys(cb) {
+        var me = this;
         //bind education to students
         this.educationModel.find({}, function (err, educations) {
-            this.studentModel.find({}, function (err, studs) {
+            me.studentModel.find({}, function (err, studs) {
                 studs.forEach(function (stud) {
                     var randomEdu = getRandom(educations);
                     stud._education = randomEdu._id;
@@ -58,7 +58,7 @@ module.exports = function JSONLoader(jsons, models) {
 
         //bind teachers to educations
         this.teacherModel.find({}, function (err, teachers) {
-            this.educationModel.find({}, function (err, educations) {
+            me.educationModel.find({}, function (err, educations) {
                 educations.forEach(function (edu) {
                     var randomTeacher = getRandom(teachers);
                     edu._teachers.push(randomTeacher._id);
@@ -71,7 +71,7 @@ module.exports = function JSONLoader(jsons, models) {
 
         //bind educations to teachers 
         this.educationModel.find({}, function (err, educations) {
-            this.teacherModel.find({}, function (err, teachers) {
+            me.teacherModel.find({}, function (err, teachers) {
                 teachers.forEach(function (teacher) {
                     var randomEdu = getRandom(educations);
                     teacher._educations.push(randomEdu._id);
@@ -83,7 +83,7 @@ module.exports = function JSONLoader(jsons, models) {
         
         //bind educations to booking 
         this.educationModel.find({}, function (err, educations) {
-            this.bookingModel.find({}, function (err, bookings) {
+            me.bookingModel.find({}, function (err, bookings) {
                 bookings.forEach(function (booking) {
                     var randomEdu = getRandom(educations);
                     booking._education = randomEdu._id;
@@ -95,7 +95,7 @@ module.exports = function JSONLoader(jsons, models) {
         
         //bind classrooms to booking 
         this.classModel.find({}, function (err, classrooms) {
-            this.bookingModel.find({}, function (err, bookings) {
+            me.bookingModel.find({}, function (err, bookings) {
                 bookings.forEach(function (booking) {
                     var randomClass = getRandom(classrooms);
                     booking._classroom = randomClass._id;

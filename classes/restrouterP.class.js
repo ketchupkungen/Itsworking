@@ -1,4 +1,5 @@
-module.exports = class Restrouter {
+'use strict';
+module.exports = class RestrouterP {
 
   constructor(expressApp,_class,routerName,populate,populate2){
 

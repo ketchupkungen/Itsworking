@@ -29,16 +29,16 @@ module.exports = function (mongoose) {
             var obj = new me({
                 name: act.name,
                 pnr: act.pnr,
-                epost: act.epost,
+                epost: act.epost
             });
             //
-            error = obj.validateSync();
+//            error = obj.validateSync();
+//            //
+//            if(error){
+//                console.log("---------Student Shema------------->"+error);
+//            }
             //
-            if(error){
-                console.log("---------Student Shema------------->"+error);
-            }
-            //
-            obj.save(function (err, cat) {
+            obj.save(function (err, obj) {
                 leftToSave--;
                 if (leftToSave === 0) {
                     cb(err, "Create students ready");
