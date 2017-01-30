@@ -10,11 +10,20 @@ function _find(obj) {
     return "find/" + JSON.stringify(obj);
 }
 
+function _findEduStud(obj) {
+    return "findEduStud/" + JSON.stringify(obj);
+}
+
+function _findEduBook(obj) {
+    return "findEduBook/" + JSON.stringify(obj);
+}
+
 function EXAMPLE() {
     //CREATE/POST
     STUDENT_REST.create({name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com"}, function (data) {
     });
 
+    //==========================================================================
 
     //UPDATE/PUT BY QUERY
     STUDENT_REST.update(_find({name: 'george morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data) {
@@ -24,6 +33,7 @@ function EXAMPLE() {
     STUDENT_REST.update('588bc5e9f2907a0b608a1f31', {epost: 'doe@gmail.com'}, function (data) {
     });
 
+    //==========================================================================
 
     //GET ALL
     BOOKING_REST.find('', function (data) {
@@ -38,11 +48,19 @@ function EXAMPLE() {
     STUDENT_REST.find(_find({name: 'john doe'}), function (data) {
     });
 
+    //GET SPEICEAL QUERY; GET ALL STUDENTS WITH EDUCATION X
+    STUDENT_REST.find(_findEduStud({name: 'suw16'}), function (data) {
+    });
+    
+    //GET SPEICEAL QUERY; GET ALL BOOKINGS FOR EDUCATION X
+    BOOKING_REST.find(_findEduBook({name:'suw18'}), function (data) {
+    });
+ 
+    //==========================================================================
 
     //DELETE QUERY
     STUDENT_REST.delete(_find({name: 'george morge'}), function (data) {
     });
-
 
     //DELETE BY ID
     STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data) {

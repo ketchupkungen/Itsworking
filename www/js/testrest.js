@@ -37,15 +37,15 @@ function addListenerPutBtn() {
 function addListenerGetBtn() {
     
     //GET ALL
-    $("#get-btn").click(function () {
-        BOOKING_REST.find('',function (data) {
-            $('#output').text(JSON.stringify(data, null, 1));
-        });
-    });
+//    $("#get-btn").click(function () {
+//        STUDENT_REST.find('',function (data) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
 
       //GET BY ID
 //    $("#get-btn").click(function () {
-//        STUDENT_REST.find('588bc28d9e001a148cf713b7', function (data) {
+//        STUDENT_REST.find('588efbc10d75430c98ba4b39', function (data) {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
@@ -53,6 +53,20 @@ function addListenerGetBtn() {
       //GET QUERY
 //    $("#get-btn").click(function () {
 //        STUDENT_REST.find(_find({name:'john doe'}), function (data) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
+
+   //GET - SPECIAL QUERY - GET STUDENTS FOR EDUCATION X
+    $("#get-btn").click(function () {
+        STUDENT_REST.find(_findEduStud({name:'suw18'}), function (data) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
+    
+    //GET - SPECIAL QUERY - GET BOOKINGS FOR EDUCATION X
+//     $("#get-btn").click(function () {
+//        BOOKING_REST.find(_findEduBook({name:'suw18'}), function (data) {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
@@ -77,5 +91,13 @@ function addListenerDeleteBtn() {
 
 function _find(obj) {
     return "find/" + JSON.stringify(obj);
+}
+
+function _findEduStud(obj) {
+    return "findEduStud/" + JSON.stringify(obj);
+}
+
+function _findEduBook(obj) {
+    return "findEduBook/" + JSON.stringify(obj);
 }
 
