@@ -19,6 +19,40 @@ and open the template in the editor.
         <script onerror="linkNotFound(this)" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
+        <!-- Menu sidebar -->
+        <nav class="navbar navbar-default sidebar" role="navigation">
+            <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>      
+            </div>
+            <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home<span class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profil<span class="caret"></span><span class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                  <ul class="dropdown-menu forAnimate" role="menu">
+                    <li><a href="#">Någonting</a></li>
+                    <li><a href="#">Någonting</a></li>
+                    <li><a href="#">Någonting</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Något annat</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Lite information kanske</a></li>
+                  </ul>
+                </li>          
+                <li ><a href="#">Boka lokal<span class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>
+                <li ><a href="#">Bokade lokaler<span class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>        
+                <li ><a href="#">Sök<span class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- /Menu sidebar -->
 
     </body>
 </html>
