@@ -1,19 +1,11 @@
-module.exports = class Restrouter {
+'use strict';
+module.exports = class RestrouterP {
 
   constructor(expressApp,_class,routerName,populate,populate2){
 
     // populate is optional:
     // 
     // OBS! 'populate' parameter is a property in the Shema which refers to another shema. EX: _education
-    // 
-    // use if want to mongoose to populate properties
-    // on GET queries
-
-    // routerName is optional:
-    // * you must use it if you are using traditional mongoose
-    //   models (rather than those created from classes)
-    // * you can also use if you want to set a different name
-    //  than the class name for the rest route
 
     this.app = expressApp;
     this.populate = populate;
@@ -104,10 +96,67 @@ module.exports = class Restrouter {
       that.respond('find',searchObj,res);
     });
 
+    //==========================================================================
+    //==========================================================================
+    
+    //CUSTOM QUERY - GET STUDENTS FOR EDUCATION X (EDUCATION_REST)
+     this.app.get(this.baseRoute + 'findEduStud/*',function(req,res){
+        var searchStr = decodeURIComponent(req.url.split('/findEduStud/')[1]);
+        var searchObj; 
+        eval('searchObj = ' + searchStr);
+        
+        _class.find({})
+            .populate({
+                path: '_education',
+                match: {name:searchObj.name},
+                select: 'name'
+              })
+            .exec(function (err, students) {
+                if (err) return handleError(err);
+                students = students.filter(filtering);
+                res.json(students);              
+        });
+        
+        function filtering(element, index, array){
+            if(element._education){
+               return element._education.name === searchObj.name;
+            }
+        }       
+    });
+    
+    //CUSTOM QUERY - GET BOOKINGS FOR EDUCATION X (BOOKING_REST)
+    this.app.get(this.baseRoute + 'findEduBook/*',function(req,res){
+        var searchStr = decodeURIComponent(req.url.split('/findEduBook/')[1]);
+        var searchObj; 
+        eval('searchObj = ' + searchStr);
+        
+        _class.find({})
+            .populate({
+                path: '_education',
+                match: {name:searchObj.name},
+                select: 'name'
+              })
+            .exec(function (err, students) {
+                if (err) return handleError(err);
+                students = students.filter(filtering);
+                res.json(students);              
+        });
+        
+        function filtering(element, index, array){
+            if(element._education){
+               return element._education.name === searchObj.name;
+            }
+        }       
+    });
+    
+    //==========================================================================
+    //==========================================================================
+    
     // One instance by id
     this.app.get(this.baseRoute + ':id',function(req,res){
       that.respond('findOne',{_id:req.params.id},res);
     });
+
 
     // Call the method of an instance
     this.app.get(this.baseRoute + ':id/:method',function(req,res){
@@ -115,6 +164,7 @@ module.exports = class Restrouter {
         res.json(err || {returns:result[req.params.method]()});
       });
     });
+    
   }
 
 

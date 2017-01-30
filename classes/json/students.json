@@ -11,10 +11,22 @@
         "epost": "jdoe@gmail.com",
         "education": ""
     },
+     {
+        "name": "hugo andersson",
+        "pnr": "850104-7846",
+        "epost": "ha@gmail.com",
+        "education": ""
+    },
     {
-        "name": "john doe",
-        "pnr": "950115-5566",
-        "epost": "jdoe@gmail.com",
+        "name": "nils nilsson",
+        "pnr": "190207-9875",
+        "epost": "nn@gmail.com",
+        "education": ""
+    },
+    {
+        "name": "roland ohlsson",
+        "pnr": "580128-4297",
+        "epost": "ro@gmail.com",
         "education": ""
     }
 ]

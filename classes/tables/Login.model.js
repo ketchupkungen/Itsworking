@@ -33,11 +33,11 @@ module.exports = function (mongoose) {
                 password: act.password
             });
             //
-            error = obj.validateSync();
-            //
-            if(error){
-                console.log("----------Login Shema------------>"+error);
-            }
+//            error = obj.validateSync();
+//            //
+//            if(error){
+//                console.log("----------Login Shema------------>"+error);
+//            }
             //
             obj.save(function (err, cat) {
                 leftToSave--;

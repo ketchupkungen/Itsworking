@@ -38,101 +38,56 @@ module.exports = class Server {
     
 //==============================================================================
 //==============================================================================
-        
-var mongoose = require('mongoose');
+var mset = g.settings.MONGOOSE;//see 'settingsConstr.js'
 
-//Stop mongoose from using an old promise library
-mongoose.Promise = Promise;
-//
-var studentsJson = require('./json/students.json');
-var educationsJson = require('./json/educations.json');
-var teachersJson = require('./json/teachers.json');
-var bookingsJson = require('./json/bookings.json');
-var classroomsJson = require('./json/classrooms.json');
-var loginsJson = require('./json/logins.json');
-//
-var studentModel = require('./tables/Student.model')(mongoose);
-var educationModel = require('./tables/Education.model')(mongoose);
-var teacherModel = require('./tables/Teacher.model')(mongoose);
-var bookingModel = require('./tables/Booking.model')(mongoose);
-var classModel = require('./tables/Classroom.model')(mongoose);
-var loginModel = require('./tables/Login.model')(mongoose);
-//
-var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
-var jsons = [studentsJson,educationsJson,teachersJson,bookingsJson,classroomsJson,loginsJson];
-//
-//
-var JSONLoader = require('./json/jsonLoader.class')(jsons,models);
-//
-var bodyparser =  require('body-parser'); //Used for Restrouter
-this.app.use(bodyparser.json());
-this.app.use(bodyparser.urlencoded({ extended: false }));
-//
-var Restrouter = require('./restrouterP.class');
-//
-//
-var pop2booking = [{path:'_education'},{path:'_classroom'}];
-//
-new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
-new Restrouter(this.app,educationModel,"edu",'_teachers');
-new Restrouter(this.app,teacherModel,"teach",'_educations');
-new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several
-new Restrouter(this.app,classModel,"class");
-new Restrouter(this.app,loginModel,"login");
-//
-mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
-//
-db.once('open', function (){
-    console.log("Connected to MongoDB");
-    testPopulations();
-//  JSONLoader.fillData();
-});
+if(mset.connect === 'true'){  
+    console.log("Connecting");
+    var mongoose = require('mongoose');
 
-function testPopulations(){
+    //Stop mongoose from using an old promise library
+    mongoose.Promise = Promise;
+    //
+    var studentModel = require('./tables/Student.model')(mongoose);
+    var educationModel = require('./tables/Education.model')(mongoose);
+    var teacherModel = require('./tables/Teacher.model')(mongoose);
+    var bookingModel = require('./tables/Booking.model')(mongoose);
+    var classModel = require('./tables/Classroom.model')(mongoose);
+    var loginModel = require('./tables/Login.model')(mongoose);
+    //
+    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+    //
+    //
+    var JSONLoader = require('./json/jsonLoader.class')(models);
+    //
+    //
+    var bodyparser =  require('body-parser'); //Used for Restrouter
+    this.app.use(bodyparser.json());
+    this.app.use(bodyparser.urlencoded({ extended: false }));
+    //
+    var Restrouter = require('./restrouterP.class');
+    //
+    //
+    var pop2booking = [{path:'_education'},{path:'_classroom'}];
+    //
+    //Set up basic routes
+    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
+    new Restrouter(this.app,educationModel,"edu",'_teachers'); // populate one
+    new Restrouter(this.app,teacherModel,"teach",'_educations');// populate one
+    new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several / two
+    new Restrouter(this.app,classModel,"class");
+    new Restrouter(this.app,loginModel,"login");
+    //
+    //Set up custom routes
     
-//    //Find education which belongs to student
-//    studentModel.findOne({ name: 'john doe' })
-//        .populate('_education') //OBS! not Shema name but the name of property in the Model
-//        .exec(function (err, student) {
-//          if (err) return handleError(err);
-////          console.log("Pop student: " + student);
-//          console.log('Populate: %s', student._education.name);
-//          // prints "The creator is Aaron"
-//    });
-//    
-//    //Find educations which a teacher has
-//     teacherModel.findOne({ name: 'tomas frank' })
-//        .populate('_educations') //OBS! not Shema name but the name of property in the Model
-//        .exec(function (err, teacher) {
-//          if (err) return handleError(err);
-//          console.log("Populate teacher: " + teacher);
-//          console.log('Populate: %s', teacher._educations[0].name);
-//          // prints "The creator is Aaron"
-//    });
-    
-    //Find students which a education has
-     studentModel.find({})
-        .populate({
-            path: '_education',
-            match: {name:'suw16'},
-            select: 'name',
-            options: { sort: { name: -1 }}
-          })
-        .exec(function (err, students) {
-             students = students.filter(function(doc){
-                  console.log('Populate: %s', doc._education);
-//                return doc.tags.length;
-            });
-          if (err) return handleError(err);
-//          console.log("Populate teacher: " + students);
-         
+    //
+    mongoose.connect('mongodb://' + mset.host + '/' + mset.database);
+    var db = mongoose.connection;
+    //
+    db.once('open', function (){
+        console.log("Connected to MongoDB");
+//        JSONLoader.fillData();
     });
-    
-//    function filtering(eduName){
-//        return eduName === 'suw16'
-//    }
-}
+}//mset.connect
 
 //==============================================================================
 //==============================================================================

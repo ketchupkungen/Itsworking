@@ -26,12 +26,20 @@ module.exports = function () {
                 cssOutput: './www/css'
             }
         },
-        SQL: {
+        MONGOOSE: {
+            connect: 'true',
+            host: 'localhost',
+            database: 'test',
+            user: '',
+            pass: ''
+        },
+        MYSQL: {
             connect: 'false',
             host: 'localhost',
+            database: '',
             user: 'root',
-            pass: '',
-            database: ''
+            pass: ''
         }
+       
     };
 };
