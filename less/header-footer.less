@@ -1,0 +1,69 @@
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+.page-content-wrapper {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -200px;
+  /* Pad bottom by footer height */
+  padding: 0 0 200px;
+}
+
+/* Set the fixed height of the footer here */
+.footer {
+  height: 200px;
+  color: white;
+}
+
+header { 
+	height: 120px;
+	margin-bottom: 70px;
+	text-align: center;
+
+	z-index: 1;
+}
+
+header .logo {
+  display: block;
+  float: left;
+  height: 100px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.menu {
+	margin-left:-15px;
+	margin-right:-15px;
+}
+
+.dropMenu {
+	z-index: 10;
+}
+
+.vertical-spacer {
+  height:50px;
+}
+
+.sm-vertical-spacer {
+  height:15px;
+}
+
+
+h1 {
+	font-size: 50px;
+}
+
+.footer li a {
+	text-decoration: none;
+	background-color: #999999;
+}
+
+.footSpace {
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
