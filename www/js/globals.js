@@ -36,9 +36,8 @@ function EXAMPLE() {
     //==========================================================================
 
     //GET ALL
-    BOOKING_REST.find('', function (data) {
+    BOOKING_REST.find('', function (data) {       
     });
-
 
     //GET BY ID
     STUDENT_REST.find('588bc28d9e001a148cf713b7', function (data) {

@@ -16,6 +16,8 @@
     "bootstrap": "*",
     "mongoose": "*",
     "mongodb": "*",
-    "body-parser": "*"
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "sha1": "*"
   }
 }

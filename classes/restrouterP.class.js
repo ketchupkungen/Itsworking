@@ -1,7 +1,7 @@
 'use strict';
 module.exports = class RestrouterP {
 
-  constructor(expressApp,_class,routerName,populate,populate2){
+  constructor(expressApp,_class,routerName,populate,populate2,access){
 
     // populate is optional:
     // 
@@ -11,6 +11,9 @@ module.exports = class RestrouterP {
     this.populate = populate;
     this.populate2 = populate2;
     this._class = _class;
+    this.access = access;
+    
+    this.access = this.access || {};
 
     // get the class name
     var className = _class.name;
@@ -215,6 +218,39 @@ module.exports = class RestrouterP {
       });
     });
 
+  }
+  
+  jsonCleaner(toClean){
+    // clean away or transform properties
+    return JSON.stringify(toClean._doc || toClean,(key,val)=>{
+      // remove __v
+      if(key == "__v"){ return; }
+      // set password to "[secret]"
+      if(key == "password"){ return "[secret]"; }
+      // unchanged properties
+      return val;
+    });
+  }
+
+
+  json(res,err,response){
+    // set status to 403 if error
+    if(err){ res.statusCode = 403; }
+    // send the response
+    res.end(this.jsonCleaner(err || response));
+  }
+
+
+  rights(req,res){
+    // check if the user has rights to access this route
+    var restrictor = this.access[req.method.toLowerCase()];
+    if(typeof restrictor == "function"){
+      if(!restrictor(req.session.content.user,req)){
+        this.json(res,{errors:'access not allowed'});
+        return false;
+      }
+    }
+    return true;
   }
 
 

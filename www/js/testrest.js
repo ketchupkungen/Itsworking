@@ -101,3 +101,21 @@ function _findEduBook(obj) {
     return "findEduBook/" + JSON.stringify(obj);
 }
 
+function addListenerLoginBtn() {
+    $.ajax({
+        async: true,
+        type: 'POST',
+        dataType: 'json',
+        processData: false,
+        headers: {"Content-Type": "application/json"},
+        url: "http://localhost:3000/rest/login",
+        data: {username: "admin", password: "1234"},
+        success: function (data) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+           
+        }
+    });
+}
+
