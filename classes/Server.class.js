@@ -70,22 +70,28 @@ if(mset.connect === 'true'){
     //
     // Never cache request starting with "/rest/"
     // Bra exempel på att skapa Middleware
-    this.app.use(function(req,res,next){
-      if(req.url.indexOf('/rest/') >= 0){
-         res.set("Cache-Control", "no-store, must-revalidate");
-      }
-      next();
-    });
+//    this.app.use(function(req,res,next){
+//      if(req.url.indexOf('/rest/') >= 0){
+//         res.set("Cache-Control", "no-store, must-revalidate");
+//      }
+//      next();
+//    });
+//    
+//    
+//     this.app.get("/checksession",function(req,res){
+//        res.json(req.session);
+//    });
+//    
+////     A path to get user roles
+//    this.app.get('/rest/user-roles',(req,res)=>{
+//        res.json(global.userRoles);
+//    });
     //
+    var Mymiddleware = require('./session/mymiddleware.class');
     //
-     this.app.get("/checksession",function(req,res){
-        res.json(req.session);
-    });
+//    this.app.use(new Mymiddleware(this.app));
+    new Mymiddleware(this.app);
     //
-    // A path to get user roles
-    this.app.get('/rest/user-roles',(req,res)=>{
-        res.json(global.userRoles);
-    });
     //
     //
     var studentModel = require('./tables/Student.model')(mongoose);
