@@ -3,7 +3,9 @@ var EDUCATION_REST = new REST('edu');
 var TEACHERS_REST = new REST('teach');
 var BOOKING_REST = new REST('book');
 var CLASS_REST = new REST('class');
-var LOGIN_REST = new REST('login');
+var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema, not the login operations
+//
+var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
 
 //Simplifies use with 'find/' prefix
 function _find(obj) {
@@ -65,4 +67,10 @@ function EXAMPLE() {
     STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data) {
     });
 
+}
+
+function EXAMPLE_LOGIN() {
+     //LOGIN/CREATE/POST
+    LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data) {
+    });
 }

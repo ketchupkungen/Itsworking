@@ -3,6 +3,11 @@ $(document).ready(function () {
     addListenerPutBtn();
     addListenerGetBtn();
     addListenerDeleteBtn();
+
+    addListenerLoginBtn();
+    addListenerLogoutBtn();
+    
+    addListenerCheckSessionBtn();
 });
 
 //CREATE
@@ -18,14 +23,14 @@ function addListenerPostBtn() {
 
 function addListenerPutBtn() {
 
-     //UPDATE BY QUERY
-     $("#put-btn").click(function () {
-        STUDENT_REST.update(_find({name:'george morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data) {
+    //UPDATE BY QUERY
+    $("#put-btn").click(function () {
+        STUDENT_REST.update(_find({name: 'george morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
-    
-     //UPDATE BY ID
+
+    //UPDATE BY ID
 //     $("#put-btn").click(function () {
 //        STUDENT_REST.update('588bc5e9f2907a0b608a1f31',{epost: 'doe@gmail.com'}, function (data) {
 //            $('#output').text(JSON.stringify(data, null, 1));
@@ -35,35 +40,35 @@ function addListenerPutBtn() {
 
 //GET
 function addListenerGetBtn() {
-    
-    //GET ALL
-//    $("#get-btn").click(function () {
-//        STUDENT_REST.find('',function (data) {
-//            $('#output').text(JSON.stringify(data, null, 1));
-//        });
-//    });
 
-      //GET BY ID
+    //GET ALL
+    $("#get-btn").click(function () {
+        STUDENT_REST.find('',function (data) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
+
+    //GET BY ID
 //    $("#get-btn").click(function () {
 //        STUDENT_REST.find('588efbc10d75430c98ba4b39', function (data) {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
-    
-      //GET QUERY
+
+    //GET QUERY
 //    $("#get-btn").click(function () {
 //        STUDENT_REST.find(_find({name:'john doe'}), function (data) {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
 
-   //GET - SPECIAL QUERY - GET STUDENTS FOR EDUCATION X
-    $("#get-btn").click(function () {
-        STUDENT_REST.find(_findEduStud({name:'suw18'}), function (data) {
-            $('#output').text(JSON.stringify(data, null, 1));
-        });
-    });
-    
+    //GET - SPECIAL QUERY - GET STUDENTS FOR EDUCATION X
+//    $("#get-btn").click(function () {
+//        STUDENT_REST.find(_findEduStud({name: 'suw18'}), function (data) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
+
     //GET - SPECIAL QUERY - GET BOOKINGS FOR EDUCATION X
 //     $("#get-btn").click(function () {
 //        BOOKING_REST.find(_findEduBook({name:'suw18'}), function (data) {
@@ -80,7 +85,7 @@ function addListenerDeleteBtn() {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
-    
+
     //DELETE BY ID
     $("#delete-btn").click(function () {
         STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data) {
@@ -101,21 +106,33 @@ function _findEduBook(obj) {
     return "findEduBook/" + JSON.stringify(obj);
 }
 
-function addListenerLoginBtn() {
-    $.ajax({
-        async: true,
-        type: 'POST',
-        dataType: 'json',
-        processData: false,
-        headers: {"Content-Type": "application/json"},
-        url: "http://localhost:3000/rest/login",
-        data: {username: "admin", password: "1234"},
-        success: function (data) {
+//==============================================================================
+
+function addListenerCheckSessionBtn() {
+    //CHECK SESSION
+    $("#check-session-btn").click(function () {
+        $.getJSON('/checksession',function(data){
             $('#output').text(JSON.stringify(data, null, 1));
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-           
-        }
+        });
+    });
+}
+
+function addListenerLoginBtn() {
+    //LOGIN/POST/CREATE
+    //pass: 0000 = 60048db7dc9ca2f753b4e5d87f33162844f1210d
+    $("#login-btn").click(function () {
+        LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
+}
+
+function addListenerLogoutBtn() {
+    //LOGOUT/DELETE/
+    $("#logout-btn").click(function () {
+        LOGIN_REST.delete('', function (data) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
     });
 }
 

@@ -10,7 +10,8 @@ class REST {
 
   create(properties,callback){
     console.log("CREATE URL: " + this.baseUrl);  
-      
+    console.log("DATA: " + JSON.stringify(properties));
+    
     $.ajax({
       url: this.baseUrl,
       type: "POST",
@@ -49,6 +50,8 @@ class REST {
 
   update(idOrQuery,properties,callback){
     console.log("UPDATE URL: " + this.baseUrl + idOrQuery);
+    console.log("DATA: " + JSON.stringify(properties));
+    
     $.ajax({
       url: this.baseUrl + idOrQuery,
       type: "PUT",

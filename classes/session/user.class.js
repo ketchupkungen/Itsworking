@@ -7,7 +7,8 @@ module.exports = class User {
     };
   }
 
-  //Som jag förstår anropas inte det från någonstans utan körs alltid innan en "save" på shemat görs
+  //Som jag förstår anropas inte det från någonstans utan körs alltid innan en "save" på shemat görs.
+  //This Code i shall use in my 'Login.model.js'
   alterSchema(schema){
 
     schema.pre('save',function(next){

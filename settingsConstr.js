@@ -28,7 +28,7 @@ module.exports = function () {
         },
         MONGOOSE: {
             connect: 'true',
-            host: 'localhost',
+            host: '10.87.0.145',
             database: 'test',
             user: '',
             pass: ''

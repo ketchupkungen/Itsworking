@@ -17,6 +17,7 @@ module.exports = function (mongoose) {
     },
        {collection: 'logins'} // sets the name of Collection in Database
     );
+    
 
     shema.statics.createFromJsonWithNotify = function (json, cb) {
         //
