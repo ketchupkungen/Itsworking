@@ -48,7 +48,6 @@ global.sha1 = sha1;
 global.userRoles = ['user','teacher','admin'];
 global.passwordSalt = "kocmoc";
 
-
 this.app.use(bodyparser.json());
 this.app.use(bodyparser.urlencoded({ extended: false }));
 
@@ -68,30 +67,9 @@ if(mset.connect === 'true'){
     this.app.use(cookieparser()); // read cookies
     this.app.use(new Sessionhandler(Session).middleware());
     //
-    // Never cache request starting with "/rest/"
-    // Bra exempel på att skapa Middleware
-//    this.app.use(function(req,res,next){
-//      if(req.url.indexOf('/rest/') >= 0){
-//         res.set("Cache-Control", "no-store, must-revalidate");
-//      }
-//      next();
-//    });
-//    
-//    
-//     this.app.get("/checksession",function(req,res){
-//        res.json(req.session);
-//    });
-//    
-////     A path to get user roles
-//    this.app.get('/rest/user-roles',(req,res)=>{
-//        res.json(global.userRoles);
-//    });
     //
     var Mymiddleware = require('./session/mymiddleware.class');
-    //
-//    this.app.use(new Mymiddleware(this.app));
     new Mymiddleware(this.app);
-    //
     //
     //
     var studentModel = require('./tables/Student.model')(mongoose);
@@ -134,15 +112,6 @@ if(mset.connect === 'true'){
     new Restrouter(this.app,loginModel,"shemalogin");
     //
     new LoginhandlerRouter(this.app,loginModel);
-    //
-    //Det är sällan man skickar request från clienten för att ändra något
-    this.app.post("/storesomethinginsession",function(req,res){
-       if(!req.session.content.stupidThings){req.session.content.stupidThings = []; }
-       req.session.content.stupidThings.push(req.body);
-       req.session.markModified('content');
-       req.session.save();
-       res.json(req.session);
-    });
     //
     //
     mongoose.connect('mongodb://' + mset.host + '/' + mset.database);

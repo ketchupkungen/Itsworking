@@ -51,9 +51,13 @@ module.exports = class RestrouterP {
     this.app.post(this.baseRoute,function(req,res){
       var instance = new _class(req.body);
       instance.save(function(err,result){
-        if(err){res.json(err);}
-        // find again so we can populate it
-        that.respond('findOne',{_id:result._id},res);
+        if(err){
+            res.send("err: " + err);
+        }else{
+            // find again so we can populate it
+            that.respond('findOne',{_id:result._id},res);
+        }
+        
       });
     });
 

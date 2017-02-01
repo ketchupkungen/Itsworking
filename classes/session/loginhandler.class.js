@@ -45,7 +45,7 @@ module.exports = class Loginhandler {
           if(doc){
               that.postReply(req,res,doc);
           }else{
-              res.json({login:'login failed for: ' + user});
+              res.json({error:'login failed for: ' + user});
           }
       });      
             
@@ -53,8 +53,6 @@ module.exports = class Loginhandler {
   }
   
   postReply(req,res,foundUser){
-    if(foundUser){
-      
 //      var user = Object.assign({},foundUser._doc,{role:foundUser.level});
       var user = foundUser;
       user.password = "";
@@ -66,10 +64,6 @@ module.exports = class Loginhandler {
       req.session.markModified('content');
       req.session.save();
       res.json({user:user, status: 'logged in succesfully'});
-    }
-    else {
-      res.json({user:false, status: 'wrong credentials'});
-    }
   }
 
   delete(){

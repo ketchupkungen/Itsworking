@@ -24,9 +24,7 @@ class REST {
       data: JSON.stringify(properties),
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
     });
 
   }
