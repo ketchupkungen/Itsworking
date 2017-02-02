@@ -1,7 +1,9 @@
+'use strict';
 module.exports = class Loginhandler {
 
-  constructor(expressApp){
+  constructor(expressApp,loginModel){
     this.app = expressApp;
+    this.loginModel = loginModel;
     this.get();
     this.post();
     this.delete();
@@ -34,50 +36,35 @@ module.exports = class Loginhandler {
         return;
       }
       // trying to log in
-      var username = req.body.username;
-      var password = sha1(req.body.password + global.passwordSalt);
-      var entities = global.userRoles;
-      var foundUser, foundEntity, checkedEntities = 0;
-      // look for user in all different entitities
-      entities.forEach((entity)=>{
-        global[entity].findOne({
-          username:username,
-          password:password
-        },(err,found)=>{
-          if(found){
-            foundUser = found;
-            foundEntity = entity;
+      var user = req.body.username;
+      var pass = sha1(req.body.password + global.passwordSalt);
+      console.log("user:" + user + " / pass: " + pass);
+      
+      var that = this;
+      this.loginModel.findOne({epost:user, password: pass},function(err,doc){
+          if(doc){
+              that.postReply(req,res,doc);
+          }else{
+              res.json({error:'login failed for: ' + user});
           }
-          checkedEntities++;
-          if(checkedEntities == entities.length){
-            // now we have checked everywhere :D
-            this.postReply(req,res,foundUser,foundEntity);
-          }
-        });
-      });
+      });      
+            
     });
   }
-
-  postReply(req,res,foundUser,entity){
-    if(foundUser){
-      // copy user and add entity as role,
-      // and delete password and __v
-      var user = Object.assign({},foundUser._doc,{role:entity});
-      delete user.password;
-      delete user.__v;
+  
+  postReply(req,res,foundUser){
+//      var user = Object.assign({},foundUser._doc,{role:foundUser.level});
+      var user = foundUser;
+      user.password = "";
+      user.__v = "";
       // log in successful
-      req.session.content.user = user; // *********req.session is a Mongoose shema
-      // since content is of type mixed we need to
-      // tell Mongoose it is updated before saving
+      req.session.content.user = user; // ------------------->req.session is a Mongoose shema
+      //
+      //since content is of type mixed we need to tell Mongoose it is updated before saving
       req.session.markModified('content');
       req.session.save();
       res.json({user:user, status: 'logged in succesfully'});
-    }
-    else {
-      res.json({user:false, status: 'wrong credentials'});
-    }
   }
-
 
   delete(){
     // logging out

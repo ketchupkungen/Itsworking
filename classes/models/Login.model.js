@@ -17,6 +17,35 @@ module.exports = function (mongoose) {
     },
        {collection: 'logins'} // sets the name of Collection in Database
     );
+    
+    //Do some stuff before making 'save'
+    shema.pre('save',function(next) {
+        
+       if (this.isModified('password')){
+         this.password = sha1(this.password + global.passwordSalt);
+       }
+       
+       var that = this;
+       
+       this.model('login').findOne({epost: this.epost},function(err,doc){
+           if(doc){
+               var err = new Error('Username already exists:' + that.epost);
+               next(err);
+           }else{
+               next();
+           }
+       });
+       
+        //Validate pnr           
+//        err = this.validateSync();
+//        if(err){
+//            next(err);
+//        }else{
+//            next();
+//        }
+       
+    });
+    
 
     shema.statics.createFromJsonWithNotify = function (json, cb) {
         //
@@ -32,13 +61,7 @@ module.exports = function (mongoose) {
                 level: act.level,
                 password: act.password
             });
-            //
-//            error = obj.validateSync();
-//            //
-//            if(error){
-//                console.log("----------Login Shema------------>"+error);
-//            }
-            //
+
             obj.save(function (err, cat) {
                 leftToSave--;
                 if (leftToSave === 0) {

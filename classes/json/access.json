@@ -1,0 +1,16 @@
+[
+    {
+        "basicroute": "rest/student",
+        "get": "1",
+        "post":"2",
+        "put": "2",
+        "delete":"3"
+    },
+    {
+        "basicroute": "rest/edu",
+        "get": "1",
+        "post":"2",
+        "put": "2",
+        "delete":"3"
+    }
+]

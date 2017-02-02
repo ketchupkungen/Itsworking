@@ -1,7 +1,7 @@
 'use strict';
 module.exports = class RestrouterP {
 
-  constructor(expressApp,_class,routerName,populate,populate2,access){
+  constructor(expressApp,_class,routerName,populate,populate2,accessModel){
 
     // populate is optional:
     // 
@@ -11,9 +11,9 @@ module.exports = class RestrouterP {
     this.populate = populate;
     this.populate2 = populate2;
     this._class = _class;
-    this.access = access;
+    this.accessModel = accessModel;
     
-    this.access = this.access || {};
+//    this.access = this.access || {};
 
     // get the class name
     var className = _class.name;
@@ -40,20 +40,63 @@ module.exports = class RestrouterP {
     this.put();
     this.delete();
   }
+  
+  jsonCleaner(toClean){
+    // clean away or transform properties
+    return JSON.stringify(toClean._doc || toClean,(key,val)=>{
+      // remove __v
+      if(key == "__v"){ return; }
+      // set password to "[secret]"
+      if(key == "password"){ return "[secret]"; }
+      // unchanged properties
+      return val;
+    });
+  }
+
+  json(res,err,response){
+    // set status to 403 if error
+    if(err){ res.statusCode = 403; }
+    // send the response
+    res.end(this.jsonCleaner(err || response));
+  }
+  
+  rights(req,res){
+      var method = req.method;
+      var level = req.session.content.user.level;
+      console.log("method: "+ method + "  level: " + level);
+      
+      if(method === "GET"){
+          
+      }else if(method === "POST"){
+        this.accessModel.findOne({basicroute:this.baseRoute,post_:{$lte:level}},function(err,doc){
+           
+           if(!doc){
+               this.json(res,{errors:'access not allowed'});
+               return false;
+           }
+           
+        });
+      }
+   }
 
 
   post(){
-
+      
     // Since "this" will change inside routes
     var _class = this._class, that = this;
 
     // Create a new instance
     this.app.post(this.baseRoute,function(req,res){
+      if(!that.rights(req,res)){return;}
       var instance = new _class(req.body);
       instance.save(function(err,result){
-        if(err){res.json(err);}
-        // find again so we can populate it
-        that.respond('findOne',{_id:result._id},res);
+        if(err){
+            res.send("err: " + err);
+        }else{
+            // find again so we can populate it
+            that.respond('findOne',{_id:result._id},res);
+        }
+        
       });
     });
 
@@ -172,7 +215,6 @@ module.exports = class RestrouterP {
 
 
   put(){
-
     // Since "this" will change inside routes
     var _class = this._class;
 
@@ -220,38 +262,5 @@ module.exports = class RestrouterP {
 
   }
   
-  jsonCleaner(toClean){
-    // clean away or transform properties
-    return JSON.stringify(toClean._doc || toClean,(key,val)=>{
-      // remove __v
-      if(key == "__v"){ return; }
-      // set password to "[secret]"
-      if(key == "password"){ return "[secret]"; }
-      // unchanged properties
-      return val;
-    });
-  }
-
-
-  json(res,err,response){
-    // set status to 403 if error
-    if(err){ res.statusCode = 403; }
-    // send the response
-    res.end(this.jsonCleaner(err || response));
-  }
-
-
-  rights(req,res){
-    // check if the user has rights to access this route
-    var restrictor = this.access[req.method.toLowerCase()];
-    if(typeof restrictor == "function"){
-      if(!restrictor(req.session.content.user,req)){
-        this.json(res,{errors:'access not allowed'});
-        return false;
-      }
-    }
-    return true;
-  }
-
 
 }

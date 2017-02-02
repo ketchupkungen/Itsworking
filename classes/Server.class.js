@@ -46,8 +46,7 @@ var LoginhandlerRouter = require('./session/loginhandler.class');
 
 global.sha1 = sha1;
 global.userRoles = ['user','teacher','admin'];
-global.passwordSalt = "shouldBeHardToGuess132638@@@@x";
-
+global.passwordSalt = "kocmoc";
 
 this.app.use(bodyparser.json());
 this.app.use(bodyparser.urlencoded({ extended: false }));
@@ -68,97 +67,51 @@ if(mset.connect === 'true'){
     this.app.use(cookieparser()); // read cookies
     this.app.use(new Sessionhandler(Session).middleware());
     //
-    // Never cache request starting with "/rest/"
-    this.app.use((req,res,next)=>{
-    if(req.url.indexOf('/rest/') >= 0){
-       // never cache rest requests
-       res.set("Cache-Control", "no-store, must-revalidate");
-     }
-      next();
-    });
-    
-    
-    //Bara ett exempel på att skapa Middleware
+    //
     this.app.use(function(req,res,next){
-       
+        if(req.url.indexOf('/rest/') >= 0){
+           res.set("Cache-Control", "no-store, must-revalidate"); 
+        }
+        next();
     });
-    
-    
     //
-    var studentModel = require('./tables/Student.model')(mongoose);
-    var educationModel = require('./tables/Education.model')(mongoose);
-    var teacherModel = require('./tables/Teacher.model')(mongoose);
-    var bookingModel = require('./tables/Booking.model')(mongoose);
-    var classModel = require('./tables/Classroom.model')(mongoose);
-    var loginModel = require('./tables/Login.model')(mongoose);
     //
-    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+    var studentModel = require('./models/Student.model')(mongoose);
+    var educationModel = require('./models/Education.model')(mongoose);
+    var teacherModel = require('./models/Teacher.model')(mongoose);
+    var bookingModel = require('./models/Booking.model')(mongoose);
+    var classModel = require('./models/Classroom.model')(mongoose);
+    var loginModel = require('./models/Login.model')(mongoose);
+    var accessModel = require('./models/Access.model')(mongoose);
+    //
+    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel,accessModel];
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
+    var Mymiddleware = require('./session/mymiddleware.class');
+    new Mymiddleware(this.app,accessModel);
     //
     var Restrouter = require('./restrouterP.class');
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //
     //Set up basic routes
-    new Restrouter(this.app,studentModel,"student",'_education','_teachers',{ // populate deep
-        get: function(user,req){
-            // Only Teachers and Admins can see/read/find students
-            if(user && user.role != "Teacher" && user.role != "Admin"){ return false; }
-            return true;
-        },
-        post: function(user,req){
-            // Only Admins can create Students
-            if(user && user.role == "Admin"){
-                return true;
-            }
-            return false;
-        }
-    });
-    
+    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); // populate deep
     new Restrouter(this.app,educationModel,"edu",'_teachers'); // populate one
     new Restrouter(this.app,teacherModel,"teach",'_educations');// populate one
     new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several / two
     new Restrouter(this.app,classModel,"class");
-    new Restrouter(this.app,loginModel,"login");
-    new LoginhandlerRouter(this.app);
-    
-    this.app.get("/checksession",function(req,res){
-        res.json(req.session);
-    });
-    
-    //Det är sällan man skickar request från clienten för att ändra något
-    this.app.post("/storesomethinginsession",function(req,res){
-       if(!req.session.content.stupidThings){req.session.content.stupidThings = []; }
-       req.session.content.stupidThings.push(req.body);
-       req.session.markModified('content');
-       req.session.save();
-       res.json(req.session);
-    });
-    
-    
-    this.app.get("/canisee",function(req,res){
-       if(req.session.content.stupidThings){
-           res.json({message:"You have entered stupid things!",stupid:req.session.content.stupidThings});
-       }
-       else {
-           res.json({message:"Not allowed to see stupid things until you post a stupid thing..."});
-       }
-    });
+    new Restrouter(this.app,loginModel,"shemalogin");
     //
+    new LoginhandlerRouter(this.app,loginModel);
     //
-    // A path to get user roles
-    this.app.get('/rest/user-roles',(req,res)=>{
-        res.json(global.userRoles);
-    });
     //
     mongoose.connect('mongodb://' + mset.host + '/' + mset.database);
     var db = mongoose.connection;
     //
     db.once('open', function (){
         console.log("Connected to MongoDB");
-//        JSONLoader.fillData();
+        JSONLoader.fillData();
     });
 }//mset.connect
 

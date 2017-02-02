@@ -67,6 +67,8 @@ module.exports = class Restrouter {
     this.put();
     this.delete();
   }
+  
+  
 
 
   post(){
