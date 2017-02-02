@@ -83,13 +83,14 @@ if(mset.connect === 'true'){
     var classModel = require('./models/Classroom.model')(mongoose);
     var loginModel = require('./models/Login.model')(mongoose);
     var accessModel = require('./models/Access.model')(mongoose);
+    global.accessModel = accessModel;
     //
     var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel,accessModel];
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
-    var Mymiddleware = require('./session/mymiddleware.class');
-    new Mymiddleware(this.app,accessModel);
+//    var Mymiddleware = require('./session/mymiddleware.class');
+//    new Mymiddleware(this.app,accessModel);
     //
     var Restrouter = require('./restrouterP.class');
     //

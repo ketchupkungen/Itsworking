@@ -39,9 +39,7 @@ class REST {
       type: "GET",
       dataType: "json",
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
     });
 
   }
@@ -62,9 +60,8 @@ class REST {
       data: JSON.stringify(properties),
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
+      
     });
   }
 
@@ -76,9 +73,8 @@ class REST {
       dataType: "json",
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
+      
     });
   }
 

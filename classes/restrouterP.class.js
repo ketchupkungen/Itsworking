@@ -1,28 +1,15 @@
 'use strict';
 module.exports = class RestrouterP {
 
-  constructor(expressApp,_class,routerName,populate,populate2,accessModel){
-
-    // populate is optional:
-    // 
-    // OBS! 'populate' parameter is a property in the Shema which refers to another shema. EX: _education
+  constructor(expressApp,_class,routerName,populate,populate2){
 
     this.app = expressApp;
     this.populate = populate;
     this.populate2 = populate2;
     this._class = _class;
-    this.accessModel = accessModel;
-    
-//    this.access = this.access || {};
-
+    this.accessModel = global.accessModel;
     // get the class name
     var className = _class.name;
-
-    // for classes created with mongoosefromclass
-    // we need to get the class name like this
-    if(_class.name == "model" && _class.orgClass){
-      className = _class.orgClass.name;
-    }
 
     // If routerName exists then use it as className
     if(routerName){
@@ -42,44 +29,51 @@ module.exports = class RestrouterP {
   }
   
   jsonCleaner(toClean){
-    // clean away or transform properties
-    return JSON.stringify(toClean._doc || toClean,(key,val)=>{
-      // remove __v
-      if(key == "__v"){ return; }
-      // set password to "[secret]"
-      if(key == "password"){ return "[secret]"; }
-      // unchanged properties
-      return val;
+      return JSON.stringify(toClean._doc || toClean,(key,val)=>{
+        if(key == "__v"){ return; }
+        if(key == "password"){ return "[secret]"; }
+        return val;
     });
   }
 
   json(res,err,response){
-    // set status to 403 if error
     if(err){ res.statusCode = 403; }
-    // send the response
     res.end(this.jsonCleaner(err || response));
   }
   
+  check(properties,res,that){
+      console.log("PROPS: " + JSON.stringify(properties));
+       that.accessModel.findOne(properties,function(err,doc){
+           console.log("DOC: ", doc);
+           if(!doc){
+               that.json(res,{errors:'access not allowed'});
+               return false;
+           }else{
+               return true;
+           }
+          
+        });
+   }
+  
   rights(req,res){
+     var that = this;
+      //
       var method = req.method;
       var level = req.session.content.user.level;
       console.log("method: "+ method + "  level: " + level);
-      
+      //
       if(method === "GET"){
-          
+       return this.check({basicroute:this.baseRoute,get_:{$lte:level}},res,that);
       }else if(method === "POST"){
-        this.accessModel.findOne({basicroute:this.baseRoute,post_:{$lte:level}},function(err,doc){
-           
-           if(!doc){
-               this.json(res,{errors:'access not allowed'});
-               return false;
-           }
-           
-        });
+        return this.check({basicroute:this.baseRoute,post_:{$lte:level}},res,that);
+      }else if(method === "PUT"){
+        return this.check({basicroute:this.baseRoute,put_:{$lte:level}},res,that);
+      }else if(method === "DELETE"){
+        return this.check({basicroute:this.baseRoute,delete_:{$lte:level}},res,that);
       }
    }
-
-
+   
+   
   post(){
       
     // Since "this" will change inside routes
@@ -87,7 +81,9 @@ module.exports = class RestrouterP {
 
     // Create a new instance
     this.app.post(this.baseRoute,function(req,res){
-      if(!that.rights(req,res)){return;}
+     //   
+     if(!that.rights(req,res)){return;}
+     //
       var instance = new _class(req.body);
       instance.save(function(err,result){
         if(err){
@@ -131,11 +127,17 @@ module.exports = class RestrouterP {
 
     // All instances
     this.app.get(this.baseRoute,function(req,res){
+      //   
+     if(!that.rights(req,res)){return;}
+     //  
       that.respond('find',{},res);
     });
 
     // Find an instance using a mongo query object
     this.app.get(this.baseRoute + 'find/*',function(req,res){
+      //   
+     if(!that.rights(req,res)){return;}
+     //
       var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
       var searchObj;
       eval('searchObj = ' + searchStr);
@@ -147,6 +149,9 @@ module.exports = class RestrouterP {
     
     //CUSTOM QUERY - GET STUDENTS FOR EDUCATION X (EDUCATION_REST)
      this.app.get(this.baseRoute + 'findEduStud/*',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //
         var searchStr = decodeURIComponent(req.url.split('/findEduStud/')[1]);
         var searchObj; 
         eval('searchObj = ' + searchStr);
@@ -172,6 +177,9 @@ module.exports = class RestrouterP {
     
     //CUSTOM QUERY - GET BOOKINGS FOR EDUCATION X (BOOKING_REST)
     this.app.get(this.baseRoute + 'findEduBook/*',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //
         var searchStr = decodeURIComponent(req.url.split('/findEduBook/')[1]);
         var searchObj; 
         eval('searchObj = ' + searchStr);
@@ -200,12 +208,18 @@ module.exports = class RestrouterP {
     
     // One instance by id
     this.app.get(this.baseRoute + ':id',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //  
       that.respond('findOne',{_id:req.params.id},res);
     });
 
 
     // Call the method of an instance
     this.app.get(this.baseRoute + ':id/:method',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //
       _class.findOne({_id:req.params.id},function(err,result){
         res.json(err || {returns:result[req.params.method]()});
       });
@@ -220,6 +234,9 @@ module.exports = class RestrouterP {
 
     // Update several instances using a mongo query object
     this.app.put(this.baseRoute + 'find/*',function(req,res){
+      //   
+      if(!that.rights(req,res)){return;}
+      //  
       var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
       var searchObj;
       eval('searchObj = ' + searchStr);
@@ -230,6 +247,9 @@ module.exports = class RestrouterP {
 
     // Update one instance by id
     this.app.put(this.baseRoute + ':id',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //
       _class.update({_id:req.params.id},req.body,function(err,result){
         res.json(err || result);
       });
@@ -245,6 +265,9 @@ module.exports = class RestrouterP {
 
     // Delete several instances using a mongo query object
     this.app.delete(this.baseRoute + 'find/*',function(req,res){
+      //   
+      if(!that.rights(req,res)){return;}
+      //  
       var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
       var searchObj;
       eval('searchObj = ' + searchStr);
@@ -255,6 +278,9 @@ module.exports = class RestrouterP {
 
     // Delete one instance by id
     this.app.delete(this.baseRoute + ':id',function(req,res){
+        //   
+        if(!that.rights(req,res)){return;}
+        //
       _class.remove({_id:req.params.id},function(err,result){
         res.json(err || result);
       });

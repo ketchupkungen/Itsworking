@@ -87,18 +87,18 @@ function addListenerGetBtn() {
 
 function addListenerDeleteBtn() {
     //DELETE QUERY
-//    $("#delete-btn").click(function () {
-//        STUDENT_REST.delete(_find({name: 'george morge'}), function (data, textStatus, jqXHR) {
-//            $('#output').text(JSON.stringify(data, null, 1));
-//        });
-//    });
-
-    //DELETE BY ID
     $("#delete-btn").click(function () {
-        STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data, textStatus, jqXHR) {
+        STUDENT_REST.delete(_find({name: 'george morge'}), function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
+
+    //DELETE BY ID
+//    $("#delete-btn").click(function () {
+//        STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data, textStatus, jqXHR) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
 }
 
 function _find(obj) {
@@ -128,7 +128,10 @@ function addListenerLoginBtn() {
     //LOGIN/POST/CREATE
     //pass: 0000 = 60048db7dc9ca2f753b4e5d87f33162844f1210d
     $("#login-btn").click(function () {
-        LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
+        var loginLevelOneProperties = {username: "gmor@gmail.com", password: "0000"};
+        var loginLevelThreeProperties = {username: "jdoe@gmail.com", password: "0000"};
+        
+        LOGIN_REST.create({username: "jdoe@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
                 $('#output').text(JSON.stringify(data, null, 1));
                 if(!data.error){
                     LOGIN_STATUS = 1;
