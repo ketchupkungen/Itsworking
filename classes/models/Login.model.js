@@ -37,12 +37,12 @@ module.exports = function (mongoose) {
        });
        
         //Validate pnr           
-        err = this.validateSync();
-        if(err){
-            next(err);
-        }else{
-            next();
-        }
+//        err = this.validateSync();
+//        if(err){
+//            next(err);
+//        }else{
+//            next();
+//        }
        
     });
     

@@ -68,43 +68,35 @@ if(mset.connect === 'true'){
     this.app.use(new Sessionhandler(Session).middleware());
     //
     //
-    var Mymiddleware = require('./session/mymiddleware.class');
-    new Mymiddleware(this.app);
+    this.app.use(function(req,res,next){
+        if(req.url.indexOf('/rest/') >= 0){
+           res.set("Cache-Control", "no-store, must-revalidate"); 
+        }
+        next();
+    });
     //
     //
-    var studentModel = require('./tables/Student.model')(mongoose);
-    var educationModel = require('./tables/Education.model')(mongoose);
-    var teacherModel = require('./tables/Teacher.model')(mongoose);
-    var bookingModel = require('./tables/Booking.model')(mongoose);
-    var classModel = require('./tables/Classroom.model')(mongoose);
-    var loginModel = require('./tables/Login.model')(mongoose);
+    var studentModel = require('./models/Student.model')(mongoose);
+    var educationModel = require('./models/Education.model')(mongoose);
+    var teacherModel = require('./models/Teacher.model')(mongoose);
+    var bookingModel = require('./models/Booking.model')(mongoose);
+    var classModel = require('./models/Classroom.model')(mongoose);
+    var loginModel = require('./models/Login.model')(mongoose);
+    var accessModel = require('./models/Access.model')(mongoose);
     //
-    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel,accessModel];
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
+    var Mymiddleware = require('./session/mymiddleware.class');
+    new Mymiddleware(this.app,accessModel);
     //
     var Restrouter = require('./restrouterP.class');
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //
     //Set up basic routes
-    new Restrouter(this.app,studentModel,"student",'_education','_teachers',{ // populate deep
-          //OBS! OBS! I think i must use 'user.level' not 'user.role'       
-//        get: function(user,req){
-//            // Only Teachers and Admins can see/read/find students
-//            if(user && user.role != "Teacher" && user.role != "Admin"){ return false; }
-//            return true;
-//        },
-//        post: function(user,req){
-//            // Only Admins can create Students
-//            if(user && user.role == "Admin"){
-//                return true;
-//            }
-//            return false;
-//        }
-    });
-    
+    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); // populate deep
     new Restrouter(this.app,educationModel,"edu",'_teachers'); // populate one
     new Restrouter(this.app,teacherModel,"teach",'_educations');// populate one
     new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several / two

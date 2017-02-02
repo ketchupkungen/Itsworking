@@ -3,19 +3,13 @@
 module.exports = class Sessionhandler {
     
    // cookie eny value can be used for ex. app name
-  constructor(mongooseSessionModel,cookieName,removeInactiveSessionsAfterMs){
+  constructor(mongooseSessionModel){
     this.Session = mongooseSessionModel;
     this.getSessionsFromDB(); // will set this.sessionMem
     this.cookieName = "app-session";
-    this.removeInactiveSessionsAfterMs = 60*60*1000;
-    setInterval(
-      ()=>{
-          this.removeInactiveSessions();
-          },
-          removeInactiveSessionsAfterMs/10 // run every 6 minutes if default
-    );
+    this.removeInactiveSessionsAfterMs = 60*60*1000;    
+    setInterval(this.removeInactiveSessions, 60000);
   }
-
 
   middleware(){
     // Create Express middleware
@@ -46,7 +40,6 @@ module.exports = class Sessionhandler {
     });
     return val;
   }
-
 
   generateCookieVal(){
     // Generate a random cookie value

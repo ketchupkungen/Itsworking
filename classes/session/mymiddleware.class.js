@@ -2,21 +2,26 @@
 
 module.exports = class Mymiddleware {
     
-  constructor(express){
+  constructor(express,accessModel){
     this.app = express;
+    this.accessModel = accessModel;
     
-    this.allRequestTypes();
+//    this.accessControl();
     this.get();
+        
   }
+  
+   
 
 
-  allRequestTypes(){
+  accessControl(){
+      var that = this;
       this.app.use(function(req,res,next){
-      if(req.url.indexOf('/rest/') >= 0){// Never cache request starting with "/rest/"
-         res.set("Cache-Control", "no-store, must-revalidate");
-      }else if(req.url.indexOf('/checkthis') >= 0){
-          res.json({middleware:'mymiddleware is working'});
+      //
+      if(req.url.indexOf('/rest/student') >= 0){
+//         that.checkAccess(req,res,"student",next);
       }
+      //
       next();
     });
   }
@@ -33,16 +38,16 @@ module.exports = class Mymiddleware {
         res.json(global.userRoles);
     });
   }
-  
-  post(){
-      //Just an example of writing some session daata
-      this.app.post("/writeToSession",function(req,res){
-       if(!req.session.content.stupidThings){req.session.content.stupidThings = []; }
-       req.session.content.stupidThings.push(req.body); // OBS! req.session is a mongoose model
-       req.session.markModified('content'); // mark modified is needed for 'mongoose.Schema.Types.Mixed'
-       req.session.save();
-       res.json(req.session);
-    });
-  }
+//  
+//  post(){
+//      //Just an example of writing some session daata
+//      this.app.post("/writeToSession",function(req,res){
+//       if(!req.session.content.stupidThings){req.session.content.stupidThings = []; }
+//       req.session.content.stupidThings.push(req.body); // OBS! req.session is a mongoose model
+//       req.session.markModified('content'); // mark modified is needed for 'mongoose.Schema.Types.Mixed'
+//       req.session.save();
+//       res.json(req.session);
+//    });
+//  }
   
 }

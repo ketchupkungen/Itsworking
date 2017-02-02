@@ -12,11 +12,33 @@ module.exports = function (mongoose) {
             },
             required: [true, 'ERROR: Personal id required']
         },
-        epost: {type:String,required: true},
+        epost: {type:String,
+            validate: {
+              validator: function(v) {
+                return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
+              },
+              message: 'ERROR: {VALUE} is not a valid email!'
+            },
+            required: [true, 'ERROR: email required']
+        },
         _education: {type:mongoose.Schema.Types.ObjectId, ref: 'education'} // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'students'} // sets the name of Collection in Database
     );
+    
+    //Do some stuff before making 'save',
+    shema.pre('save',function(next) {
+        
+        //Validate pnr           
+//        err = this.validateSync();
+//        if(err){
+//            next(err);
+//        }else{
+//            next();
+//        }
+        next(); // OBS! 
+    });
+    
 
     shema.statics.createFromJsonWithNotify = function (json, cb) {
         //
@@ -31,12 +53,6 @@ module.exports = function (mongoose) {
                 pnr: act.pnr,
                 epost: act.epost
             });
-            //
-//            error = obj.validateSync();
-//            //
-//            if(error){
-//                console.log("---------Student Shema------------->"+error);
-//            }
             //
             obj.save(function (err, obj) {
                 leftToSave--;

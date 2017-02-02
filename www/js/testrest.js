@@ -14,18 +14,18 @@ $(document).ready(function () {
 function addListenerPostBtn() {
 
     //CREATE
-//    $("#post-btn").click(function () {
-//        STUDENT_REST.create({name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com"}, function (data, textStatus, jqXHR) {
-//            $('#output').text(JSON.stringify(data, null, 1));
-//        });
-//    });
-    
-    //CREATE
     $("#post-btn").click(function () {
-        LOGIN_SHEMA_REST.create({pnr: "850131-0737", epost: "gmor@gmail.com",password:"0000",level:"1"}, function (data, textStatus, jqXHR) {
+        STUDENT_REST.create({name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com"}, function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
+    
+    //CREATE
+//    $("#post-btn").click(function () {
+//        LOGIN_SHEMA_REST.create({pnr: "850131-0737", epost: "gmor@gmail.com",password:"0000",level:"1"}, function (data, textStatus, jqXHR) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
 }
 
 function addListenerPutBtn() {
