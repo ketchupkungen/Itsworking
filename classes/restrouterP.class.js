@@ -27,9 +27,6 @@ module.exports = class RestrouterP {
     this.put();
     this.delete();
   }
-  
-  
-   
    
   post(){
       
@@ -289,9 +286,9 @@ module.exports = class RestrouterP {
    }
    
    check(properties,res,that,cb){
-      console.log("PROPS: " + JSON.stringify(properties));
+//      console.log("PROPS: " + JSON.stringify(properties));
        that.accessModel.findOne(properties,function(err,doc){
-           console.log("DOC: ", doc);
+//           console.log("DOC: ", doc);
            if(!doc){
                that.json(res,{errors:'access not allowed'});
                cb(false);
@@ -313,9 +310,5 @@ module.exports = class RestrouterP {
     if(err){ res.statusCode = 403; }
     res.end(this.jsonCleaner(err || response));
   }
-  
-  
-  
-  
   
 }

@@ -18,6 +18,7 @@ g = {}; // all global variables (ex. settings)
   "./classLoader"
 ].forEach(function(x){
   // store required modules in "m"
+//  console.log("require: " + x);
   m[x.replace(/\W/g,'')] = require(x);
 });
 

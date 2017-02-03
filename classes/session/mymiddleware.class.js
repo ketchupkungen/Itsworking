@@ -2,40 +2,26 @@
 
 module.exports = class Mymiddleware {
     
-  constructor(express,accessModel){
+  constructor(express){
     this.app = express;
-    this.accessModel = accessModel;
     
-//    this.accessControl();
     this.get();
-        
+    this.use();
   }
   
-   
-
-
-  accessControl(){
-      var that = this;
-      this.app.use(function(req,res,next){
-      //
-      if(req.url.indexOf('/rest/student') >= 0){
-//         that.checkAccess(req,res,"student",next);
-      }
-      //
-      next();
-    });
+  use(){
+      //Never cache rest
+    this.app.use(function(req,res,next){
+        if(req.url.indexOf('/rest/') >= 0){
+           res.set("Cache-Control", "no-store, must-revalidate"); 
+        }
+        next();
+    }); 
   }
-  
   
   get(){
     this.app.get("/checksession",function(req,res){
         res.json(req.session);
-    });
-    //
-    //
-    // A path to get user roles
-    this.app.get('/user-roles',(req,res)=>{
-        res.json(global.userRoles);
     });
   }
 //  

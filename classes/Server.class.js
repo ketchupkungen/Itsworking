@@ -7,11 +7,11 @@ module.exports = class Server {
     
     // add express to this
     this.app = m.express();
-    
-    
 
     // run the setup method
     this.setup();
+    this.main();
+    this.listen();
   }
 
   setup() {
@@ -32,49 +32,33 @@ module.exports = class Server {
 
     // parse all urlencoded request body data
     // for example from "standard" HTML forms
+    //Restrouter also needs this
     this.app.use(m.bodyparser.urlencoded({extended: false}));
-
-    var me = this;
+  }
     
-//==============================================================================
-//==============================================================================
-var bodyparser =  require('body-parser'); // Used for Restrouter
-var cookieparser = require('cookie-parser');
+main(){
 var sha1 = require('sha1');
-
-var LoginhandlerRouter = require('./session/loginhandler.class');
-
 global.sha1 = sha1;
-global.userRoles = ['user','teacher','admin'];
 global.passwordSalt = "kocmoc";
 
-this.app.use(bodyparser.json());
-this.app.use(bodyparser.urlencoded({ extended: false }));
+var LoginhandlerRouter = require('./session/loginhandler.class');
+var Sessionhandler = require('./session/sessionhandler.class');
+var Mymiddleware = require('./session/mymiddleware.class');
+var Restrouter = require('./restrouterP.class');
 
 var mset = g.settings.MONGOOSE;//see 'settingsConstr.js'
 
 if(mset.connect === 'true'){  
-    console.log("Connecting");
-    var mongoose = require('mongoose');
 
+    var mongoose = require('mongoose');
     //Stop mongoose from using an old promise library
     mongoose.Promise = Promise;
     //
-    // Make the express server able to handle
-    // cookies, sessions and logins
-    var Sessionhandler = require('./session/sessionhandler.class');
     var Session = require('./session/session.model')(mongoose);
-    this.app.use(cookieparser()); // read cookies
     this.app.use(new Sessionhandler(Session).middleware());
     //
-    //
-    this.app.use(function(req,res,next){
-        if(req.url.indexOf('/rest/') >= 0){
-           res.set("Cache-Control", "no-store, must-revalidate"); 
-        }
-        next();
-    });
-    //
+    //Implements some basic functionality
+    new Mymiddleware(this.app);
     //
     var studentModel = require('./models/Student.model')(mongoose);
     var educationModel = require('./models/Education.model')(mongoose);
@@ -89,10 +73,7 @@ if(mset.connect === 'true'){
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
-    var Mymiddleware = require('./session/mymiddleware.class');
-    new Mymiddleware(this.app,accessModel);
-    //
-    var Restrouter = require('./restrouterP.class');
+   
     //
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
@@ -118,12 +99,17 @@ if(mset.connect === 'true'){
 
 //==============================================================================
 //==============================================================================
-   // listen on port 3000
+   
+}
+
+listen(){
+    // listen on port 3000
+    var me = this;
     this.app.listen(this.settings.port,  function() {
       console.log("Server listening on port "+me.settings.port);
     });
-  }
-  
 }
+  
+};
 
 
