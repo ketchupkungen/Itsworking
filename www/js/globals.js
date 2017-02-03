@@ -20,17 +20,21 @@ function login(username, password, cb) {
     });
 }
 
-function logOut(cb){
+function logOut(cb) {
     LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
-       cb(true); 
+        $("body").empty();
+        includeHtml("templates/login.html", "body");
+        if (cb) {
+          cb(true);
+        }
     });
 }
 
-function isLoggedIn(cb){
+function isLoggedIn(cb) {
     LOGIN_REST.find('', function (data, textStatus, jqXHR) {
-        if(data.user){
+        if (data.user) {
             cb(true);
-        }else{
+        } else {
             cb(false);
         }
     });
@@ -40,16 +44,16 @@ function isLoggedIn(cb){
 
 
 function EXAMPLE_LOGIN() {
-     //LOGIN/CREATE/POST
+    //LOGIN/CREATE/POST
     LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
-        if(!data.error){
+        if (!data.error) {
             LOGIN_STATUS = 1;
             ACCESS_LEVEL = data.user.level;
-        }else{
+        } else {
             LOGIN_STATUS = 0;
         }
     });
-    
+
     //LOGOUT/DELETE/
     LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
         LOGIN_STATUS = 0;
@@ -75,7 +79,7 @@ function EXAMPLE_CRUD() {
     //==========================================================================
 
     //GET ALL
-    BOOKING_REST.find('', function (data, textStatus, jqXHR) {       
+    BOOKING_REST.find('', function (data, textStatus, jqXHR) {
     });
 
     //GET BY ID
@@ -89,11 +93,11 @@ function EXAMPLE_CRUD() {
     //GET SPEICEAL QUERY; GET ALL STUDENTS WITH EDUCATION X
     STUDENT_REST.find(_findEduStud({name: 'suw16'}), function (data, textStatus, jqXHR) {
     });
-    
+
     //GET SPEICEAL QUERY; GET ALL BOOKINGS FOR EDUCATION X
-    BOOKING_REST.find(_findEduBook({name:'suw18'}), function (data, textStatus, jqXHR) {
+    BOOKING_REST.find(_findEduBook({name: 'suw18'}), function (data, textStatus, jqXHR) {
     });
- 
+
     //==========================================================================
 
     //DELETE QUERY

@@ -1,22 +1,24 @@
 $(document).ready(function () {
-    
     go();
 });
 
 
-
 function go() {
     addEventLoginBtn();
+    addEventLogOutBtn();
 
-    logOut(function () {
-        includeHtml("templates/login.html", "body");
-    });
-    
-    
+    logOut();
 
     function loggedIn() {
         $("body").empty();
         includeHtml("templates/basiclayout.html", "body");
+    }
+
+    function addEventLogOutBtn() {
+        $("body").on("click", "#log-out-btn-one", function (evt) {
+            evt.preventDefault();
+            logOut();
+        });
     }
 
     function addEventLoginBtn() {
