@@ -8,6 +8,7 @@ $(document).ready(function () {
     addListenerLogoutBtn();
     
     addListenerCheckSessionBtn();
+    addListenerGetLoginStatusBtn();
 });
 
 //CREATE
@@ -128,18 +129,14 @@ function addListenerLoginBtn() {
     //LOGIN/POST/CREATE
     //pass: 0000 = 60048db7dc9ca2f753b4e5d87f33162844f1210d
     $("#login-btn").click(function () {
-        var loginLevelOneProperties = {username: "gmor@gmail.com", password: "0000"};
-        var loginLevelThreeProperties = {username: "jdoe@gmail.com", password: "0000"};
         
         LOGIN_REST.create({username: "jdoe@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
-                $('#output').text(JSON.stringify(data, null, 1));
-                if(!data.error){
-                    LOGIN_STATUS = 1;
-                    ACCESS_LEVEL = data.user.level;
-                    console.log("ACCESS_LEVEL:" + ACCESS_LEVEL);
-                }else{
-                    LOGIN_STATUS = 0;
-                }
+            $('#output').text(JSON.stringify(data, null, 1));
+            if(!data.error){
+                console.log("LOGGED IN, ACCESS_LEVEL:" + data.user.level);
+            }else{
+                console.log("LOGG IN FAILED");
+            }
         });
     });
 }
@@ -149,8 +146,15 @@ function addListenerLogoutBtn() {
     $("#logout-btn").click(function () {
         LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
-            LOGIN_STATUS = 0;
-            ACCESS_LEVEL = 0;
+        });
+    });
+}
+
+function addListenerGetLoginStatusBtn() {
+    //GET STATUS/GET/FIND
+    $("#check-session-status-btn").click(function () {
+        LOGIN_REST.find('', function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));           
         });
     });
 }

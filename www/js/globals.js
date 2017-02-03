@@ -1,5 +1,3 @@
-var LOGIN_STATUS = 0; // 0 = logged out, 1 = logged in
-var ACCESS_LEVEL = 0; // 1 = student, 2 = teacher, 3 = admin
 //
 var STUDENT_REST = new REST('student');
 var EDUCATION_REST = new REST('edu');
@@ -9,6 +7,37 @@ var CLASS_REST = new REST('class');
 var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema, not the login operations
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
+
+
+function login(username, password, cb) {
+    LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {
+        if (!data.error) {
+            console.log("LOGIN OK, ACCESS_LEVEL:" + data.user.level);
+            cb(true);
+        } else {
+            cb(false);
+        }
+    });
+}
+
+function logOut(cb){
+    LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
+       cb(true); 
+    });
+}
+
+function isLoggedIn(cb){
+    LOGIN_REST.find('', function (data, textStatus, jqXHR) {
+        if(data.user){
+            cb(true);
+        }else{
+            cb(false);
+        }
+    });
+}
+
+
+
 
 function EXAMPLE_LOGIN() {
      //LOGIN/CREATE/POST
