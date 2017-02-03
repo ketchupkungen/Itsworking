@@ -12,7 +12,7 @@ module.exports = function (mongoose) {
             required: [true, 'ERROR: Personal id required']
         },
         epost:   {type:String,required:true},
-        level: {type:Number,enum:[1,2,3]},
+        level: {type:Number,min:0,max:3},
         password: {type:String,required:true}
     },
        {collection: 'logins'} // sets the name of Collection in Database

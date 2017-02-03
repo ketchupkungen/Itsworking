@@ -89,13 +89,13 @@ if(mset.connect === 'true'){
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
-//    var Mymiddleware = require('./session/mymiddleware.class');
-//    new Mymiddleware(this.app,accessModel);
+    var Mymiddleware = require('./session/mymiddleware.class');
+    new Mymiddleware(this.app,accessModel);
     //
     var Restrouter = require('./restrouterP.class');
     //
-    var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //
+    var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //Set up basic routes
     new Restrouter(this.app,studentModel,"student",'_education','_teachers'); // populate deep
     new Restrouter(this.app,educationModel,"edu",'_teachers'); // populate one
