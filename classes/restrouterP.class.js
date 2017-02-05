@@ -3,23 +3,13 @@ module.exports = class RestrouterP {
 
   constructor(expressApp,_class,routerName,populate,populate2){
 
-    // populate is optional:
-    // 
-    // OBS! 'populate' parameter is a property in the Shema which refers to another shema. EX: _education
-
     this.app = expressApp;
     this.populate = populate;
     this.populate2 = populate2;
     this._class = _class;
-
+    this.accessModel = global.accessModel;
     // get the class name
     var className = _class.name;
-
-    // for classes created with mongoosefromclass
-    // we need to get the class name like this
-    if(_class.name == "model" && _class.orgClass){
-      className = _class.orgClass.name;
-    }
 
     // If routerName exists then use it as className
     if(routerName){
@@ -37,23 +27,29 @@ module.exports = class RestrouterP {
     this.put();
     this.delete();
   }
-
-
+   
   post(){
-
+      
     // Since "this" will change inside routes
     var _class = this._class, that = this;
 
     // Create a new instance
     this.app.post(this.baseRoute,function(req,res){
-      var instance = new _class(req.body);
-      instance.save(function(err,result){
-        if(err){res.json(err);}
-        // find again so we can populate it
-        that.respond('findOne',{_id:result._id},res);
-      });
-    });
-
+     //   
+      that.rights(req,res,function(ret){
+          if(ret){
+            var instance = new _class(req.body);
+            instance.save(function(err,result){
+                if(err){
+                    res.send("err: " + err);
+                }else{
+                    // find again so we can populate it
+                    that.respond('findOne',{_id:result._id},res);
+                }
+            });//save
+          }
+      });//rights
+    }); //post
   }
 
   // A response helper for gets
@@ -64,7 +60,6 @@ module.exports = class RestrouterP {
         if(this.populate2){
             m.populate({
              path: this.populate,
-            // Get friends of friends - populate the 'friends' array for every friend
              populate: { path: this.populate2 }
             });
         }else{
@@ -79,21 +74,32 @@ module.exports = class RestrouterP {
 
 
   get(){
-
     // Since "this" will change inside routes
     var _class = this._class, that = this;
 
     // All instances
     this.app.get(this.baseRoute,function(req,res){
-      that.respond('find',{},res);
+      //   
+      that.rights(req,res,function(ret){
+          if(ret){
+            that.respond('find',{},res);  
+          }
+      });
+      //
     });
 
     // Find an instance using a mongo query object
     this.app.get(this.baseRoute + 'find/*',function(req,res){
-      var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
-      var searchObj;
-      eval('searchObj = ' + searchStr);
-      that.respond('find',searchObj,res);
+     //
+     that.rights(req,res,function(ret){
+         if(ret){
+            var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
+            var searchObj;
+            eval('searchObj = ' + searchStr);
+            that.respond('find',searchObj,res);
+         }
+     });
+     //
     });
 
     //==========================================================================
@@ -101,52 +107,64 @@ module.exports = class RestrouterP {
     
     //CUSTOM QUERY - GET STUDENTS FOR EDUCATION X (EDUCATION_REST)
      this.app.get(this.baseRoute + 'findEduStud/*',function(req,res){
-        var searchStr = decodeURIComponent(req.url.split('/findEduStud/')[1]);
-        var searchObj; 
-        eval('searchObj = ' + searchStr);
-        
-        _class.find({})
-            .populate({
-                path: '_education',
-                match: {name:searchObj.name},
-                select: 'name'
-              })
-            .exec(function (err, students) {
-                if (err) return handleError(err);
-                students = students.filter(filtering);
-                res.json(students);              
-        });
-        
-        function filtering(element, index, array){
-            if(element._education){
-               return element._education.name === searchObj.name;
+        //   
+        that.rights(req,res,function(ret){
+            if(ret){
+               var searchStr = decodeURIComponent(req.url.split('/findEduStud/')[1]);
+                var searchObj; 
+                eval('searchObj = ' + searchStr);
+
+                _class.find({})
+                    .populate({
+                        path: '_education',
+                        match: {name:searchObj.name},
+                        select: 'name'
+                      })
+                    .exec(function (err, students) {
+                        if (err) return handleError(err);
+                        students = students.filter(filtering);
+                        res.json(students);              
+                });
+
+                function filtering(element, index, array){
+                    if(element._education){
+                       return element._education.name === searchObj.name;
+                    }
+                }        
             }
-        }       
+        });//rights
+        //
     });
     
     //CUSTOM QUERY - GET BOOKINGS FOR EDUCATION X (BOOKING_REST)
     this.app.get(this.baseRoute + 'findEduBook/*',function(req,res){
-        var searchStr = decodeURIComponent(req.url.split('/findEduBook/')[1]);
-        var searchObj; 
-        eval('searchObj = ' + searchStr);
-        
-        _class.find({})
-            .populate({
-                path: '_education',
-                match: {name:searchObj.name},
-                select: 'name'
-              })
-            .exec(function (err, students) {
-                if (err) return handleError(err);
-                students = students.filter(filtering);
-                res.json(students);              
-        });
-        
-        function filtering(element, index, array){
-            if(element._education){
-               return element._education.name === searchObj.name;
-            }
-        }       
+        //   
+        that.rights(req,res,function(ret){
+           if(ret){
+               //
+                var searchStr = decodeURIComponent(req.url.split('/findEduBook/')[1]);
+                var searchObj; 
+                eval('searchObj = ' + searchStr);
+
+                _class.find({})
+                    .populate({
+                        path: '_education',
+                        match: {name:searchObj.name},
+                        select: 'name'
+                      })
+                    .exec(function (err, students) {
+                        if (err) return handleError(err);
+                        students = students.filter(filtering);
+                        res.json(students);              
+                });
+
+                function filtering(element, index, array){
+                    if(element._education){
+                       return element._education.name === searchObj.name;
+                    }
+                }       
+           } 
+        }); //rights
     });
     
     //==========================================================================
@@ -160,6 +178,7 @@ module.exports = class RestrouterP {
 
     // Call the method of an instance
     this.app.get(this.baseRoute + ':id/:method',function(req,res){
+        
       _class.findOne({_id:req.params.id},function(err,result){
         res.json(err || {returns:result[req.params.method]()});
       });
@@ -169,25 +188,36 @@ module.exports = class RestrouterP {
 
 
   put(){
-
     // Since "this" will change inside routes
     var _class = this._class;
+    var that = this;
 
     // Update several instances using a mongo query object
     this.app.put(this.baseRoute + 'find/*',function(req,res){
-      var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
-      var searchObj;
-      eval('searchObj = ' + searchStr);
-      _class.update(searchObj,req.body,{multi:true},function(err,result){
-        res.json(err || result);
+      //   
+      that.rights(req,res,function(ret){
+        if(ret){
+            var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
+            var searchObj;
+            eval('searchObj = ' + searchStr);
+            _class.update(searchObj,req.body,{multi:true},function(err,result){
+            res.json(err || result);
+          });
+        }
       });
+      //  
     });
 
     // Update one instance by id
     this.app.put(this.baseRoute + ':id',function(req,res){
-      _class.update({_id:req.params.id},req.body,function(err,result){
-        res.json(err || result);
-      });
+        //   
+        that.rights(req,res,function(ret){
+            if(ret){
+              _class.update({_id:req.params.id},req.body,function(err,result){
+              res.json(err || result);
+             }); 
+           }
+        });
     });
 
   }
@@ -197,25 +227,88 @@ module.exports = class RestrouterP {
 
     // Since "this" will change inside routes
     var _class = this._class;
+    var that = this;
 
     // Delete several instances using a mongo query object
     this.app.delete(this.baseRoute + 'find/*',function(req,res){
-      var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
-      var searchObj;
-      eval('searchObj = ' + searchStr);
-      _class.remove(searchObj,function(err,result){
-        res.json(err || result);
+      //   
+      that.rights(req,res,function(ret){
+        if(ret){
+           var searchStr = decodeURIComponent(req.url.split('/find/')[1]);
+            var searchObj;
+            eval('searchObj = ' + searchStr);
+            _class.remove(searchObj,function(err,result){
+              res.json(err || result);
+            });
+        }
       });
     });
 
     // Delete one instance by id
     this.app.delete(this.baseRoute + ':id',function(req,res){
-      _class.remove({_id:req.params.id},function(err,result){
-        res.json(err || result);
-      });
+        //   
+        that.rights(req,res,function(ret){
+             if(ret){
+                 _class.remove({_id:req.params.id},function(err,result){
+                    res.json(err || result);
+                });
+             }
+        });
+        //
     });
-
+    
+  }
+  
+  rights(req,res,cb){
+     var that = this;
+      //
+      var method = req.method;
+      var level = req.session.content.user.level;
+      console.log("method: "+ method + "  level: " + level);
+      //
+      if(method === "GET"){
+       this.check({basicroute:this.baseRoute,get_:{$lte:level}},res,that,function(ret){
+          cb(ret);
+       });
+      }else if(method === "POST"){
+        this.check({basicroute:this.baseRoute,post_:{$lte:level}},res,that,function(ret){
+          cb(ret);
+       });
+      }else if(method === "PUT"){
+        this.check({basicroute:this.baseRoute,put_:{$lte:level}},res,that,function(ret){
+          cb(ret);
+       });
+      }else if(method === "DELETE"){
+        this.check({basicroute:this.baseRoute,delete_:{$lte:level}},res,that,function(ret){
+          cb(ret);
+       });
+      }
+   }
+   
+   check(properties,res,that,cb){
+//      console.log("PROPS: " + JSON.stringify(properties));
+       that.accessModel.findOne(properties,function(err,doc){
+//           console.log("DOC: ", doc);
+           if(!doc){
+               that.json(res,{errors:'access not allowed'});
+               cb(false);
+           }else{
+              cb(true);
+           }         
+        });
+   }
+  
+  jsonCleaner(toClean){
+      return JSON.stringify(toClean._doc || toClean,(key,val)=>{
+        if(key == "__v"){ return; }
+        if(key == "password"){ return "[secret]"; }
+        return val;
+    });
   }
 
-
+  json(res,err,response){
+    if(err){ res.statusCode = 403; }
+    res.end(this.jsonCleaner(err || response));
+  }
+  
 }

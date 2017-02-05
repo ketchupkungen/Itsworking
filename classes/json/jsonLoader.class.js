@@ -12,8 +12,9 @@ module.exports = function JSONLoader(models) {
     this.bookingsJson = require('./bookings.json');
     this.classroomsJson = require('./classrooms.json');
     this.loginsJson = require('./logins.json');
+    this.accessJson = require('./access.json');
 
-    this.jsons = [this.studentsJson,this.educationsJson,this.teachersJson,this.bookingsJson,this.classroomsJson,this.loginsJson];
+    this.jsons = [this.studentsJson,this.educationsJson,this.teachersJson,this.bookingsJson,this.classroomsJson,this.loginsJson,this.accessJson];
     
 
     this.fillData = function() {

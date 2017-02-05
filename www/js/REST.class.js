@@ -10,7 +10,8 @@ class REST {
 
   create(properties,callback){
     console.log("CREATE URL: " + this.baseUrl);  
-      
+    console.log("DATA: " + JSON.stringify(properties));
+    
     $.ajax({
       url: this.baseUrl,
       type: "POST",
@@ -23,9 +24,7 @@ class REST {
       data: JSON.stringify(properties),
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
     });
 
   }
@@ -40,15 +39,15 @@ class REST {
       type: "GET",
       dataType: "json",
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
     });
 
   }
 
   update(idOrQuery,properties,callback){
     console.log("UPDATE URL: " + this.baseUrl + idOrQuery);
+    console.log("DATA: " + JSON.stringify(properties));
+    
     $.ajax({
       url: this.baseUrl + idOrQuery,
       type: "PUT",
@@ -61,9 +60,8 @@ class REST {
       data: JSON.stringify(properties),
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
+      
     });
   }
 
@@ -75,9 +73,8 @@ class REST {
       dataType: "json",
       // callback functions
       success: callback,
-      error: function(error){
-        throw(error);
-      }
+      error: callback
+      
     });
   }
 

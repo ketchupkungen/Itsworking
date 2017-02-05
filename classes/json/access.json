@@ -1,0 +1,45 @@
+[
+    {
+        "basicroute": "/rest/student/",
+        "get": "1",
+        "post": "2",
+        "put": "2",
+        "delete": "3"
+    },
+    {
+        "basicroute": "/rest/edu/",
+        "get": "1",
+        "post": "2",
+        "put": "2",
+        "delete": "3"
+    },
+    {
+        "basicroute": "/rest/teach/",
+        "get": "1",
+        "post": "3",
+        "put": "3",
+        "delete": "3"
+    },
+    {
+        "basicroute": "/rest/book/",
+        "get": "1",
+        "post": "2",
+        "put": "2",
+        "delete": "3"
+    },
+    {
+        "basicroute": "/rest/class/",
+        "get": "1",
+        "post": "3",
+        "put": "3",
+        "delete": "3"
+    },
+    {
+        "basicroute": "/rest/shemalogin/",
+        "get": "1",
+        "post": "3",
+        "put": "3",
+        "delete": "3"
+    }
+    
+]

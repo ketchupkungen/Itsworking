@@ -7,11 +7,11 @@ module.exports = class Server {
     
     // add express to this
     this.app = m.express();
-    
-    
 
     // run the setup method
     this.setup();
+    this.main();
+    this.listen();
   }
 
   setup() {
@@ -32,71 +32,84 @@ module.exports = class Server {
 
     // parse all urlencoded request body data
     // for example from "standard" HTML forms
+    //Restrouter also needs this
     this.app.use(m.bodyparser.urlencoded({extended: false}));
-
-    var me = this;
+  }
     
-//==============================================================================
-//==============================================================================
+main(){
+var sha1 = require('sha1');
+global.sha1 = sha1;
+global.passwordSalt = "kocmoc";
+
+var LoginhandlerRouter = require('./session/loginhandler.class');
+var Sessionhandler = require('./session/sessionhandler.class');
+var Mymiddleware = require('./session/mymiddleware.class');
+var Restrouter = require('./restrouterP.class');
+
 var mset = g.settings.MONGOOSE;//see 'settingsConstr.js'
 
 if(mset.connect === 'true'){  
-    console.log("Connecting");
-    var mongoose = require('mongoose');
 
+    var mongoose = require('mongoose');
     //Stop mongoose from using an old promise library
     mongoose.Promise = Promise;
     //
-    var studentModel = require('./tables/Student.model')(mongoose);
-    var educationModel = require('./tables/Education.model')(mongoose);
-    var teacherModel = require('./tables/Teacher.model')(mongoose);
-    var bookingModel = require('./tables/Booking.model')(mongoose);
-    var classModel = require('./tables/Classroom.model')(mongoose);
-    var loginModel = require('./tables/Login.model')(mongoose);
+    var Session = require('./session/session.model')(mongoose);
+    this.app.use(new Sessionhandler(Session).middleware());
     //
-    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel];
+    //Implements some basic functionality
+    new Mymiddleware(this.app);
     //
+    var studentModel = require('./models/Student.model')(mongoose);
+    var educationModel = require('./models/Education.model')(mongoose);
+    var teacherModel = require('./models/Teacher.model')(mongoose);
+    var bookingModel = require('./models/Booking.model')(mongoose);
+    var classModel = require('./models/Classroom.model')(mongoose);
+    var loginModel = require('./models/Login.model')(mongoose);
+    var accessModel = require('./models/Access.model')(mongoose);
+    global.accessModel = accessModel;
+    //
+    var models = [studentModel,educationModel,teacherModel,bookingModel,classModel,loginModel,accessModel];
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
-    //
-    var bodyparser =  require('body-parser'); //Used for Restrouter
-    this.app.use(bodyparser.json());
-    this.app.use(bodyparser.urlencoded({ extended: false }));
-    //
-    var Restrouter = require('./restrouterP.class');
+   
     //
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
-    //
     //Set up basic routes
-    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); //populate deep
+    new Restrouter(this.app,studentModel,"student",'_education','_teachers'); // populate deep
     new Restrouter(this.app,educationModel,"edu",'_teachers'); // populate one
     new Restrouter(this.app,teacherModel,"teach",'_educations');// populate one
     new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several / two
     new Restrouter(this.app,classModel,"class");
-    new Restrouter(this.app,loginModel,"login");
+    new Restrouter(this.app,loginModel,"shemalogin");
     //
-    //Set up custom routes
-    
+    new LoginhandlerRouter(this.app,loginModel);
+    //
     //
     mongoose.connect('mongodb://' + mset.host + '/' + mset.database);
     var db = mongoose.connection;
     //
     db.once('open', function (){
         console.log("Connected to MongoDB");
-//        JSONLoader.fillData();
+        JSONLoader.fillData();
     });
 }//mset.connect
 
 //==============================================================================
 //==============================================================================
-   // listen on port 3000
+   
+}
+
+listen(){
+    // listen on port 3000
+    var me = this;
     this.app.listen(this.settings.port,  function() {
       console.log("Server listening on port "+me.settings.port);
     });
-  }
-  
 }
+  
+};
 
 
