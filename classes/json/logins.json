@@ -10,6 +10,12 @@
         "epost": "jdoe@gmail.com",
         "level":"2",
         "password": "0000"
+    },
+    {
+        "pnr": "550505-5555",
+        "epost": "admin@mail.com",
+        "level":"3",
+        "password": "0000"
     }
     
 ]

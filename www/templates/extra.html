@@ -1,0 +1,10 @@
+<div>
+	<h3>${headline}</h3>
+	<p>${text}</p>
+	[repeat pets, pet]
+		<p><strong>${pet}</strong></p>
+		[if pet == "Dog"]
+			<p>Dogs are really cool!</p>
+		[endif]
+	[endrepeat]
+</div>
