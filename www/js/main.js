@@ -1,9 +1,26 @@
 
 $(document).ready(function () {
-	console.log('Yo! DOM Ready!');
-
-	go();
+    console.log('Yo! DOM Ready!');
+    initializeHistoryRouter();
+    go();
 });
+
+function initializeHistoryRouter() {
+    // '/status-link' is a href of <a> tag
+    new HistoryRouter({
+        '/status-link': function () {
+            openLink("#content-main", "templates/statusTest.html");
+        },
+        '/options-link': function () {
+            openLink("#content-main", "templates/optionsTest.html");
+        }
+    });
+
+    function openLink(contentId, templatePath) {
+        $(contentId).empty();
+        includeHtml(templatePath, contentId);
+    }
+}
 
 
 function go() {
@@ -12,13 +29,14 @@ function go() {
 
     logOut();
 
-	//adds 'click' event listener for menu items
-	initMenuItemClick();
+    //adds 'click' event listener for menu items
+    initMenuItemClick();
 
     function loggedIn() {
         $("body").empty();
         includeHtml("templates/basiclayout.html", "body");
     }
+
 
     function addEventLogOutBtn() {
         $("body").on("click", "#log-out-btn-one", function (evt) {
@@ -53,31 +71,31 @@ function go() {
 
 function initMenuItemClick() {
 
-	// click on menu item
+    // click on menu item
     $('html').on('click', '.navbar-nav li', function (e) {
-   		console.log('You selected menu item (object): ', e);
+        console.log('You selected menu item (object): ', e);
 
-   		if (!e.target.id){
-	   		console.log('The menu item "'+e.target.text+'" is MISSING an id!!');
-   		} else{
-	   		console.log('You selected menu item (id): ', e.target.id);
-   		}
+        if (!e.target.id) {
+            console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
+        } else {
+            console.log('You selected menu item (id): ', e.target.id);
+        }
 
-   		var whichTemplate = '';
+        var whichTemplate = '';
 
-   		if (e.target.id == 'profile-settings') {
-   			whichTemplate = 'profileContent';
-   		}
+        if (e.target.id == 'profile-settings') {
+            whichTemplate = 'profileContent';
+        }
 
-   		//!!TODO: add more menu items here
+        //!!TODO: add more menu items here
 
 
-   		if (whichTemplate !== '') {
-			var htmlTemplate = loadTemplate('layouts/'+whichTemplate+'.html');
-			$('.header-title h1').html(e.target.text);
-			$('main').html(htmlTemplate);
-		}
-	});
+        if (whichTemplate !== '') {
+            var htmlTemplate = loadTemplate('layouts/' + whichTemplate + '.html');
+            $('.header-title h1').html(e.target.text);
+            $('main').html(htmlTemplate);
+        }
+    });
 
 }
 
