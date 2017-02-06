@@ -9,7 +9,7 @@ function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
         '/status-link': function () {
-            openLink("#content-main", "templates/statusTest.html");
+            openLink("#content-main", "templates/adminRooms.html");
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
@@ -73,12 +73,12 @@ function initMenuItemClick() {
 
     // click on menu item
     $('html').on('click', '.navbar-nav li', function (e) {
-        console.log('You selected menu item (object): ', e);
+//        console.log('You selected menu item (object): ', e);
 
         if (!e.target.id) {
             console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
         } else {
-            console.log('You selected menu item (id): ', e.target.id);
+//            console.log('You selected menu item (id): ', e.target.id);
         }
 
         var whichTemplate = '';

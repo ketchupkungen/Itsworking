@@ -27,7 +27,7 @@ class HistoryRouter {
 
     // when clicking a link run the click handler
     $(document).on('click','a',function(e){
-      console.log("Event object",e);
+//      console.log("Event object",e);
       var aTag = $(this);
       self.clickHandler(aTag,e);
     });
