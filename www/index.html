@@ -9,14 +9,16 @@ and open the template in the editor.
         <title>Test Login</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <script onerror="linkNotFound(this)" src="js/external/jquery-1.9.1.js"></script>
+        <script onerror="linkNotFound(this)" src="js/external/client.min.js"></script>
+		<script src="js/REST.class.js"></script>
         <script src="js/globals.js"></script>
         <script src="js/lib_a.js"></script>
-        <script onerror="linkNotFound(this)" src="js/external/jquery-1.9.1.js"></script>
         <link onerror="linkNotFound(this)" rel="stylesheet" href="css/all.css" type="text/css"/>
-        <link onerror="linkNotFound(this)" rel="stylesheet" href="css/slate-theme.min.css">   
-        
-        
+        <link onerror="linkNotFound(this)" rel="stylesheet" href="css/slate-theme.min.css">
+        <script onerror="linkNotFound(this)" src="js/modals/my_modals.js"></script>
+        <script onerror="linkNotFound(this)" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
     </head>
     <body>
         <!-- Sidebar menu -->
@@ -28,7 +30,7 @@ and open the template in the editor.
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-              </button>      
+              </button>
             </div>
             <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
               <ul class="nav navbar-nav">
@@ -38,18 +40,17 @@ and open the template in the editor.
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profil<span class="caret"></span><span class="profil pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
                   <ul class="dropdown-menu forAnimate" role="menu">
                     <li><a href="#">Status?</a></li>
-                    <li><a href="#">Inställningar?</a></li>
+                    <li><a href="#" id="profile-settings">Inställningar?</a></li>
                     <li><a href="#">Någonting</a></li>
                     <li class="divider"></li>
                     <li><a href="#">Något annat</a></li>
                     <li class="divider"></li>
                     <li><a href="#"><strong>Logga ut</strong></a></li>
                   </ul>
-                </li>          
+                </li>
                 <li ><a href="#">Boka lokal<span class="boka pull-right hidden-xs showopacity glyphicon glyphicon-pushpin"></span></a></li>
-                <li ><a href="#">Bokade lokaler<span class="bokade pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a></li>        
+                <li ><a href="#">Bokade lokaler<span class="bokade pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a></li>
                 <li ><a href="#">Sök<span class="sok pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a></li>
-
                 <!--Ska vara dold för elever och lärare -->
                 <li ><a href="#">Administratör<span class="admin pull-right hidden-xs showopacity glyphicon glyphicon-cog"></span></a></li>
 
@@ -58,15 +59,23 @@ and open the template in the editor.
           </div>
         </nav>
         <!-- /Sidebar menu -->
-        
+
+        <div class="testIncludeTemplate"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="mainTemplate"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Header -->
         <div class="page-content-wrapper">
-
             <header class="container-fluid bg bg-primary">
-
                 <div class="row">
                     <div class="col-sm-12">
+
                         <h1>Itsworking</h1>  
                     </div>
                 </div>
@@ -79,6 +88,32 @@ and open the template in the editor.
         <!-- /Page content -->
 
 
+	        <!-- vertical spacer-->
+	        <div class="vertical-spacer"></div>
+	        </div>
+	        <div class="vertical-spacer"></div>
+	        </div>
+	        <!-- /vertical spacer -->
+
+	        <!-- Footer -->
+	        <div class="container-fluid bg-primary footer">
+	            <div class="row bg-primary">
+	                <div class="col-sm-offset-1 col-sm-2 footSpace">
+	                    <a href="#"><h4><strong>Skolan</strong></h4></a>
+	                    <a href="#"><p>Utbildningar</p></a>
+	                    <a href="#"><p>Information</p></a>
+	                </div>
+
+	                    <div class="sm-vertical-spacer"></div>
+
+	                    <p><strong>Adress: Location 23</strong></p>
+	                    <p><strong>Postal code: 343 33 Locationtown</strong></p>
+
+	                </div>
+	            </div>
+	        </div>
+        <!-- /main page content -->
+        </main>
 
         <!-- vertical spacer-->
         <div class="vertical-spacer"></div>
@@ -95,7 +130,6 @@ and open the template in the editor.
                     <a href="#"><p>Utbildningar</p></a>
                     <a href="#"><p>Information</p></a>
                 </div>
-
                 <div class="col-sm-offset-2 col-sm-3 footSpace">
                     <a href="#"><h4><strong>Kontakta Oss</strong></h4><a>
                     <a href="#"><p>email: något@något.com</p></a>
@@ -105,12 +139,12 @@ and open the template in the editor.
                 <div class="col-sm-offset-1 col-sm-2 footSpace">
                     <a href="#"><h4><strong>Följ oss</strong></h4></a>
                     <a href="#"><p>Nyhetsbrev:</p></a>
-                    <a href="#"><p></p></a>      
+                    <a href="#"><p></p></a>
                 </div>
-            </div>    
-        </div>   
+            </div>
+        </div>
         <!-- /Footer -->
-        
+
     </head>
     <body>
 
