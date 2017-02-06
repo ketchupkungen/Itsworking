@@ -76,13 +76,15 @@ var formHelpers = new FormHelpers();
 
 // Load html templates
 // (also see libs/template.jquery.js)
+console.log("HEJ OCH HÅ")
 $.loadTemplates([
-  'header',
+  /*'header',
   'modal',
   'navbar',
   'restTestOutput',
   'tableFromObject',
-  'formFromObject'
+  'formFromObject',
+  'main'*/
 ],start);
 
 // Set up client side routes

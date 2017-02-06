@@ -1,9 +1,16 @@
+// Load ALL templates, wait for DOM ready and run go
+/*$.loadTemplates([
+  "login",
+  "basiclayout",
+  "main"
+],()=>{$(go);});*/
 
-$(document).ready(function () {
-	console.log('Yo! DOM Ready!');
 
-	go();
-});
+$.loadTemplates([
+  "login",
+  "basiclayout",
+  "main"
+],function(){$(document).ready(go);});
 
 
 function go() {
@@ -17,7 +24,8 @@ function go() {
 
     function loggedIn() {
         $("body").empty();
-        includeHtml("templates/basiclayout.html", "body");
+        $('body').template('basiclayout',{email:"något@något.com"});
+        //includeHtml("templates/basiclayout.html", "body");
     }
 
     function addEventLogOutBtn() {
