@@ -73,8 +73,6 @@ if(mset.connect === 'true'){
     //
     var JSONLoader = require('./json/jsonLoader.class')(models);
     //
-   
-    //
     //
     var pop2booking = [{path:'_education'},{path:'_classroom'}];
     //Set up basic routes
@@ -97,9 +95,12 @@ if(mset.connect === 'true'){
     });
 }//mset.connect
 
-//==============================================================================
-//==============================================================================
    
+    // If no other route rule fulfilled then return www/index.html
+    this.app.get('*',(req,res)=>{
+      res.sendFile(__dirname + '/www/index.html');
+    });
+
 }
 
 listen(){
