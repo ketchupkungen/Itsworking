@@ -1,9 +1,6 @@
-// Load ALL templates, wait for DOM ready and run go
-/*$.loadTemplates([
-  "login",
-  "basiclayout",
-  "main"
-],()=>{$(go);});*/
+$(document).ready(function () {
+    initializeHistoryRouter();
+});
 
 
 $.loadTemplates([
@@ -43,7 +40,6 @@ function go() {
     function loggedIn() {
         $("body").empty();
         $('body').template('basiclayout',{email:"något@något.com"});
-        //includeHtml("templates/basiclayout.html", "body");
     }
 
 
