@@ -8,7 +8,9 @@ $.loadTemplates([
   "basiclayout",
   "main",
   "booking",
-  "search"
+  "search",
+  "booked",
+  "admin"
 ],function(){$(document).ready(go);});
 
 
@@ -26,6 +28,12 @@ function initializeHistoryRouter() {
         },
         '/search-link': function () {
             openLink("#content-main", "templates/search.html");
+        },
+        '/booked-link': function () {
+            openLink("#content-main", "templates/booked.html");
+        },
+        '/admin-link': function () {
+            openLink("#content-main", "templates/admin.html");
         }
     });
 
