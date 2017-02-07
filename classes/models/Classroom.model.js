@@ -3,7 +3,7 @@ module.exports = function (mongoose) {
     // Mongoose Schema, One-to-Few relation
     var shema = mongoose.Schema({
         nr:  {type:Number,required: true,min: 1, max: 10},
-        size:   {type:String,enum:['small',"middle","large"]},
+        size:   {type:String,enum:['SM',"MD","LG"]},
         projector: {type:Boolean,default: false}
     },
        {collection: 'classrooms'} // sets the name of Collection in Database
