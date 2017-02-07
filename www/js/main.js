@@ -7,7 +7,8 @@ $.loadTemplates([
   "login",
   "basiclayout",
   "main",
-  "booking"
+  "booking",
+  "search"
 ],function(){$(document).ready(go);});
 
 
@@ -22,6 +23,9 @@ function initializeHistoryRouter() {
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking.html");
+        },
+        '/search-link': function () {
+            openLink("#content-main", "templates/search.html");
         }
     });
 
@@ -108,4 +112,3 @@ function initMenuItemClick() {
     });
 
 }
-
