@@ -6,7 +6,8 @@ $(document).ready(function () {
 $.loadTemplates([
   "login",
   "basiclayout",
-  "main"
+  "main",
+  "search"
 ],function(){$(document).ready(go);});
 
 
@@ -18,6 +19,9 @@ function initializeHistoryRouter() {
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
+        },
+        '/search-link': function () {
+            openLink("#content-main", "templates/search.html");
         }
     });
 
@@ -103,4 +107,3 @@ function initMenuItemClick() {
     });
 
 }
-
