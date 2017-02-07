@@ -108,6 +108,8 @@ function addEventAdminEditIcon() {
 
 function addEventAdminDeleteIcon() {
     $('body').on("click", ".delete-room-icon", function () {
+        $('.admin-add-room-form').remove();
+        
         var parent = $(this).parent();
         var id = $(parent).data('_id');
         console.log("ID:", id);
