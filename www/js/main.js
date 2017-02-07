@@ -6,7 +6,8 @@ $(document).ready(function () {
 $.loadTemplates([
   "login",
   "basiclayout",
-  "main"
+  "main",
+  "booking"
 ],function(){$(document).ready(go);});
 
 
@@ -18,6 +19,9 @@ function initializeHistoryRouter() {
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
+        },
+        '/booking-link': function () {
+            openLink("#content-main", "templates/booking.html");
         }
     });
 
@@ -32,7 +36,8 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-    logOut();
+//    logOut();
+loggedIn();
 
     //adds 'click' event listener for menu items
     initMenuItemClick();
