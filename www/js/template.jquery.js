@@ -82,7 +82,7 @@
     x = x.replace(/\[else\s*if([^\]]*)\]/g,'`})}${_else_if($1,()=>{return `');
     x = x.replace(/\[else\]/g,'`})}${_else(()=>{return `');
     x = x.replace(/\[endif\]/g,'`})}${_endif()}');
-console.log(x);
+//console.log(x);
     return x;
   }
 

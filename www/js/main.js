@@ -18,7 +18,7 @@ function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
         '/status-link': function () {
-            openLink("#content-main", "templates/adminRooms.html");
+            adminDisplayRooms();
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
@@ -49,7 +49,11 @@ function go() {
     addEventLogOutBtn();
 
 //    logOut();
+<<<<<<< HEAD
+     loggedIn();
+=======
 loggedIn();
+>>>>>>> fac24b929caa26a0e68136344235e219bb042989
 
     //adds 'click' event listener for menu items
     initMenuItemClick();
