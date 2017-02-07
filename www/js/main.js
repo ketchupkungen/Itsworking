@@ -49,11 +49,7 @@ function go() {
     addEventLogOutBtn();
 
 //    logOut();
-<<<<<<< HEAD
      loggedIn();
-=======
-loggedIn();
->>>>>>> fac24b929caa26a0e68136344235e219bb042989
 
     //adds 'click' event listener for menu items
     initMenuItemClick();
