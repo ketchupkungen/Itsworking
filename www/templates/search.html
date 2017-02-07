@@ -4,9 +4,9 @@
             <div class="input-group input-group-sm">
                 <!--
                 <span class="input-group-addon" id="logoModifier">ANC SEARCH</span>-->
-                <input type="text" class="form-control" placeholder="Search for.." id="searchField">
+                <input type="text" class="form-control" placeholder="Sök efter..." id="searchField">
                 <span class="input-group-btn">
-                    <button class="search-btn btn btn-primary" type="button" id="searchButton" data-loading-text="Searching..">Search</button>
+                    <button class="search-btn btn btn-primary" type="button" id="searchButton" data-loading-text="Searching..">Sök</button>
                 </span>
                 <!--
 <span id="deviceCheckbox" class="input-group-addon">
@@ -15,120 +15,120 @@
 
 
             </div>
-        </div>
-        <div class="progressContainer">
-        </div>
-        <div class="resultsContainer">
-            <div class="panel panel-default" id="searchPanel">
-                <div class="panel-heading" id="searchPanelHeading">Result</div>
-                <div class="panel-body">
 
-                    <table class="table" id="addressTable">
+            <div class="progressContainer">
+            </div>
+            <div class="resultsContainer">
+                <div class="panel panel-default" id="searchPanel">
+                    <div class="panel-heading" id="searchPanelHeading">Resultat</div>
+                    <div class="panel-body">
+
+                        <table class="table" id="addressTable">
+                            <tr>
+                                <td>ANC Code</td>
+                                <td>EFK</td>
+                                <td>BTID</td>
+                                <td>4532</td>
+                                <td>Sort Code</td>
+                                <td>24004233</td>
+                                <td width="100%"></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div style="background-color: #fafafa; border-top: 1px solid #dddddd;" class="search-panel-body">
+
+                        <table class="table" id="addressTable">
+                            <tr>
+                                <td>Address</td>
+                                <td>1234 Something Drive, Southampton, SN2 PL5</td>
+                                <td width="100%"></td>
+                            </tr>
+                            <tr>
+                                <td>Location</td>
+                                <td>Southampton</td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number</td>
+                                <td>01327 340456</td>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+                    <table class="table" id="deviceTable">
                         <tr>
-                            <td>ANC Code</td>
-                            <td>EFK</td>
-                            <td>BTID</td>
-                            <td>4532</td>
-                            <td>Sort Code</td>
-                            <td>24004233</td>
-                            <td width="100%"></td>
-                        </tr>
-                    </table>
-
-                </div>
-                <div style="background-color: #fafafa; border-top: 1px solid #dddddd;" class="panel-body">
-
-                    <table class="table" id="addressTable">
-                        <tr>
-                            <td>Address</td>
-                            <td>1234 Something Drive, Southampton, SN2 PL5</td>
-                            <td width="100%"></td>
-                        </tr>
-                        <tr>
-                            <td>Location</td>
-                            <td>Southampton</td>
-                        </tr>
-                        <tr>
-                            <td>Phone Number</td>
-                            <td>01327 340456</td>
-                        </tr>
-                    </table>
-
-
-
-                </div>
-                <table class="table" id="deviceTable">
-                    <tr>
-                        <td colspan="5">
-                            <span id="deviceCheckboxes" class="input-group-addon">
+                            <td colspan="5">
+                                <span id="deviceCheckboxes" class="input-group-addon">
                                     <input type="checkbox" aria-label="" checked> Show Workstations
                                 </span>
-                            <span id="deviceCheckboxes" class="input-group-addon">
+                                <span id="deviceCheckboxes" class="input-group-addon">
                                     <input type="checkbox" aria-label="" checked> Show Printers
                                 </span>
-                            <span id="deviceCheckboxes" class="input-group-addon">
+                                <span id="deviceCheckboxes" class="input-group-addon">
                                     <input type="checkbox" aria-label=""> Show Servers
                                 </span>
-                    </tr>
-                    </tr>
-                    <tr>
-                        <th>Device Code</th>
-                        <th>Device Name</th>
-                        <th>WSID</th>
-                        <th>IP Address</th>
-                        <th>TAU Indicator</th>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.43.243.22</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>W</td>
-                        <td>Workstation4324</td>
-                        <td>4234</td>
-                        <td>199.243.22</td>
-                        <td>20</td>
-                    </tr>
-                </table>
+                        </tr>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                        <tr>
+                            <td>Wwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                            <td>wwwwwwww</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
