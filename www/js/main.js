@@ -6,7 +6,11 @@ $(document).ready(function () {
 $.loadTemplates([
   "login",
   "basiclayout",
-  "main"
+  "main",
+  "booking",
+  "search",
+  "booked",
+  "admin"
 ],function(){$(document).ready(go);});
 
 
@@ -18,6 +22,18 @@ function initializeHistoryRouter() {
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
+        },
+        '/booking-link': function () {
+            openLink("#content-main", "templates/booking.html");
+        },
+        '/search-link': function () {
+            openLink("#content-main", "templates/search.html");
+        },
+        '/booked-link': function () {
+            openLink("#content-main", "templates/booked.html");
+        },
+        '/admin-link': function () {
+            openLink("#content-main", "templates/admin.html");
         }
     });
 
@@ -33,7 +49,11 @@ function go() {
     addEventLogOutBtn();
 
 //    logOut();
+<<<<<<< HEAD
      loggedIn();
+=======
+loggedIn();
+>>>>>>> fac24b929caa26a0e68136344235e219bb042989
 
     //adds 'click' event listener for menu items
     initMenuItemClick();
@@ -104,4 +124,3 @@ function initMenuItemClick() {
     });
 
 }
-
