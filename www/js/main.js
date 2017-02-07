@@ -17,11 +17,8 @@ $.loadTemplates([
 function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
-        '/status-link': function () {
+        '/classroom-admin': function () {
             adminDisplayRooms();
-        },
-        '/options-link': function () {
-            openLink("#content-main", "templates/optionsTest.html");
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking.html");
