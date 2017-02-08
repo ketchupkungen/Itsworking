@@ -257,6 +257,34 @@ module.exports = class RestrouterP {
         //
     });
     
+    //==========================================================================
+    //==========================================================================
+    
+    //CUSTOM QUERY DELETE REFERENCE FROM REFS - EX: DELETE A TEACHER FROM EDUCATIONS
+    this.app.delete(this.baseRoute + 'deleteReference/' + ':id',function(req,res){
+        //   
+        that.rights(req,res,function(ret){
+            if(ret){
+                var primaryId = req.params.id;
+                var referenceId = req.body.ref_id;
+                
+              _class.findOne({_id:primaryId},function(err,doc){
+                  if(doc){
+                      doc.removeTeacher(referenceId,function(ok,referenceId){
+                        res.json({erase:'ok',refId:referenceId});
+                      });
+                  }else{
+                       res.json({erase:'failed',refId:referenceId});
+                  }
+                 
+              });
+            }
+        });
+    });
+    
+    //==========================================================================
+    //==========================================================================
+    
   }
   
   rights(req,res,cb){
@@ -264,7 +292,7 @@ module.exports = class RestrouterP {
       //
       var method = req.method;
       var level = req.session.content.user.level;
-      console.log("method: "+ method + "  level: " + level);
+      console.log("method: "+ method + "  accesslevel: " + level);
       //
       if(method === "GET"){
        this.check({basicroute:this.baseRoute,get_:{$lte:level}},res,that,function(ret){

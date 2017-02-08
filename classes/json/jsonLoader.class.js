@@ -67,16 +67,18 @@ module.exports = function JSONLoader(models) {
         });
 
         //bind teachers to educations
-        this.teacherModel.find({}, function (err, teachers) {
-            me.educationModel.find({}, function (err, educations) {
-                educations.forEach(function (edu) {
-                    var randomTeacher = getRandom(teachers);
-                    edu._teachers.push(randomTeacher._id);
-                    edu.save();
-                    console.log("B:_id set for: " + edu.name + " : " + randomTeacher._id);
-                });
+        for(var i = 0; i < 2; i++){
+            this.teacherModel.find({}, function (err, teachers) {
+              me.educationModel.find({}, function (err, educations) {
+                  educations.forEach(function (edu) {
+                      var randomTeacher = getRandom(teachers);
+                      edu._teachers.push(randomTeacher._id);
+                      edu.save();
+                      console.log("B:_id set for: " + edu.name + " : " + randomTeacher._id);
+                  });
+              });
             });
-        });
+        }
 
 
         //bind educations to teachers 

@@ -10,7 +10,8 @@ $.loadTemplates([
   "booking",
   "search",
   "booked",
-  "admin"
+  "admin",
+  "profile-modal"
 ],function(){$(document).ready(go);});
 
 
@@ -20,8 +21,8 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
             adminDisplayRooms();
         },
-        '/options-link': function () {
-            openLink("#content-main", "templates/optionsTest.html");
+        '/education-admin': function () {
+            adminDisplayEducations();
         },
         '/profilemodal': function (){
             $('.overlay').fadeIn(300);
@@ -37,7 +38,11 @@ function initializeHistoryRouter() {
         },
         '/admin-link': function () {
             openLink("#content-main", "templates/admin.html");
+        },
+        '/profile-status-link': function () {
+            openLink("#content-main", "templates/profile-modal.html");
         }
+
     });
 
     function openLink(contentId, templatePath) {
@@ -51,15 +56,17 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-//    logOut();
-     loggedIn();
+    logOut();
+//    loggedIn();
 
     //adds 'click' event listener for menu items
-    initMenuItemClick();
+//    initMenuItemClick();
 
     function loggedIn() {
         $("body").empty();
-        $('body').template('basiclayout',{email:"något@något.com"});
+        $('body').template('basiclayout', {email: "något@något.com"});
+        //
+        DISPLAY_ACCESS_CONTROL();
     }
 
 
@@ -101,7 +108,7 @@ function initMenuItemClick() {
 //        console.log('You selected menu item (object): ', e);
 
         if (!e.target.id) {
-            console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
+//            console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
         } else {
 //            console.log('You selected menu item (id): ', e.target.id);
         }

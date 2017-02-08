@@ -740,7 +740,6 @@ table.fc-header{
         }
         
     #wrap {
-        width: 1100px;
         margin: 0 auto;
         }
         
@@ -779,8 +778,7 @@ table.fc-header{
 
     #calendar {
 /*      float: right; */
-        margin: 0 auto;
-        width: 900px;
+        width: 100%;
         /*background-color: #FFFFFF;*/
           border-radius: 6px;
         box-shadow: 0 1px 2px #C3C3C3;
@@ -789,3 +787,15 @@ table.fc-header{
 box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.18);
         }
 
+/*
+===================== Responsiv design =================== */
+
+@media (max-width: 700px) {
+	.fc-header {
+		display: -webkit-flex;
+		-webkit-flex-direction: column-reverse;
+  		display: flex;
+  		flex-direction: column-reverse;	
+
+	}
+}
