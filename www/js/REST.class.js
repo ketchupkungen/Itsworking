@@ -73,5 +73,27 @@ class REST {
       
     });
   }
+  
+  deleteRef(idOrQuery,properties,callback){
+    console.log("UPDATE URL: " + this.baseUrl + idOrQuery);
+    console.log("DATA: " + JSON.stringify(properties));
+    
+    $.ajax({
+      url: this.baseUrl + idOrQuery,
+      type: "DELETE",
+      dataType: "json",
+      // don't process the request body
+      processData: false,
+      // and tell Node that it is raw json
+      headers: {"Content-Type": "application/json"},
+      // the request body
+      data: JSON.stringify(properties),
+      // callback functions
+      success: callback,
+      error: callback
+      
+    });
+  }
+  
 
 }

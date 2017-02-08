@@ -4,14 +4,16 @@ $(document).ready(function () {
 
 
 $.loadTemplates([
-  "login",
-  "basiclayout",
-  "main",
-  "booking",
-  "search",
-  "booked",
-  "admin"
-],function(){$(document).ready(go);});
+    "login",
+    "basiclayout",
+    "main",
+    "booking",
+    "search",
+    "booked",
+    "admin"
+], function () {
+    $(document).ready(go);
+});
 
 
 function initializeHistoryRouter() {
@@ -19,6 +21,9 @@ function initializeHistoryRouter() {
     new HistoryRouter({
         '/classroom-admin': function () {
             adminDisplayRooms();
+        },
+        '/education-admin': function () {
+            adminDisplayEducations();
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking.html");
@@ -45,15 +50,17 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-//    logOut();
-     loggedIn();
+    logOut();
+//    loggedIn();
 
     //adds 'click' event listener for menu items
-    initMenuItemClick();
+//    initMenuItemClick();
 
     function loggedIn() {
         $("body").empty();
-        $('body').template('basiclayout',{email:"något@något.com"});
+        $('body').template('basiclayout', {email: "något@något.com"});
+        //
+        DISPLAY_ACCESS_CONTROL();
     }
 
 
@@ -95,7 +102,7 @@ function initMenuItemClick() {
 //        console.log('You selected menu item (object): ', e);
 
         if (!e.target.id) {
-            console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
+//            console.log('The menu item "' + e.target.text + '" is MISSING an id!!');
         } else {
 //            console.log('You selected menu item (id): ', e.target.id);
         }
