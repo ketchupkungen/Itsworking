@@ -5,6 +5,7 @@ $(document).ready(function () {
     addListenerDeleteBtn();
 
     addListenerLoginBtn();
+     addListenerLoginAdminBtn();
     addListenerLogoutBtn();
     
     addListenerCheckSessionBtn();
@@ -121,6 +122,21 @@ function addListenerCheckSessionBtn() {
     $("#check-session-btn").click(function () {
         $.getJSON('/checksession',function (data, textStatus, jqXHR){
             $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
+}
+
+function addListenerLoginAdminBtn() {
+    //LOGIN/POST/CREATE
+    //pass: 0000 = 60048db7dc9ca2f753b4e5d87f33162844f1210d
+    $("#login-admin-btn").click(function () {
+        LOGIN_REST.create({username: "admin@mail.com", password: "0000"}, function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));
+            if(!data.error){
+                console.log("LOGGED IN, ACCESS_LEVEL:" + data.user.level);
+            }else{
+                console.log("LOGG IN FAILED");
+            }
         });
     });
 }

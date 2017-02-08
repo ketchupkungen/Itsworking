@@ -110,6 +110,36 @@ function EXAMPLE_CRUD() {
 
 }
 
+function createInstanse(rest,properties,cb){
+    rest.create(properties, function (data, textStatus, jqXHR) {
+        if(data){
+            cb(true,data);
+        }else{
+            cb(false,data);
+        }
+    });
+}
+
+function deleteById(rest,id,cb){
+     rest.delete(id, function (data, textStatus, jqXHR) {
+         if(data.ok === 1){
+             cb(true);
+         }else{
+             cb(false);
+         }
+    });
+}
+
+function findById(rest,id,cb){
+     rest.find(id, function (data, textStatus, jqXHR) {
+         if(data){
+             cb(data,true);
+         }else{
+             cb(data,false);
+         }
+    });
+}
+
 //Simplifies use with 'find/' prefix
 function _find(obj) {
     return "find/" + JSON.stringify(obj);

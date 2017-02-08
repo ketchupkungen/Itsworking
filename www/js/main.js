@@ -6,21 +6,37 @@ $(document).ready(function () {
 $.loadTemplates([
   "login",
   "basiclayout",
-  "main"
+  "main",
+  "booking",
+  "search",
+  "booked",
+  "admin"
 ],function(){$(document).ready(go);});
 
 
 function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
-        '/status-link': function () {
-            openLink("#content-main", "templates/adminRooms.html");
+        '/classroom-admin': function () {
+            adminDisplayRooms();
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
         },
         '/profilemodal': function (){
             $('.overlay').fadeIn(300);
+        },
+        '/booking-link': function () {
+            openLink("#content-main", "templates/booking.html");
+        },
+        '/search-link': function () {
+            openLink("#content-main", "templates/search.html");
+        },
+        '/booked-link': function () {
+            openLink("#content-main", "templates/booked.html");
+        },
+        '/admin-link': function () {
+            openLink("#content-main", "templates/admin.html");
         }
     });
 
@@ -35,7 +51,8 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-    logOut();
+//    logOut();
+     loggedIn();
 
     //adds 'click' event listener for menu items
     initMenuItemClick();
@@ -106,4 +123,3 @@ function initMenuItemClick() {
     });
 
 }
-

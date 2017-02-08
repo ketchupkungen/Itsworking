@@ -1,7 +1,3 @@
-// // ES6 style class that is a factory
-// that creates wrappers for REST requests
-// to a specific REST entity
-
 class REST {
 
   constructor(entityName){

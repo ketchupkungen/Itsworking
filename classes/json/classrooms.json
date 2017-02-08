@@ -1,15 +1,15 @@
 [
     {
         "nr": "5",
-        "size": "middle"
+        "size": "MD"
     },
     {
         "nr": "1",
-        "size": "large"
+        "size": "LG"
     },
     {
         "nr": "2",
-        "size": "small"
+        "size": "SM"
     }
 ]
 
