@@ -1,10 +1,11 @@
 $(document).ready(function() {
 
-
+/*
 // Opens profile-modal when clicked on "profil"
 profileModal();
 
 });
+*/
 
 function profileModal(){
 
@@ -16,4 +17,5 @@ function profileModal(){
 		$('.overlay').fadeOut(300);
 	});
 }
+
 

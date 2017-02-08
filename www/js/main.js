@@ -10,7 +10,8 @@ $.loadTemplates([
   "booking",
   "search",
   "booked",
-  "admin"
+  "admin",
+  "profile-modal"
 ],function(){$(document).ready(go);});
 
 
@@ -37,7 +38,11 @@ function initializeHistoryRouter() {
         },
         '/admin-link': function () {
             openLink("#content-main", "templates/admin.html");
+        },
+        '/profile-status-link': function () {
+            openLink("#content-main", "templates/profile-modal.html");
         }
+
     });
 
     function openLink(contentId, templatePath) {
