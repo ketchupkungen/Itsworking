@@ -4,16 +4,15 @@ $(document).ready(function () {
 
 
 $.loadTemplates([
-    "login",
-    "basiclayout",
-    "main",
-    "booking",
-    "search",
-    "booked",
-    "admin"
-], function () {
-    $(document).ready(go);
-});
+  "login",
+  "basiclayout",
+  "main",
+  "booking",
+  "search",
+  "booked",
+  "admin",
+  "profile-modal"
+],function(){$(document).ready(go);});
 
 
 function initializeHistoryRouter() {
@@ -24,6 +23,9 @@ function initializeHistoryRouter() {
         },
         '/education-admin': function () {
             adminDisplayEducations();
+        },
+        '/profilemodal': function (){
+            $('.overlay').fadeIn(300);
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking.html");
@@ -36,7 +38,11 @@ function initializeHistoryRouter() {
         },
         '/admin-link': function () {
             openLink("#content-main", "templates/admin.html");
+        },
+        '/profile-status-link': function () {
+            openLink("#content-main", "templates/profile-modal.html");
         }
+
     });
 
     function openLink(contentId, templatePath) {

@@ -1,0 +1,91 @@
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right:0;
+	background-color: lightgray;
+	opacity: 0.7;
+	display:none;
+}
+
+.profile-name {
+	margin:0 -15px 15px -15px;
+	padding:20px;
+	background:#999;
+	color: white;
+	border-radius: 10px 10px 0 0;
+	font-size:1.3em;
+	text-transform: uppercase;
+}
+
+
+.profile-modal {
+	position: relative;
+	max-width: 600px;
+	max-height: 800px;
+	background-color:white;
+	border-radius: 10px;
+	margin:0 auto;
+	top:20%;
+	padding:0 15px 15px 15px;
+	box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.4);
+}
+
+
+.close-btn {
+	position: absolute;
+	right:-40px;
+	top:-40px;
+	font-size:1.5em;
+	height:30px;
+	width:30px;
+	text-align: center;
+	cursor:pointer;
+	transition: all 80ms ease-in-out;
+}
+
+
+.close-btn:hover {
+	transform: scale(1.4);
+
+}
+
+.text-box {
+	display:inline-block;
+}
+
+.lower-part {
+	text-align:right;
+}
+
+.update-btn {
+	border-style: none;
+	background-color: black;
+	border-radius: 5px;
+	padding:10px 15px;
+	color:white;
+	cursor:pointer;
+}
+
+.profile-link {
+	position: absolute;
+	right:20px;
+	top:50px;
+
+}
+
+/*
+===== responsiv design ====*/ 
+@media (max-width: 740px) {
+	.close-btn {
+		right:20px;
+		top:20px;
+	}
+	.profile-modal {
+		margin:20px;
+	}
+}
+
+
+
