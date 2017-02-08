@@ -12,7 +12,7 @@ module.exports = function (mongoose) {
             },
             required: [true, 'ERROR: Personal id required']
         },
-        epost: {type:String,required: true},
+        epost: {type:String,required: true,unique:true},
         _educations: [{type:mongoose.Schema.Types.ObjectId, ref: 'education' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'teachers'} // sets the name of Collection in Database

@@ -1,3 +1,5 @@
+LOGIN_STATUS = 0;
+ACCESS_LEVEL = 0;
 //
 var STUDENT_REST = new REST('student');
 var EDUCATION_REST = new REST('edu');
@@ -8,13 +10,16 @@ var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema,
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
 
-
 function login(username, password, cb) {
     LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {
         if (!data.error) {
             console.log("LOGIN OK, ACCESS_LEVEL:" + data.user.level);
+            LOGIN_STATUS = 1;
+            ACCESS_LEVEL = data.user.level;
             cb(true);
         } else {
+            LOGIN_STATUS = 0;
+            ACCESS_LEVEL = 0;
             cb(false);
         }
     });
@@ -25,7 +30,9 @@ function logOut(cb) {
         $("body").empty();
         includeHtml("templates/login.html", "body");
         if (cb) {
-          cb(true);
+            LOGIN_STATUS = 0;
+            ACCESS_LEVEL = 0;
+            cb(true);
         }
     });
 }
@@ -39,8 +46,6 @@ function isLoggedIn(cb) {
         }
     });
 }
-
-
 
 
 function EXAMPLE_LOGIN() {
@@ -108,35 +113,41 @@ function EXAMPLE_CRUD() {
     STUDENT_REST.delete('588bc5e9f2907a0b608a1f31', function (data, textStatus, jqXHR) {
     });
 
+    //DELETE A TEACHERS ID FROM THE ARRAY OF TEACHERS REFERENSES
+    //REMOVE A TEACHER FROM EDUCATION
+    EDUCATION_REST.deleteRef('deleteReference/' + 'EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
+    });
+
 }
 
-function createInstanse(rest,properties,cb){
+
+function createInstanse(rest, properties, cb) {
     rest.create(properties, function (data, textStatus, jqXHR) {
-        if(data){
-            cb(true,data);
-        }else{
-            cb(false,data);
+        if (data) {
+            cb(true, data);
+        } else {
+            cb(false, data);
         }
     });
 }
 
-function deleteById(rest,id,cb){
-     rest.delete(id, function (data, textStatus, jqXHR) {
-         if(data.ok === 1){
-             cb(true);
-         }else{
-             cb(false);
-         }
+function deleteById(rest, id, cb) {
+    rest.delete(id, function (data, textStatus, jqXHR) {
+        if (data.ok === 1) {
+            cb(true);
+        } else {
+            cb(false);
+        }
     });
 }
 
-function findById(rest,id,cb){
-     rest.find(id, function (data, textStatus, jqXHR) {
-         if(data){
-             cb(data,true);
-         }else{
-             cb(data,false);
-         }
+function findById(rest, id, cb) {
+    rest.find(id, function (data, textStatus, jqXHR) {
+        if (data) {
+            cb(data, true);
+        } else {
+            cb(data, false);
+        }
     });
 }
 

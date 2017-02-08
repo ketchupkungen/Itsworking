@@ -46,6 +46,19 @@ module.exports = function (mongoose) {
         return this.model('education').find({name: this.name}, cb);
     };
     
+    
+    shema.methods.removeTeacher = function (teacher_id,cb) {
+            var index = this._teachers.indexOf(teacher_id);
+            if(index !== -1){
+                this._teachers.splice(index, 1);
+                this.save(function(err,doc){
+                  cb(err,teacher_id);
+                });
+            }else{
+                cb(false,teacher_id);
+            }
+    };
+    
 
     // Compile the schema to a model
     // it will result in a new collection in the database

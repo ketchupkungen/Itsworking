@@ -52,7 +52,7 @@ function addListenerGetBtn() {
 
     //GET ALL
     $("#get-btn").click(function () {
-        STUDENT_REST.find('',function (data, textStatus, jqXHR) {
+        EDUCATION_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
@@ -89,11 +89,11 @@ function addListenerGetBtn() {
 
 function addListenerDeleteBtn() {
     //DELETE QUERY
-    $("#delete-btn").click(function () {
-        STUDENT_REST.delete(_find({name: 'george morge'}), function (data, textStatus, jqXHR) {
-            $('#output').text(JSON.stringify(data, null, 1));
-        });
-    });
+//    $("#delete-btn").click(function () {
+//        STUDENT_REST.delete(_find({name: 'george morge'}), function (data, textStatus, jqXHR) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
 
     //DELETE BY ID
 //    $("#delete-btn").click(function () {
@@ -101,6 +101,15 @@ function addListenerDeleteBtn() {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
+
+    //DELETE A TEACHERS ID FROM THE ARRAY OF TEACHERS REFERENSES
+    //REMOVE A TEACHER FROM EDUCATION
+     $("#delete-btn").click(function () {
+       EDUCATION_REST.deleteRef('deleteReference/' + 'EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
+          $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
+
 }
 
 function _find(obj) {
