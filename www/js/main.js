@@ -18,6 +18,9 @@ function initializeHistoryRouter() {
         },
         '/options-link': function () {
             openLink("#content-main", "templates/optionsTest.html");
+        },
+        '/profilemodal': function (){
+            $('.overlay').fadeIn(300);
         }
     });
 
