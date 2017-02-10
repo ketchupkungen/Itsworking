@@ -47,6 +47,14 @@ function isLoggedIn(cb) {
     });
 }
 
+function getAccessLevel(cb){
+     $.getJSON('/checksession',function (data, textStatus, jqXHR){
+            if(data.user){
+                
+            }
+     });
+}
+
 
 function EXAMPLE_LOGIN() {
     //LOGIN/CREATE/POST
@@ -84,7 +92,8 @@ function EXAMPLE_CRUD() {
     //==========================================================================
 
     //GET ALL
-    BOOKING_REST.find('', function (data, textStatus, jqXHR) {
+    STUDENT_REST.find('', function (data, textStatus, jqXHR) {
+               
     });
 
     //GET BY ID

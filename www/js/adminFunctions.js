@@ -28,15 +28,13 @@ function adminDisplayEducations() {
             var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon edit-edu-icon'>" + "</td>");
             $(tdEdit).data("_id", value._id);
             $(tr).append(tdEdit);
-
-
+            //
             $(value._teachers).each(function (index, teacher) {
                 //
                 var tdT = $("<td>" + teacher.name + "</td>");
                 var imgDel = $("<img src='images/delete.png' class='basic-icon delete-teacher-icon'>");
                 $(imgDel).data("teacher_id", teacher._id);
                 $(imgDel).data("edu_id", value._id);
-//                $(imgDel).data("td", tdT);
                 $(tdT).append(imgDel);
                 $(tr).append(tdT);
                 //
@@ -47,7 +45,7 @@ function adminDisplayEducations() {
                 }
                 //
             });
-
+            //
             $(tableTemplate).find("tbody").append(tr);
         });
 

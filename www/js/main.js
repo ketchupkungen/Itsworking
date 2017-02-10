@@ -4,15 +4,17 @@ $(document).ready(function () {
 
 
 $.loadTemplates([
-  "login",
-  "basiclayout",
-  "main",
-  "booking",
-  "search",
-  "booked",
-  "admin",
-  "profile-modal"
-],function(){$(document).ready(go);});
+    "login",
+    "basiclayout",
+    "main",
+    "booking",
+    "search",
+    "booked",
+    "admin",
+    "profile-modal"
+], function () {
+    $(document).ready(go);
+});
 
 
 function initializeHistoryRouter() {
@@ -24,7 +26,7 @@ function initializeHistoryRouter() {
         '/education-admin': function () {
             adminDisplayEducations();
         },
-        '/profilemodal': function (){
+        '/profilemodal': function () {
             $('.overlay').fadeIn(300);
         },
         '/booking-link': function () {
@@ -56,8 +58,8 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-    logOut();
-//    loggedIn();
+//    logOut();
+    loggedIn();
 
     //adds 'click' event listener for menu items
 //    initMenuItemClick();
@@ -66,7 +68,14 @@ function go() {
         $("body").empty();
         $('body').template('basiclayout', {email: "något@något.com"});
         //
-        DISPLAY_ACCESS_CONTROL();
+        //
+        if (ACCESS_LEVEL < 3) {
+            $('#access-admin-panel').css('display', 'none');
+        }
+        //
+        if (ACCESS_LEVEL < 2) {
+            $('#access-booking-panel').css('display', 'none');
+        }
     }
 
 
@@ -84,19 +93,14 @@ function go() {
             var pass = $("#inputPassword").val();
 
             login(username, pass, function (status) {
-                console.log("LOGIN: " + status);
                 if (status) {
                     loggedIn();
                 } else {
-                    cannotLoggin();
+                    $(".wrong-credentials").css("display", "block");
                 }
             });
 
         });
-    }
-
-    function cannotLoggin() {
-        $(".wrong-credentials").css("display", "block");
     }
 
 }
