@@ -46,23 +46,43 @@ function adminDisplayEducations() {
                 }
                 //
             });
-
-            buildTeachersCombo(function (comboBox) {
-                var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
-                $(tdAddTeacher).append(comboBox);
-                $(tdAddTeacher).data("comboBox", comboBox);
-                $(tdAddTeacher).data("_id", value._id);
-                $(tr).append(tdAddTeacher);
-            });
-
+            //
+            var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
+            $(tdAddTeacher).data("_id", value._id);
+            $(tr).append(tdAddTeacher);
+            //
+            //
             $(tableTemplate).find("tbody").append(tr);
         });
-
+        //
+        var th = $('<th>Add</th>');
+        $(tableTemplate).find("thead tr").append(th);
+        //
         $("#content-main").append(tableTemplate);
 
     });
 }
 
+
+function addEventAdminAddTeacher() {
+    $('body').on('click', '.add-teacher-icon', function (e) {
+        var parent = $(this).parent();
+        var eduId = $(parent).data('_id');
+
+        buildTeachersCombo(function (comboBox) {
+
+            showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
+                var teacherId = $(comboBox).val();
+                EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
+                    console.log("ADD TEACHER: ", data);
+                    adminDisplayEducations();
+                });
+            });
+
+        });
+
+    });
+}
 
 function buildTeachersCombo(cb) {
 
@@ -75,27 +95,6 @@ function buildTeachersCombo(cb) {
         cb(select);
     });
 
-}
-
-
-function addEventAdminAddTeacher() {
-    $('body').on('click', '.add-teacher-icon', function (e) {
-        var parent = $(this).parent();
-        var eduId = $(parent).data('_id');
-        
-        var comboBox = $(parent).data('comboBox');
-        
-        showInputModal("Title","AAAA",comboBox);
-        
-        var teacherId = $(comboBox).val();
-        console.log('TEACHER_ID',teacherId);
-
-        EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
-            console.log("ADD TEACHER: ", data);
-            adminDisplayEducations();
-        });
-
-    });
 }
 
 

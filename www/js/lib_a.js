@@ -178,3 +178,14 @@ function getDateGivenFormat(date, format) {
     var d = new Date(date);
     return format.replace("#year", d.getFullYear()).replace("#month", months[d.getMonth()]).replace("#day", d.getDate());
 }
+
+//==============================================================================
+//==============================================================================
+
+function exists(selector) {
+    if ($(selector).length) {
+        return true;
+    } else {
+        return false;
+    }
+}

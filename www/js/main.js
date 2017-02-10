@@ -58,27 +58,8 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-//    logOut();
-    loggedIn();
-
-    //adds 'click' event listener for menu items
-//    initMenuItemClick();
-
-    function loggedIn() {
-        $("body").empty();
-        $('body').template('basiclayout', {email: "något@något.com"});
-        //
-        //
-        if (ACCESS_LEVEL < 3) {
-            $('#access-admin-panel').css('display', 'none');
-        }
-        //
-        if (ACCESS_LEVEL < 2) {
-            $('#access-booking-panel').css('display', 'none');
-        }
-    }
-
-
+    openFirstPage();
+  
     function addEventLogOutBtn() {
         $("body").on("click", "#log-out-btn-one", function (evt) {
             evt.preventDefault();
