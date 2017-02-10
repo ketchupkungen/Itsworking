@@ -61,19 +61,19 @@ var defaults = {
 	// locale
 	isRTL: false,
 	firstDay: 0,
-	monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-	monthNamesShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-	dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-	dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+	monthNames: ['Januari','Februari','Mars','April','Maj','Juni','Juli','Augusti','September','Oktober','November','December'],
+	monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt','Nov','Dec'],
+	dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
+	dayNamesShort: ['Sön','Mån','Tis','Ons','Tors','Fre','Lör'],
 	buttonText: {
 		prev: "<span class='fc-text-arrow'>‹</span>",
 		next: "<span class='fc-text-arrow'>›</span>",
 		prevYear: "<span class='fc-text-arrow'>«</span>",
 		nextYear: "<span class='fc-text-arrow'>»</span>",
-		today: 'today',
-		month: 'month',
-		week: 'week',
-		day: 'day'
+		today: 'Idag',
+		month: 'Måndag',
+		week: 'Vecka',
+		day: 'Dag'
 	},
 	
 	// jquery-ui theming

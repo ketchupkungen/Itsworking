@@ -43,7 +43,7 @@ $("html").on('click', '#modal-input-ok-btn', function () {
 
 
 
-function showInputModal(title, infoMsg, size, obj) {
+function showInputModal(title, infoMsg,input, size, obj) {
     //
     $('body').on('shown.bs.modal', '#gridSystemModalLabel', function () {
         $('#modal-input-text').focus();
@@ -54,6 +54,7 @@ function showInputModal(title, infoMsg, size, obj) {
     var modalObj = $.parseHTML(loadTemplate(PATH + "modal_input.html"));
     $(modalObj).find(".modal-title").text(title);
     $(modalObj).find(".modal-body p").text(infoMsg);
+    $(modalObj).find(".modal-input").append(input);
     //
     if (size === 'sm') {
         $(modalObj).find(".modal-dialog").addClass("modal-sm");

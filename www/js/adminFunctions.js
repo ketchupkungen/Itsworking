@@ -5,6 +5,7 @@ $(document).ready(function () {
     addEventAdminAddRoomSubmitBtn();
     //
     addEventAdminDeleteTeacherIcon();
+    addEventAdminAddTeacher();
 });
 
 function adminDisplayEducations() {
@@ -45,11 +46,54 @@ function adminDisplayEducations() {
                 }
                 //
             });
-            //
+
+            buildTeachersCombo(function (comboBox) {
+                var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
+                $(tdAddTeacher).append(comboBox);
+                $(tdAddTeacher).data("comboBox", comboBox);
+                $(tdAddTeacher).data("_id", value._id);
+                $(tr).append(tdAddTeacher);
+            });
+
             $(tableTemplate).find("tbody").append(tr);
         });
 
         $("#content-main").append(tableTemplate);
+
+    });
+}
+
+
+function buildTeachersCombo(cb) {
+
+    TEACHERS_REST.find('', function (data, textStatus, jqXHR) {
+        var select = $('<select></select>');
+        $(data).each(function (index, t) {
+            var option = $("<option value=" + t._id + ">" + t.name + "</option>");
+            $(select).append(option);
+        });
+        cb(select);
+    });
+
+}
+
+
+function addEventAdminAddTeacher() {
+    $('body').on('click', '.add-teacher-icon', function (e) {
+        var parent = $(this).parent();
+        var eduId = $(parent).data('_id');
+        
+        var comboBox = $(parent).data('comboBox');
+        
+        showInputModal("Title","AAAA",comboBox);
+        
+        var teacherId = $(comboBox).val();
+        console.log('TEACHER_ID',teacherId);
+
+        EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
+            console.log("ADD TEACHER: ", data);
+            adminDisplayEducations();
+        });
 
     });
 }
@@ -60,13 +104,13 @@ function addEventAdminDeleteTeacherIcon() {
         var teacher_id = $(this).data('teacher_id');
         var edu_id = $(this).data('edu_id');
 
-        EDUCATION_REST.deleteRef('deleteReference/' + edu_id, {ref_id: teacher_id}, function (data, textStatus, jqXHR) {
-           if(data.erase === 'ok'){
-               console.log("DELETE REFERENCE OK: " + data.refId);
-               adminDisplayEducations();
-           }else{
-               console.log("DELETE REFERENCE FAILED: " + data.refId);
-           }
+        EDUCATION_REST.deleteRef(edu_id, {ref_id: teacher_id}, function (data, textStatus, jqXHR) {
+            if (data.status == true) {
+                console.log("DELETE TEACHER OK: " + data.id);
+                adminDisplayEducations();
+            } else {
+                console.log("DELETE TEACHER FAILED: " + data.id);
+            }
         });
     });
 }

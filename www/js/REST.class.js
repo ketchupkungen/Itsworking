@@ -24,6 +24,27 @@ class REST {
     });
 
   }
+  
+  createRef(properties,callback){
+    console.log("CREATE URL: " + this.baseUrl + 'addReference/');  
+    console.log("DATA: " + JSON.stringify(properties));
+    
+    $.ajax({
+      url: this.baseUrl + 'addReference/',
+      type: "POST",
+      dataType: "json",
+      // don't process the request body
+      processData: false,
+      // and tell Node that it is raw json
+      headers: {"Content-Type": "application/json"},
+      // the request body
+      data: JSON.stringify(properties),
+      // callback functions
+      success: callback,
+      error: callback
+    });
+
+  }
 
   find(idOrQuery,callback){
    console.log("FIND URL: " + this.baseUrl + idOrQuery);
@@ -79,7 +100,7 @@ class REST {
     console.log("DATA: " + JSON.stringify(properties));
     
     $.ajax({
-      url: this.baseUrl + idOrQuery,
+      url: this.baseUrl + 'deleteReference/' + idOrQuery,
       type: "DELETE",
       dataType: "json",
       // don't process the request body
