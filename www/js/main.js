@@ -56,8 +56,8 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
 
-    logOut();
-//    loggedIn();
+//    logOut();
+    loggedIn();
 
     //adds 'click' event listener for menu items
 //    initMenuItemClick();
@@ -66,7 +66,6 @@ function go() {
         $("body").empty();
         $('body').template('basiclayout', {email: "något@något.com"});
         //
-        DISPLAY_ACCESS_CONTROL();
     }
 
 

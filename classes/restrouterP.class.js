@@ -50,6 +50,33 @@ module.exports = class RestrouterP {
           }
       });//rights
     }); //post
+    
+    //==========================================================================
+    //==========================================================================
+    //CUSTOM QUERY - ADD REFERENCE EX: Add a teacher to educations
+    this.app.post(this.baseRoute + 'addReference/',function(req,res){
+     //   
+      that.rights(req,res,function(ret){
+          if(ret){
+             //
+             var primaryId = req.body.primId;
+             var referenceId = req.body.refId;
+             //
+             _class.findOne({_id:primaryId},function(err,doc){
+                 if(doc){
+                      doc.addReference(referenceId,function(status,info,id){
+                      res.json({status:status,info:info,id:id});
+                    }); 
+                 }else{
+                     res.json({status:false,info:'doc not found',id:primaryId});
+                 }
+                
+             });
+          }
+      });//rights
+    }); //post
+    //==========================================================================
+    //==========================================================================
   }
 
   // A response helper for gets
@@ -270,11 +297,11 @@ module.exports = class RestrouterP {
                 
               _class.findOne({_id:primaryId},function(err,doc){
                   if(doc){
-                      doc.removeTeacher(referenceId,function(ok,referenceId){
-                        res.json({erase:'ok',refId:referenceId});
+                      doc.removeReference(referenceId,function(status,info,id){
+                        res.json({status:status,info:info,id:id});
                       });
                   }else{
-                       res.json({erase:'failed',refId:referenceId});
+                       res.json({status:false,info:"doc not found",id:primaryId});
                   }
                  
               });

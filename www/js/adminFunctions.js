@@ -5,6 +5,7 @@ $(document).ready(function () {
     addEventAdminAddRoomSubmitBtn();
     //
     addEventAdminDeleteTeacherIcon();
+    addEventAdminAddTeacher();
 });
 
 function adminDisplayEducations() {
@@ -47,12 +48,32 @@ function adminDisplayEducations() {
                 }
                 //
             });
+            
+            var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
+            $(tdAddTeacher).data("_id", value._id);
+            $(tr).append(tdAddTeacher);
 
             $(tableTemplate).find("tbody").append(tr);
         });
 
         $("#content-main").append(tableTemplate);
+        
 
+    });
+}
+
+
+function addEventAdminAddTeacher(){
+    $('body').on('click','.add-teacher-icon',function(e){
+        var parent = $(this).parent();
+        var eduId = $(parent).data('_id');
+        var teacherId = '589dc7b329b338f80856e059';
+        
+        EDUCATION_REST.createRef({primId:eduId,refId:teacherId},function (data, textStatus, jqXHR){
+            console.log("ADD TEACHER: ",data);
+            adminDisplayEducations();
+        });
+        
     });
 }
 
@@ -62,12 +83,12 @@ function addEventAdminDeleteTeacherIcon() {
         var teacher_id = $(this).data('teacher_id');
         var edu_id = $(this).data('edu_id');
 
-        EDUCATION_REST.deleteRef('deleteReference/' + edu_id, {ref_id: teacher_id}, function (data, textStatus, jqXHR) {
-           if(data.erase === 'ok'){
-               console.log("DELETE REFERENCE OK: " + data.refId);
+        EDUCATION_REST.deleteRef(edu_id, {ref_id: teacher_id}, function (data, textStatus, jqXHR) {
+           if(data.status == true){
+               console.log("DELETE TEACHER OK: " + data.id);
                adminDisplayEducations();
            }else{
-               console.log("DELETE REFERENCE FAILED: " + data.refId);
+               console.log("DELETE TEACHER FAILED: " + data.id);
            }
         });
     });
