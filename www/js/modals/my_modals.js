@@ -28,32 +28,37 @@ function showInfoModal(title, infoMsg, size, type) {
     $('#modal-info').modal();
 }
 //------------------------------------------------------------------------------
-var INPUT_MODAL_OBJ;
+var INPUT_MODAL_CB;
 
 $("html").on('click', '#modal-input-abort-btn', function () {
-
+    INPUT_MODAL_CB(false);
 });
 
 $("html").on('click', '#modal-input-ok-btn', function () {
-    var input = $("#modal-input-text").val();
-    $(INPUT_MODAL_OBJ).attr("value", input);
-//    showInfoModal("INPUT MODAL TEXT", input, "lg");
-//    $(INPUT_MODAL_OBJ).text(".....example.....");
+    //
+//    var input = $("#modal-input-text").val();
+    INPUT_MODAL_CB($('#modal-input'));
+
 });
 
 
-
-function showInputModal(title, infoMsg, size, obj) {
+function showInputModalB(title, infoMsg, customizedObj, size, cb) {
     //
     $('body').on('shown.bs.modal', '#gridSystemModalLabel', function () {
         $('#modal-input-text').focus();
     });
     //
-    INPUT_MODAL_OBJ = obj;
+    INPUT_MODAL_CB = cb;
     //
     var modalObj = $.parseHTML(loadTemplate(PATH + "modal_input.html"));
+    //
     $(modalObj).find(".modal-title").text(title);
     $(modalObj).find(".modal-body p").text(infoMsg);
+    //
+    if(customizedObj){
+        $(modalObj).find("#modal-input").append(customizedObj);
+        $(modalObj).find('#modal-input-text').remove();
+    }
     //
     if (size === 'sm') {
         $(modalObj).find(".modal-dialog").addClass("modal-sm");

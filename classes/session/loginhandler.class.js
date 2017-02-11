@@ -62,8 +62,10 @@ module.exports = class Loginhandler {
       //
       //since content is of type mixed we need to tell Mongoose it is updated before saving
       req.session.markModified('content');
-      req.session.save();
-      res.json({user:user, status: 'logged in succesfully'});
+      req.session.save(function(err,doc){
+          res.json({user:user, status: 'logged in succesfully'});
+      });
+      
   }
 
   delete(){

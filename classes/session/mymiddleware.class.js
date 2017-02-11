@@ -23,6 +23,18 @@ module.exports = class Mymiddleware {
     this.app.get("/checksession",function(req,res){
         res.json(req.session);
     });
+    
+    this.app.get("/accesslevel",function(req,res){
+        if(req.session.content.user){
+           res.json(req.session.content.user.level); 
+        }else{
+           res.json(0);
+        }
+    });
+    
+    this.app.get("/username",function(req,res){
+        res.json(req.session.content.user.epost);
+    });
   }
 //  
 //  post(){

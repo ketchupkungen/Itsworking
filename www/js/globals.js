@@ -1,5 +1,3 @@
-LOGIN_STATUS = 0;
-ACCESS_LEVEL = 0;
 //
 var STUDENT_REST = new REST('student');
 var EDUCATION_REST = new REST('edu');
@@ -10,16 +8,41 @@ var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema,
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
 
+
+function openFirstPage() {
+    getAccessLevel(function (level) {
+        if (level === 0) {
+            logOut();
+        }else if(level > 0){
+            loggedIn();
+        }
+    });
+}
+
+function loggedIn() {
+    //
+    $("body").empty();
+    $('body').template('basiclayout', {email: "något@något.com"});
+    //
+    //
+    getAccessLevel(function (level) {
+        console.log("ACCESS LEVEL:", level);
+        if (level < 3) {
+            $('#access-admin-panel').css('display', 'none');
+        }
+        //
+        if (level < 2) {
+            $('#access-booking-panel').css('display', 'none');
+        }
+    });
+}
+
 function login(username, password, cb) {
     LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {
         if (!data.error) {
             console.log("LOGIN OK, ACCESS_LEVEL:" + data.user.level);
-            LOGIN_STATUS = 1;
-            ACCESS_LEVEL = data.user.level;
             cb(true);
         } else {
-            LOGIN_STATUS = 0;
-            ACCESS_LEVEL = 0;
             cb(false);
         }
     });
@@ -30,8 +53,6 @@ function logOut(cb) {
         $("body").empty();
         includeHtml("templates/login.html", "body");
         if (cb) {
-            LOGIN_STATUS = 0;
-            ACCESS_LEVEL = 0;
             cb(true);
         }
     });
@@ -47,22 +68,37 @@ function isLoggedIn(cb) {
     });
 }
 
+function getAccessLevel(cb) {
+    $.getJSON('/accesslevel', function (level, textStatus, jqXHR) {
+        if (level) {
+            cb(level);
+        } else {
+            cb(0);
+        }
+    });
+}
+
+function getUserName(cb) {
+    $.getJSON('/username', function (email, textStatus, jqXHR) {
+        if (email) {
+            cb(email);
+        } else {
+            cb(false);
+        }
+    });
+}
+
 
 function EXAMPLE_LOGIN() {
     //LOGIN/CREATE/POST
     LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
         if (!data.error) {
-            LOGIN_STATUS = 1;
-            ACCESS_LEVEL = data.user.level;
         } else {
-            LOGIN_STATUS = 0;
         }
     });
 
     //LOGOUT/DELETE/
     LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
-        LOGIN_STATUS = 0;
-        ACCESS_LEVEL = 0;
     });
 }
 
@@ -84,7 +120,8 @@ function EXAMPLE_CRUD() {
     //==========================================================================
 
     //GET ALL
-    BOOKING_REST.find('', function (data, textStatus, jqXHR) {
+    STUDENT_REST.find('', function (data, textStatus, jqXHR) {
+
     });
 
     //GET BY ID

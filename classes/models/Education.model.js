@@ -46,17 +46,39 @@ module.exports = function (mongoose) {
         return this.model('education').find({name: this.name}, cb);
     };
     
-    
-    shema.methods.removeTeacher = function (teacher_id,cb) {
+    /**
+     * Remove teacher
+     * @param {type} teacher_id
+     * @param {type} cb
+     * @returns {undefined}
+     */
+    shema.methods.removeReference = function (teacher_id,cb) {
             var index = this._teachers.indexOf(teacher_id);
             if(index !== -1){
                 this._teachers.splice(index, 1);
                 this.save(function(err,doc){
-                  cb(err,teacher_id);
+                  cb(true,'',teacher_id); 
                 });
             }else{
-                cb(false,teacher_id);
+                cb(false,'dont exist',teacher_id);
             }
+    };
+    
+    /**
+     * Add Teacher
+     * @param {type} teacher_id
+     * @param {type} cb
+     * @returns {undefined}
+     */
+    shema.methods.addReference = function (teacher_id,cb) {
+        if(this._teachers.indexOf(teacher_id)=== -1){
+            this._teachers.push(teacher_id);
+            this.save(function(err,doc){
+               cb(true,'',teacher_id); 
+            });
+        }else{
+            cb(false,'allready exist',teacher_id);
+        }
     };
     
 
