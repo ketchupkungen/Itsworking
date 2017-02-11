@@ -22,10 +22,10 @@
                         <li class="divider"></li>
                         <li><a href="#" id="log-out-btn-one">Logga ut</a></li>
                     </ul>
-                </li>          
-                <li ><a href="/booking-link">Boka lokal<span class="pull-right hidden-xs showopacity glyphicon glyphicon-pushpin"></span></a></li>
-                <li ><a href="/booked-link">Bokade lokaler<span class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a></li>
-                <li ><a href="/search-link">Sök<span class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a></li>
+                </li>
+                <li><a href="/booking-link">Boka lokal<span class="pull-right hidden-xs showopacity glyphicon glyphicon-pushpin"></span></a></li>
+                <li><a href="/booked-link">Bokade lokaler<span class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a></li>
+                <li><a href="/search-link">Sök<span class="pull-right hidden-xs showopacity glyphicon glyphicon-search"></span></a></li>
 
                 <!--Ska vara dold för elever och lärare -->
                 <li class="dropdown" id="access-admin-panel">
@@ -54,7 +54,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="title">Itsworking</h1>
-            </div><!--
+            </div>
+            <!--
             <button type="link" class="btn btn-link profile-link">Logga ut</button>-->
         </div>
 
@@ -63,39 +64,39 @@
     <!-- /header -->
 
     <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Profiluppgifter</h4>
-      </div>
-      <div class="modal-body">
-        <p>Profilbild: </p>
-        <div class="profile-image">
-            <img src="http://placehold.it/100x100/">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Profiluppgifter</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Profilbild: </p>
+                    <div class="profile-image">
+                        <img src="http://placehold.it/100x100/">
+                    </div>
+                    <div class="text-box">
+                        <p>För- och Efternamn:</p>
+                        <p class="name">#</p>
+                        <p>Personnummer: </p>
+                        <p class="birthday">#</p>
+                        <p>E-post: </p>
+                        <p class="mail">#</p>
+                        <p>Utbildning: </p>
+                        <p class="education">#</p>
+                    </div>
+                    <div class="lower-part">
+                        <button class="update-btn">Ändra uppgifter</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+                    <button type="button" class="btn btn-primary">Spara ändringar</button>
+                </div>
+            </div>
         </div>
-        <div class="text-box">
-            <p>För- och Efternamn:</p>
-            <p class="name">#</p>
-            <p>Personnummer: </p>
-            <p class="birthday">#</p>
-            <p>E-post: </p>
-            <p class="mail">#</p>
-            <p>Utbildning: </p>
-            <p class="education">#</p>
-        </div>
-        <div class="lower-part">
-            <button class="update-btn">Ändra uppgifter</button>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-        <button type="button" class="btn btn-primary">Spara ändringar</button>
-      </div>
     </div>
-  </div>
-</div>
 
     <!-- main page content -->
 
@@ -113,7 +114,7 @@
 
 
     <!-- vertical spacer-->
-<div class="vertical-spacer"></div>
+    <div class="vertical-spacer"></div>
 </div>
 <div class="vertical-spacer"></div>
 <!-- /vertical spacer -->
@@ -123,20 +124,30 @@
     <div class="row bg-primary">
         <div class="col-sm-offset-1 col-sm-2 footSpace">
             <a href="#"><h4><strong>Skolan</strong></h4></a>
-            <a href="#"><p>Utbildningar</p></a>
-            <a href="#"><p>Information</p></a>
+            <a href="#">
+                <p>Utbildningar</p>
+            </a>
+            <a href="#">
+                <p>Information</p>
+            </a>
         </div>
 
         <div class="col-sm-offset-2 col-sm-3 footSpace">
             <a href="#"><h4><strong>Kontakta Oss</strong></h4><a>
             <a href="#"><p>email: ${email}</p></a>
-            <a href="#"><p>tel: 070 032 213 321</p></a>
+            <a href="#">
+                <p>tel: 070 032 213 321</p>
+            </a>
         </div>
 
         <div class="col-sm-offset-1 col-sm-2 footSpace">
 
+            <a class="btn btn-default" href="http://twitter.com/KatyaR0lin" data-size="large" data-show-count="false" data-show-name="false">
+
+            Följ oss</a>
+            <!--
             <a href="https://twitter.com" class="btn btn-default btn-twitter" data-show-count="false" data-size="large"><h4><strong>Följ oss</strong></h4></a>
-                              
+            -->
         </div>
     </div>
 </div>
