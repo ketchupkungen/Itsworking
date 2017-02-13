@@ -37,6 +37,12 @@ function loggedIn() {
     });
 }
 
+function getFingerPrints() {
+    var client = new ClientJS();
+    var prints = client.getFingerprint();
+    return prints;
+}
+
 function login(username, password, cb) {
     LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {
         if (!data.error) {

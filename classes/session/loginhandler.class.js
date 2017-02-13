@@ -7,6 +7,9 @@ module.exports = class Loginhandler {
     this.get();
     this.post();
     this.delete();
+    //
+    var HashMap = require('hashmap');
+    global.FINGER_PRINT_SESSION_MAP = new HashMap();
   }
 
 
@@ -38,8 +41,7 @@ module.exports = class Loginhandler {
       // trying to log in
       var user = req.body.username;
       var pass = sha1(req.body.password + global.passwordSalt);
-      console.log("user:" + user + " / pass: " + pass);
-      
+      //
       var that = this;
       this.loginModel.findOne({epost:user, password: pass},function(err,doc){
           if(doc){
@@ -51,6 +53,7 @@ module.exports = class Loginhandler {
             
     });
   }
+  
   
   postReply(req,res,foundUser){
 //      var user = Object.assign({},foundUser._doc,{role:foundUser.level});

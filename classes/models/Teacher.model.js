@@ -46,7 +46,22 @@ module.exports = function (mongoose) {
             });
         });
     };
-       
+  /**
+   * Add education
+   * @param {type} edu_id
+   * @param {type} cb
+   * @returns {undefined}
+   */     
+  shema.methods.addReference = function (edu_id,cb) {
+        if(this._educations.indexOf(edu_id)=== -1){
+            this._educations.push(edu_id);
+            this.save(function(err,doc){
+               cb(true,'',edu_id); 
+            });
+        }else{
+            cb(false,'allready exist',edu_id);
+        }
+  };
     
   shema.statics.deleteAll = function(cb) {
     return this.remove({}, cb);

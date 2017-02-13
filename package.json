@@ -18,6 +18,7 @@
     "mongodb": "*",
     "body-parser": "*",
     "cookie-parser": "*",
-    "sha1": "*"
+    "sha1": "*",
+    "hashmap":"*"
   }
 }
