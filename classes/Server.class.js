@@ -98,7 +98,6 @@ if(mset.connect === 'true'){
    
     // If no other route rule fulfilled then return www/index.html
     var myIndexFile = m.path.join(__dirname,'..','www','index.html');
-    console.log(myIndexFile);
     this.app.get('*',(req,res)=>{
       res.sendFile(myIndexFile);
     });
