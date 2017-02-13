@@ -13,7 +13,7 @@ function openFirstPage() {
     getAccessLevel(function (level) {
         if (level === 0) {
             logOut();
-        }else if(level > 0){
+        } else if (level > 0) {
             loggedIn();
         }
     });
@@ -37,11 +37,6 @@ function loggedIn() {
     });
 }
 
-function getFingerPrints() {
-    var client = new ClientJS();
-    var prints = client.getFingerprint();
-    return prints;
-}
 
 function login(username, password, cb) {
     LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {

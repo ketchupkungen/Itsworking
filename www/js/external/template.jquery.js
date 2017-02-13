@@ -88,8 +88,8 @@
 
   $.loadTemplates = (
     fileNames,
+    folderPath,
     callback,
-    folderPath = "templates",
     extension = "html"
   ) => {
     var co = 0;

@@ -7,12 +7,18 @@ $(document).ready(function () {
     addEventAdminDeleteTeacherIcon();
     addEventAdminAddTeacher();
     //
-
+    addEventAdminAddEduBtn();
 });
+
+function addEventAdminEditEduIcon() {
+    $('body').on("click", ".edit-edu-icon", function () {
+        
+    });
+}
 
 function addEventAdminAddEduBtn() {
     $('body').on("click", "#admin-add-edu-btn", function () {
-
+        $('#content-main').template('adminAddEduForm', {email: "något@något.com"});
     });
 }
 
@@ -103,7 +109,6 @@ function buildTeachersCombo(cb) {
         });
         cb(select);
     });
-
 }
 
 
