@@ -24,7 +24,7 @@ function initializeHistoryRouter() {
             adminDisplayRooms();
         },
         '/education-admin': function () {
-            adminDisplayEducations();
+            adminDisplayEducations();        
         },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
@@ -34,6 +34,7 @@ function initializeHistoryRouter() {
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking.html");
+            displayBookingRooms();
         },
         '/search-link': function () {
             openLink("#content-main", "templates/search.html");

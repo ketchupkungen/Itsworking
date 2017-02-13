@@ -6,15 +6,7 @@ $(document).ready(function () {
     //
     addEventAdminDeleteTeacherIcon();
     addEventAdminAddTeacher();
-    //
-
 });
-
-function addEventAdminAddEduBtn() {
-    $('body').on("click", "#admin-add-edu-btn", function () {
-
-    });
-}
 
 function adminDisplayEducations() {
     $("#content-main").empty();
@@ -27,6 +19,7 @@ function adminDisplayEducations() {
             var tr = $('<tr>');
             $(tr).append("<td>" + value.name + "</td>");
             $(tr).append("<td>" + value.score + "</td>");
+
 
             var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon delete-edu-icon'>" + "</td>");
             $(tdDelete).data("_id", value._id);
@@ -81,10 +74,8 @@ function addEventAdminAddTeacher() {
             showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
                 var teacherId = $(comboBox).val();
                 EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
-                    TEACHERS_REST.createRef({primId: teacherId, refId: eduId}, function (data, textStatus, jqXHR) {
-                        console.log("ADD TEACHER: ", data);
-                        adminDisplayEducations();
-                    });
+                    console.log("ADD TEACHER: ", data);
+                    adminDisplayEducations();
                 });
             });
 
@@ -130,7 +121,11 @@ function adminDisplayRooms() {
     $("#content-main").empty();
     var tableTemplate = $(loadTemplate("templates/admin/adminRooms.html"));
 
-    CLASS_REST.find(_find({_sort: 'nr'}), function (data, textStatus, jqXHR) {
+    CLASS_REST.find('', function (data, textStatus, jqXHR) {
+
+        data.sort(function (a, b) {
+            return parseFloat(a.nr) - parseFloat(b.nr);
+        });
 
         $(data).each(function (index, value) {
             var tr = $('<tr>');
