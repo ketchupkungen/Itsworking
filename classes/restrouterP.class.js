@@ -82,7 +82,27 @@ module.exports = class RestrouterP {
   // A response helper for gets
   // (so we can populate things)
   respond(method,query,res){
-    var m = this._class[method](query);
+    //
+    var _fields = query._fields || '';
+    delete query._fields;
+    var _sortSkipLimit = {
+      sort: query._sort,
+      skip: query._skip,
+      limit: query._limit
+    }
+    delete query._sort;
+    delete query._skip;
+    delete query._limit;    
+    //  
+    var m = this._class[method](
+      // Mongoose query
+      query,
+      // Fields
+      _fields,
+      // Sort, skip, limit
+      _sortSkipLimit
+    );
+    //
     if(this.populate){
         if(this.populate2){
             m.populate({
