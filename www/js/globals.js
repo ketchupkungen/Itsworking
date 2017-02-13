@@ -132,11 +132,11 @@ function EXAMPLE_CRUD() {
     STUDENT_REST.find(_find({name: 'john doe'}), function (data, textStatus, jqXHR) {
     });
 
-    //GET SPEICEAL QUERY; GET ALL STUDENTS WITH EDUCATION X
+    //GET SPECIAL QUERY; GET ALL STUDENTS WITH EDUCATION X
     STUDENT_REST.find(_findEduStud({name: 'suw16'}), function (data, textStatus, jqXHR) {
     });
 
-    //GET SPEICEAL QUERY; GET ALL BOOKINGS FOR EDUCATION X
+    //GET SPECIAL QUERY; GET ALL BOOKINGS FOR EDUCATION X
     BOOKING_REST.find(_findEduBook({name: 'suw18'}), function (data, textStatus, jqXHR) {
     });
 

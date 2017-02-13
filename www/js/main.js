@@ -26,6 +26,9 @@ function initializeHistoryRouter() {
         '/education-admin': function () {
             adminDisplayEducations();
         },
+        '/main-link': function () {
+            openLink("#content-main", "templates/main.html");
+        },
         '/profilemodal': function () {
             $('.overlay').fadeIn(300);
         },
