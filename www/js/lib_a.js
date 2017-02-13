@@ -1,9 +1,4 @@
-function defineFingerPrint() {
-    var client = new ClientJS();
-    var prints = client.getFingerprint(); // Calculate Device/Browser Fingerprint
-    $(".test-div-finger-print").text("Browser finger print: " + prints);
-    return prints;
-}
+
 
 
 function getJsonFromUrlSync(url) {
