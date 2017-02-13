@@ -3,18 +3,31 @@ $(document).ready(function () {
 });
 
 
-$.loadTemplates([
-    "login",
-    "basiclayout",
-    "main",
-    "booking",
-    "search",
-    "booked",
-    "admin",
-    "profile-modal"
-], function () {
-    $(document).ready(go);
-});
+$.loadTemplates(
+        [
+            "login",
+            "basiclayout",
+            "main",
+            "booking",
+            "search",
+            "booked",
+            "admin",
+            "profile-modal",
+        ]
+        , 'templates'
+        , function () {
+            $(document).ready(go);
+        });
+        
+        
+        $.loadTemplates(
+        [
+            "adminAddEduForm",
+        ]
+        , 'templates/admin'
+        , function () {
+            $(document).ready(go);
+        });
 
 
 function initializeHistoryRouter() {
@@ -63,7 +76,7 @@ function go() {
     addEventLogOutBtn();
 
     openFirstPage();
-  
+
     function addEventLogOutBtn() {
         $("body").on("click", "#log-out-btn-one", function (evt) {
             evt.preventDefault();

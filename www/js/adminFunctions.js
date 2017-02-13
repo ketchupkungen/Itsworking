@@ -6,7 +6,71 @@ $(document).ready(function () {
     //
     addEventAdminDeleteTeacherIcon();
     addEventAdminAddTeacher();
+    //
+    addEventAdminAddEduBtn();
+    addEventAdminEditEduIcon();
+    addEventAdminDeleteEduIcon();
+    addEventAdminEduSubmitBtn();
 });
+
+function addEventAdminEduSubmitBtn() {
+    $('body').on("click", "#admin-edu-submit-btn", function (e) {
+        e.preventDefault();
+        var isUpdate = $(this).data('update');
+        console.log("IS UPDATE", isUpdate);
+
+        var name = $("#education-name").val();
+        var score = $("#education-score").val();
+        var info = $("#education-info").text();
+
+        if (isUpdate) {
+            EDUCATION_REST.update(ACT_EDIT_ID, {name: name, score: score, info: info}, function (data, textStatus, jqXHR) {
+                console.log("UPDATE:", data)
+                adminDisplayEducations();
+            });
+        } else {
+            createInstanse(EDUCATION_REST, {name: name, score: score, info: info}, function (ok, data) {
+                if (ok) {
+                    adminDisplayEducations();
+                }
+            });
+        }
+
+    });
+}
+
+function addEventAdminEditEduIcon() {
+    $('body').on("click", ".edit-edu-icon", function () {
+        $('.admin-add-edu-form').remove();
+        var parent = $(this).parent();
+        var edu_id = $(parent).data("_id");
+        ACT_EDIT_ID = edu_id;
+
+        findById(EDUCATION_REST, edu_id, function (data) {
+            $('#content-main').template('adminAddEduForm', {name: data.name, info: data.info, score: data.score});
+            $('#admin-edu-submit-btn').data('update', true);
+        });
+    });
+}
+
+function addEventAdminAddEduBtn() {
+    $('body').on("click", "#admin-add-edu-btn", function () {
+        $('.admin-add-edu-form').remove();
+        $('#content-main').template('adminAddEduForm', {name: '', info: '', score: ''});
+    });
+}
+
+function addEventAdminDeleteEduIcon() {
+    $('body').on("click", ".delete-edu-icon", function () {
+        var parent = $(this).parent();
+        var edu_id = $(parent).data("_id");
+
+        deleteById(EDUCATION_REST, edu_id, function (data, ok) {
+
+        });
+
+    });
+}
 
 function adminDisplayEducations() {
     $("#content-main").empty();
@@ -94,7 +158,6 @@ function buildTeachersCombo(cb) {
         });
         cb(select);
     });
-
 }
 
 
