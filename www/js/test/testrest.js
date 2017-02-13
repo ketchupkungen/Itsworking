@@ -5,7 +5,7 @@ $(document).ready(function () {
     addListenerDeleteBtn();
 
     addListenerLoginBtn();
-     addListenerLoginAdminBtn();
+    addListenerLoginAdminBtn();
     addListenerLogoutBtn();
     
     addListenerCheckSessionBtn();
@@ -49,10 +49,16 @@ function addListenerPutBtn() {
 
 //GET
 function addListenerGetBtn() {
+    //GET WITH OPTIONS  -- IMPORTANT
+     $("#get-options-btn").click(function () {
+        TEACHERS_REST.find(_find({_fields:'name epost',_sort:'name',_skip:0,_limit:3}), function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
 
     //GET ALL
     $("#get-btn").click(function () {
-        EDUCATION_REST.find('',function (data, textStatus, jqXHR) {
+        TEACHERS_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
