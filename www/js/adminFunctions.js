@@ -25,7 +25,10 @@ function addEventAdminProfileViewElem() {
             var cont = $("<div class='admin-modal-auto'></div>");
             
             $.each(data, function (name, value) {
-                var pName = $("<p>" + name + "</p>");
+                if(name.indexOf('_') >= 0){
+                    return true;
+                }
+                var pName = $("<h3>" + name + "</h3>");
                 var pValue = $("<p>" + value + "</p>");
                 $(cont).append(pName);
                 $(cont).append(pValue);
@@ -126,9 +129,11 @@ function adminDisplayEducations() {
             //
             $(value._teachers).each(function (index, teacher) {
                 //
-                var tdT = $("<td class='admin-modal-preview'>" + teacher.name + "</td>");
-                $(tdT).data('_id', teacher._id);
-                $(tdT).data('rest', TEACHERS_REST);
+                var tdT = $("<td></td>");
+                var _a = $("<a class='admin-modal-preview'>" + teacher.name + "</a>");
+                $(_a).data('_id', teacher._id);
+                $(_a).data('rest', TEACHERS_REST);
+                $(tdT).append(_a);
                 //
                 var imgDel = $("<img src='images/delete.png' class='basic-icon delete-teacher-icon'>");
                 $(imgDel).data("teacher_id", teacher._id);
@@ -169,6 +174,11 @@ function addEventAdminAddTeacher() {
         buildTeachersCombo(function (comboBox) {
 
             showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
+                //
+                if(modalInput === false){
+                   return;
+                }
+                //
                 var teacherId = $(comboBox).val();
                 EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
                     console.log("add teacher -> edu", data);
