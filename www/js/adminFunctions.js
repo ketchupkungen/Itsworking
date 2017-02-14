@@ -11,7 +11,30 @@ $(document).ready(function () {
     addEventAdminEditEduIcon();
     addEventAdminDeleteEduIcon();
     addEventAdminEduSubmitBtn();
+    //
+    addEventAdminProfileViewElem();
 });
+
+function addEventAdminProfileViewElem() {
+    $('body').on("click", ".admin-modal-preview", function (e) {
+        var id = $(this).data('_id');
+        var rest = $(this).data('rest');
+        console.log("ID", id);
+
+        findById(rest, id, function (data) {
+            var cont = $("<div class='admin-modal-auto'></div>");
+            
+            $.each(data, function (name, value) {
+                var pName = $("<p>" + name + "</p>");
+                var pValue = $("<p>" + value + "</p>");
+                $(cont).append(pName);
+                $(cont).append(pValue);
+            });
+            
+            showInfoModal("Info", '', cont);
+        });
+    });
+}
 
 function addEventAdminEduSubmitBtn() {
     $('body').on("click", "#admin-edu-submit-btn", function (e) {
@@ -103,7 +126,10 @@ function adminDisplayEducations() {
             //
             $(value._teachers).each(function (index, teacher) {
                 //
-                var tdT = $("<td>" + teacher.name + "</td>");
+                var tdT = $("<td class='admin-modal-preview'>" + teacher.name + "</td>");
+                $(tdT).data('_id', teacher._id);
+                $(tdT).data('rest', TEACHERS_REST);
+                //
                 var imgDel = $("<img src='images/delete.png' class='basic-icon delete-teacher-icon'>");
                 $(imgDel).data("teacher_id", teacher._id);
                 $(imgDel).data("edu_id", value._id);

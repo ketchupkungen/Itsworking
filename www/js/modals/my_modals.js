@@ -4,10 +4,17 @@ var PATH = "js/modals/";
 //showInfoModal("Error", "Test", "md", "error");
 //showConfirmModal("Erase button?", "Shall the button be removed", "md", $(this),"warning");
 
-function showInfoModal(title, infoMsg, size, type) {
+function showInfoModal(title, infoMsg, customizedObj, size, type) {
     var modalObj = $.parseHTML(loadTemplate(PATH + "modal_info.html"));
     $(modalObj).find(".modal-title").text(title);
-    $(modalObj).find(".modal-body").text(infoMsg);
+    //
+    //
+    if (customizedObj) {
+        $(modalObj).find(".modal-body").empty();
+        $(modalObj).find(".modal-body").append(customizedObj);
+    } else {
+        $(modalObj).find(".modal-body").text(infoMsg);
+    }
     //
     if (size === 'sm') {
         $(modalObj).find(".modal-dialog").addClass("modal-sm");
@@ -53,7 +60,7 @@ function showInputModalB(title, infoMsg, customizedObj, size, cb) {
     $(modalObj).find(".modal-title").text(title);
     $(modalObj).find(".modal-body p").text(infoMsg);
     //
-    if(customizedObj){
+    if (customizedObj) {
         $(modalObj).find("#modal-input").append(customizedObj);
         $(modalObj).find('#modal-input-text').remove();
     }
@@ -87,7 +94,7 @@ $("html").on('click', '#modal-yes-btn', function () {
 
 var CONFIRM_MODAL_CB;
 
-function showConfirmModal(title, infoMsg, size, type,cb) {
+function showConfirmModal(title, infoMsg, size, type, cb) {
     //
     CONFIRM_MODAL_CB = cb;
     //
