@@ -36,9 +36,7 @@ $("html").on('click', '#modal-input-abort-btn', function () {
 
 $("html").on('click', '#modal-input-ok-btn', function () {
     //
-//    var input = $("#modal-input-text").val();
     INPUT_MODAL_CB($('#modal-input'));
-
 });
 
 
@@ -80,17 +78,18 @@ function showInputModalB(title, infoMsg, customizedObj, size, cb) {
 //------------------------------------------------------------------------------
 
 $("html").on('click', '#modal-no-btn', function () {
+    CONFIRM_MODAL_CB(false);
 });
 
 $("html").on('click', '#modal-yes-btn', function () {
-    $(CONFIRM_MODAL_OBJ).remove();
+    CONFIRM_MODAL_CB(true);
 });
 
-var CONFIRM_MODAL_OBJ;
+var CONFIRM_MODAL_CB;
 
-function showConfirmModal(title, infoMsg, size, obj, type) {
+function showConfirmModal(title, infoMsg, size, type,cb) {
     //
-    CONFIRM_MODAL_OBJ = obj;
+    CONFIRM_MODAL_CB = cb;
     //
     var modalObj = $.parseHTML(loadTemplate(PATH + "modal_confirm.html"));
     $(modalObj).find(".modal-title").text(title);

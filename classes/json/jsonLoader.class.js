@@ -67,31 +67,31 @@ module.exports = function JSONLoader(models) {
         });
 
         //bind teachers to educations
-        for(var i = 0; i < 2; i++){
-            this.teacherModel.find({}, function (err, teachers) {
-              me.educationModel.find({}, function (err, educations) {
-                  educations.forEach(function (edu) {
-                      var randomTeacher = getRandom(teachers);
-                      edu._teachers.push(randomTeacher._id);
-                      edu.save();
-                      console.log("B:_id set for: " + edu.name + " : " + randomTeacher._id);
-                  });
-              });
-            });
-        }
+//        for(var i = 0; i < 2; i++){
+//            this.teacherModel.find({}, function (err, teachers) {
+//              me.educationModel.find({}, function (err, educations) {
+//                  educations.forEach(function (edu) {
+//                      var randomTeacher = getRandom(teachers);
+//                      edu._teachers.push(randomTeacher._id);
+//                      edu.save();
+//                      console.log("B:_id set for: " + edu.name + " : " + randomTeacher._id);
+//                  });
+//              });
+//            });
+//        }
 
 
         //bind educations to teachers 
-        this.educationModel.find({}, function (err, educations) {
-            me.teacherModel.find({}, function (err, teachers) {
-                teachers.forEach(function (teacher) {
-                    var randomEdu = getRandom(educations);
-                    teacher._educations.push(randomEdu._id);
-                    teacher.save();
-                    console.log("C:_id set for: " + teacher.name + " : " + randomEdu._id);
-                });
-            });
-        });
+//        this.educationModel.find({}, function (err, educations) {
+//            me.teacherModel.find({}, function (err, teachers) {
+//                teachers.forEach(function (teacher) {
+//                    var randomEdu = getRandom(educations);
+//                    teacher._educations.push(randomEdu._id);
+//                    teacher.save();
+//                    console.log("C:_id set for: " + teacher.name + " : " + randomEdu._id);
+//                });
+//            });
+//        });
         
         //bind educations to booking 
         this.educationModel.find({}, function (err, educations) {

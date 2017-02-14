@@ -17,11 +17,10 @@ function addEventAdminEduSubmitBtn() {
     $('body').on("click", "#admin-edu-submit-btn", function (e) {
         e.preventDefault();
         var isUpdate = $(this).data('update');
-        console.log("IS UPDATE", isUpdate);
 
         var name = $("#education-name").val();
         var score = $("#education-score").val();
-        var info = $("#education-info").text();
+        var info = $("#education-info").val();
 
         if (isUpdate) {
             EDUCATION_REST.update(ACT_EDIT_ID, {name: name, score: score, info: info}, function (data, textStatus, jqXHR) {
@@ -39,6 +38,7 @@ function addEventAdminEduSubmitBtn() {
     });
 }
 
+//EDIT
 function addEventAdminEditEduIcon() {
     $('body').on("click", ".edit-edu-icon", function () {
         $('.admin-add-edu-form').remove();
@@ -53,6 +53,7 @@ function addEventAdminEditEduIcon() {
     });
 }
 
+//ADD
 function addEventAdminAddEduBtn() {
     $('body').on("click", "#admin-add-edu-btn", function () {
         $('.admin-add-edu-form').remove();
@@ -60,15 +61,22 @@ function addEventAdminAddEduBtn() {
     });
 }
 
+//DELETE
 function addEventAdminDeleteEduIcon() {
     $('body').on("click", ".delete-edu-icon", function () {
-        var parent = $(this).parent();
-        var edu_id = $(parent).data("_id");
-
-        deleteById(EDUCATION_REST, edu_id, function (data, ok) {
-
+        showConfirmModal("Radera?", "Bekräfta handling", 'sm', 'error', (yes) => {
+            if (!yes) {
+                return;
+            }
+            //
+            var parent = $(this).parent();
+            var edu_id = $(parent).data("_id");
+            //
+            deleteById(EDUCATION_REST, edu_id, function (data, ok) {
+                adminDisplayEducations();
+            });
+            //
         });
-
     });
 }
 
@@ -83,7 +91,6 @@ function adminDisplayEducations() {
             var tr = $('<tr>');
             $(tr).append("<td>" + value.name + "</td>");
             $(tr).append("<td>" + value.score + "</td>");
-
 
             var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon delete-edu-icon'>" + "</td>");
             $(tdDelete).data("_id", value._id);
@@ -138,8 +145,11 @@ function addEventAdminAddTeacher() {
             showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
                 var teacherId = $(comboBox).val();
                 EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
-                    console.log("ADD TEACHER: ", data);
-                    adminDisplayEducations();
+                    console.log("add teacher -> edu", data);
+                    TEACHERS_REST.createRef({primId: teacherId, refId: eduId}, function (data, textStatus, jqXHR) {
+                        console.log("add edu -> teacher", data);
+                        adminDisplayEducations();
+                    });
                 });
             });
 
@@ -167,11 +177,14 @@ function addEventAdminDeleteTeacherIcon() {
         var edu_id = $(this).data('edu_id');
 
         EDUCATION_REST.deleteRef(edu_id, {ref_id: teacher_id}, function (data, textStatus, jqXHR) {
-            if (data.status == true) {
-                console.log("DELETE TEACHER OK: " + data.id);
-                adminDisplayEducations();
-            } else {
-                console.log("DELETE TEACHER FAILED: " + data.id);
+            if (data.status === true) {
+                console.log("DELETE TEACHER REF OK: " + data.id);
+                TEACHERS_REST.deleteRef(teacher_id, {ref_id: edu_id}, function (data) {
+                    if (data.status === true) {
+                        console.log("DELETE EDU REF OK: " + data.id);
+                        adminDisplayEducations();
+                    }
+                });
             }
         });
     });
@@ -289,11 +302,16 @@ function addEventAdminDeleteIcon() {
         var id = $(parent).data('_id');
         console.log("ID:", id);
 
-        deleteById(CLASS_REST, id, function (ok) {
-            if (ok) {
-                var row = $(parent).data('tr');
-                $(row).remove();
+        showConfirmModal("Radera?", "Bekräfta handling", 'sm', 'error', (yes) => {
+            if (!yes) {
+                return;
             }
+            deleteById(CLASS_REST, id, function (ok) {
+                if (ok) {
+                    var row = $(parent).data('tr');
+                    $(row).remove();
+                }
+            });
         });
     });
 }

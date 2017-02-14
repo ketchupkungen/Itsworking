@@ -46,6 +46,19 @@ module.exports = function (mongoose) {
             });
         });
     };
+    
+    shema.methods.removeReference = function (ref_id,cb) {
+        var index = this._educations.indexOf(ref_id);
+        if(index !== -1){
+            this._educations.splice(index, 1);
+            this.save(function(err,doc){
+              cb(true,'',ref_id); 
+            });
+        }else{
+            cb(false,'dont exist',ref_id);
+        }
+    };
+    
   /**
    * Add education
    * @param {type} edu_id
