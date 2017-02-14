@@ -42,18 +42,22 @@ function initializeHistoryRouter() {
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
         },
+        '/school-link': function () {
+            openLink("#content-main", "templates/school.html");
+        },
         '/profilemodal': function () {
             $('.overlay').fadeIn(300);
         },
         '/booking-link': function () {
-            openLink("#content-main", "templates/booking.html");
+            openLink("#content-main", "templates/booking/booking.html");
             displayBookingRooms();
         },
         '/search-link': function () {
             openLink("#content-main", "templates/search.html");
         },
         '/booked-link': function () {
-            openLink("#content-main", "templates/booked.html");
+            openLink("#content-main", "templates/booking/booked.html");
+            displayBookedRooms();
         },
         '/admin-link': function () {
             openLink("#content-main", "templates/admin.html");
