@@ -25,7 +25,7 @@ function addEventAdminProfileViewElem() {
             var cont = $("<div class='admin-modal-auto'></div>");
             
             $.each(data, function (name, value) {
-                if(name.indexOf('_') >= 0){
+                if(name.indexOf('_') >= 0 && name.indexOf('_id')){
                     return true;
                 }
                 var pName = $("<h3>" + name + "</h3>");
@@ -34,7 +34,7 @@ function addEventAdminProfileViewElem() {
                 $(cont).append(pValue);
             });
             
-            showInfoModal("Info", '', cont);
+            showInfoModal('', '', cont);
         });
     });
 }
@@ -115,7 +115,10 @@ function adminDisplayEducations() {
     EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
         $(data).each(function (index, value) {
             var tr = $('<tr>');
-            $(tr).append("<td>" + value.name + "</td>");
+            var td_a = $("<td><a class='admin-modal-preview'>"+value.name+"</a></td>");
+            $(td_a).find(".admin-modal-preview").data('_id',value._id);
+            $(td_a).find(".admin-modal-preview").data('rest',EDUCATION_REST);
+            $(tr).append(td_a);
             $(tr).append("<td>" + value.score + "</td>");
 
             var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon delete-edu-icon'>" + "</td>");
