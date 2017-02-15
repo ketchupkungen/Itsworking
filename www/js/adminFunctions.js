@@ -4,6 +4,7 @@ $(document).ready(function () {
     addEventAdminAddRoomBtn();
     addEventAdminAddRoomSubmitBtn();
     //
+    //
     addEventAdminDeleteTeacherIcon();
     addEventAdminAddTeacher();
     //
@@ -15,30 +16,106 @@ $(document).ready(function () {
     addEventAdminProfileViewElem();
 });
 
+//==============================================================================
+
+/**
+ * IMPORTANT
+ * @returns {undefined}
+ */
 function addEventAdminProfileViewElem() {
     $('body').on("click", ".admin-modal-preview", function (e) {
         var id = $(this).data('_id');
         var rest = $(this).data('rest');
-        console.log("ID", id);
-
+        //
         findById(rest, id, function (data) {
             var cont = $("<div class='admin-modal-auto'></div>");
-            
+            //
             $.each(data, function (name, value) {
-                if(name.indexOf('_') >= 0 && name.indexOf('_id')){
+                if (name.indexOf('_id') >= 0 || name.indexOf('__v') >= 0) {
                     return true;
                 }
-                var pName = $("<h3>" + name + "</h3>");
-                var pValue = $("<p>" + value + "</p>");
-                $(cont).append(pName);
-                $(cont).append(pValue);
+                //
+                if (Array.isArray(value) === false) {
+                    var pName = $("<h3>" + name + "</h3>");
+                    var pValue = $("<p>" + value + "</p>");
+                    $(cont).append(pName);
+                    $(cont).append(pValue);
+                } else { //is array
+                    //Populating...
+                    $(value).each(function (index, value_) {
+                        //
+                        $(cont).append('<hr>');
+                        $.each(value_, function (key, val) {
+                            //
+                            if (Array.isArray(val) || key.indexOf('_id') >= 0 || key.indexOf('__v') >= 0) {
+                                return true;
+                            }
+                            //
+                            var pName = $("<h4>" + key + "</h4>");
+                            var pValue = $("<p>" + val + "</p>");
+                            $(cont).append(pName);
+                            $(cont).append(pValue);
+                        });
+                    });
+                    return true;
+                }
+                //
+
             });
-            
+
             showInfoModal('', '', cont);
         });
     });
 }
 
+//==============================================================================
+
+
+function adminDisplayStudents() {
+    $("#content-main").empty();
+    var tableTemplate = $(loadTemplate("templates/admin/adminStudents.html"));
+
+    STUDENT_REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 50}), function (data, textStatus, jqXHR) {
+        $(data).each(function (index, value) {
+            var TR = $('<tr>');
+            var td_name = $("<td>" + value.name + "</td>")
+            $(TR).append(td_name);
+            //
+            hasLogin(value, td_name);
+            //
+            $(TR).append("<td>" + "<a class='admin-modal-preview'>" + value._education.name + "</a>" + "</td>");
+            $(TR).find('.admin-modal-preview').data('_id', value._education._id);
+            $(TR).find('.admin-modal-preview').data('rest', EDUCATION_REST);
+            //
+            $(TR).append("<td>" + value.epost + "</td>");
+            $(TR).append("<td>" + value.pnr + "</td>");
+
+            $(tableTemplate).find('tbody').append(TR);
+        });
+        //
+        $('#content-main').append(tableTemplate);
+
+    });
+}
+
+function hasLogin(pers, td) {
+    LOGIN_SHEMA_REST.find(_find({epost: pers.epost}), function (data) {
+        
+        var icon = {1:'key.png',2:'delete.png'};
+        
+        var value = data[0];
+        if (value) {
+            $(td).append("<img src='images/key.png' class='basic-icon admin-modal-preview'>");
+            $(td).find('.admin-modal-preview').data('_id', value._id);
+            $(td).find('.admin-modal-preview').data('rest', LOGIN_SHEMA_REST);
+        }
+    });
+}
+
+
+//==============================================================================
+
+//SUBMIT ADD/UPDATE
 function addEventAdminEduSubmitBtn() {
     $('body').on("click", "#admin-edu-submit-btn", function (e) {
         e.preventDefault();
@@ -50,7 +127,6 @@ function addEventAdminEduSubmitBtn() {
 
         if (isUpdate) {
             EDUCATION_REST.update(ACT_EDIT_ID, {name: name, score: score, info: info}, function (data, textStatus, jqXHR) {
-                console.log("UPDATE:", data)
                 adminDisplayEducations();
             });
         } else {
@@ -60,7 +136,6 @@ function addEventAdminEduSubmitBtn() {
                 }
             });
         }
-
     });
 }
 
@@ -79,7 +154,7 @@ function addEventAdminEditEduIcon() {
     });
 }
 
-//ADD
+//ADD FORM
 function addEventAdminAddEduBtn() {
     $('body').on("click", "#admin-add-edu-btn", function () {
         $('.admin-add-edu-form').remove();
@@ -115,9 +190,9 @@ function adminDisplayEducations() {
     EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
         $(data).each(function (index, value) {
             var tr = $('<tr>');
-            var td_a = $("<td><a class='admin-modal-preview'>"+value.name+"</a></td>");
-            $(td_a).find(".admin-modal-preview").data('_id',value._id);
-            $(td_a).find(".admin-modal-preview").data('rest',EDUCATION_REST);
+            var td_a = $("<td><a class='admin-modal-preview'>" + value.name + "</a></td>");
+            $(td_a).find(".admin-modal-preview").data('_id', value._id);
+            $(td_a).find(".admin-modal-preview").data('rest', EDUCATION_REST);
             $(tr).append(td_a);
             $(tr).append("<td>" + value.score + "</td>");
 
@@ -178,8 +253,8 @@ function addEventAdminAddTeacher() {
 
             showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
                 //
-                if(modalInput === false){
-                   return;
+                if (modalInput === false) {
+                    return;
                 }
                 //
                 var teacherId = $(comboBox).val();

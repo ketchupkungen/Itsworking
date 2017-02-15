@@ -120,9 +120,12 @@ function EXAMPLE_CRUD() {
 
     //==========================================================================
 
+    //GET WITH OPTIONS  -- ***************IMPORTANT****************************
+    TEACHERS_REST.find(_find({_fields: 'name _id', _sort: 'name', _skip: 0, _limit: 3}), function (data, textStatus, jqXHR) {
+    });
+
     //GET ALL
     STUDENT_REST.find('', function (data, textStatus, jqXHR) {
-
     });
 
     //GET BY ID

@@ -39,6 +39,9 @@ function initializeHistoryRouter() {
         '/education-admin': function () {
             adminDisplayEducations();        
         },
+        '/student-admin': function () {
+            adminDisplayStudents();
+        },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
         },

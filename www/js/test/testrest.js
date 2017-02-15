@@ -51,14 +51,14 @@ function addListenerPutBtn() {
 function addListenerGetBtn() {
     //GET WITH OPTIONS  -- IMPORTANT
      $("#get-options-btn").click(function () {
-        TEACHERS_REST.find(_find({_fields:'name epost',_sort:'name',_skip:0,_limit:3}), function (data, textStatus, jqXHR) {
+        STUDENT_REST.find(_find({_fields:'',_sort:'name',_skip:0,_limit:3}), function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
 
     //GET ALL
     $("#get-btn").click(function () {
-        TEACHERS_REST.find('',function (data, textStatus, jqXHR) {
+        EDUCATION_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });

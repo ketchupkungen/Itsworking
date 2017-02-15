@@ -6,7 +6,11 @@ var PATH = "js/modals/";
 
 function showInfoModal(title, infoMsg, customizedObj, size, type) {
     var modalObj = $.parseHTML(loadTemplate(PATH + "modal_info.html"));
-    $(modalObj).find(".modal-title").text(title);
+    if(title){
+      $(modalObj).find(".modal-title").text(title);  
+    }else{
+        $(modalObj).find('.modal-header').remove();
+    }
     //
     //
     if (customizedObj) {
