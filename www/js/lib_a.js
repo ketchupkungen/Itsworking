@@ -1,4 +1,21 @@
+function isChecked(selector){
+    if($(selector).is(':checked')){
+        return true;
+    }else{
+        return false;
+    }
+}
 
+
+function generatePassword() {
+    var length = 6,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
 
 function getJsonFromUrlSync(url) {

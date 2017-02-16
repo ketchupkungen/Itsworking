@@ -14,6 +14,7 @@ $(document).ready(function () {
     addEventAdminEduSubmitBtn();
     //
     addEventAdminProfileViewElem();
+    addEventAdminAddLoginIcon();
 });
 
 //==============================================================================
@@ -100,16 +101,82 @@ function adminDisplayStudents() {
 
 function hasLogin(pers, td) {
     LOGIN_SHEMA_REST.find(_find({epost: pers.epost}), function (data) {
-        
-        var icon = {1:'key.png',2:'delete.png'};
-        
+
         var value = data[0];
         if (value) {
-            $(td).append("<img src='images/key.png' class='basic-icon admin-modal-preview'>");
+            $(td).append("<img src='images/key-" + value.level + ".png' class='basic-icon admin-modal-preview'>");
+            $(td).append("<img src='images/edit.png' class='basic-icon admin-edit-login'>");
+            $(td).find('.admin-edit-login').data('person', pers);
+            $(td).find('.admin-edit-login').data('edit', true);
+            $(td).find('.admin-edit-login').data('level', value.level);
+            //
             $(td).find('.admin-modal-preview').data('_id', value._id);
             $(td).find('.admin-modal-preview').data('rest', LOGIN_SHEMA_REST);
+        } else {
+            $(td).append("<img src='images/key-add.png' class='basic-icon admin-add-login-icon'>");
+            $(td).find('.admin-add-login-icon').data('person', pers);
         }
     });
+}
+
+function addEventAdminAddLoginIcon() {
+    $('body').on("click", '.admin-add-login-icon, .admin-edit-login', function (e) {
+        var person = $(this).data('person');
+        var edit = $(this).data('edit');
+        var level = $(this).data('level');
+        //
+        var template = $(loadTemplate('templates/admin/other/adminAddLoginForm.html'));
+        //
+        if (edit) {
+            $(template).find('#form-group-pass').append("<label><input type='checkbox' id='cboxpass'>ändra lösenord</label>");
+            $(template).find('#admin-login-level').val('' + level);
+        }
+        //
+        $(template).find('#admin-login-name').val(person.name);
+        $(template).find('#admin-login-pass').val(generatePassword());
+        //
+        $(template).find('#admin-add-login-submit-btn').data('person', person);
+        $(template).find('#admin-add-login-submit-btn').data('template', template);
+        $(template).find('#admin-add-login-submit-btn').data('edit', edit);
+        //
+        showInfoModal(edit ? 'Edit login' : 'Create login', '', template, 'sm');
+    });
+
+    $('body').on("click", '#admin-add-login-submit-btn', function (e) {
+        e.preventDefault();
+        //
+        var edit = $(this).data('edit');
+        var per = $(this).data('person');
+        var template = $($(this).data('template'));
+        //
+        var pass = $('#admin-login-pass').val();
+        var level = $('#admin-login-level').val();
+        //
+        if (edit) {
+            var updatePass = isChecked("#cboxpass");
+
+            LOGIN_SHEMA_REST.update(_find({epost: per.epost}), !updatePass ? {level: level} : {level: level, password: pass}, function (data, textStatus, jqXHR) {
+                showStatus(data, template);
+            });
+        } else {
+            LOGIN_SHEMA_REST.create({pnr: per.pnr, epost: per.epost, password: pass, level: level}, function (data, textStatus, jqXHR) {
+                showStatus(data, template);
+            });
+        }
+    });
+
+    function showStatus(data, template) {
+        if (data) {
+            $(template).find('.status').addClass('ok');
+            $(template).find('.status').text('Status: OK');
+            //
+            adminDisplayStudents();
+            //
+        } else {
+            $(template).find('.status').addClass('failed');
+            $(template).find('.status').text('Status: failed');
+        }
+    }
 }
 
 
@@ -390,7 +457,6 @@ function addEventAdminEditIcon() {
                 var nr = data.nr;
                 var size = data.size;
                 var projector = data.projector;
-                console.log("EDIT:" + nr + " / " + size + " / " + projector);
 
                 var formTemplate = $(loadTemplate("templates/admin/adminAddRoomForm.html"));
 

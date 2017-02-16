@@ -12,7 +12,7 @@ $.loadTemplates(
             "search",
             "booked",
             "admin",
-            "profile-modal",
+            "profile-modal"
         ]
         , 'templates'
         , function () {
@@ -22,7 +22,7 @@ $.loadTemplates(
         
         $.loadTemplates(
         [
-            "adminAddEduForm",
+            "adminAddEduForm"
         ]
         , 'templates/admin'
         , function () {
