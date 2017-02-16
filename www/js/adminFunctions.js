@@ -13,66 +13,13 @@ $(document).ready(function () {
     addEventAdminDeleteEduIcon();
     addEventAdminEduSubmitBtn();
     //
-    addEventAdminProfileViewElem();
     addEventAdminAddLoginIcon();
     addEventDeleteEduRefStud();
     addEventAddEduRefStud();
+    addEventDeleteStud();
 });
 
 //==============================================================================
-
-/**
- * IMPORTANT
- * @returns {undefined}
- */
-function addEventAdminProfileViewElem() {
-    $('body').on("click", ".admin-modal-preview", function (e) {
-        var id = $(this).data('_id');
-        var rest = $(this).data('rest');
-        //
-        findById(rest, id, function (data) {
-            var cont = $("<div class='admin-modal-auto'></div>");
-            //
-            $.each(data, function (name, value) {
-                if (name.indexOf('_id') >= 0 || name.indexOf('__v') >= 0) {
-                    return true;
-                }
-                //
-                if (Array.isArray(value) === false) {
-                    var pName = $("<h3>" + name + "</h3>");
-                    var pValue = $("<p>" + value + "</p>");
-                    $(cont).append(pName);
-                    $(cont).append(pValue);
-                } else { //is array
-                    //Populating...
-                    $(value).each(function (index, value_) {
-                        //
-                        $(cont).append('<hr>');
-                        $.each(value_, function (key, val) {
-                            //
-                            if (Array.isArray(val) || key.indexOf('_id') >= 0 || key.indexOf('__v') >= 0) {
-                                return true;
-                            }
-                            //
-                            var pName = $("<h4>" + key + "</h4>");
-                            var pValue = $("<p>" + val + "</p>");
-                            $(cont).append(pName);
-                            $(cont).append(pValue);
-                        });
-                    });
-                    return true;
-                }
-                //
-
-            });
-
-            showInfoModal('', '', cont);
-        });
-    });
-}
-
-//==============================================================================
-
 
 function adminDisplayStudents() {
     $("#content-main").empty();
@@ -98,18 +45,36 @@ function adminDisplayStudents() {
                 $(TR).append(td_edu);
             } else {
                 var td_edu = $("<td><img src='images/add.png' class='basic-icon admin-add-edu-ref-stud'></td>");
-                $(td_edu).find('.admin-add-edu-ref-stud').data("_id",value._id);
+                $(td_edu).find('.admin-add-edu-ref-stud').data("_id", value._id);
                 $(TR).append(td_edu);
             }
             //
             $(TR).append("<td>" + value.epost + "</td>");
             $(TR).append("<td>" + value.pnr + "</td>");
-
+            //
+            $(TR).append("<td><img src='images/delete.png' class='basic-icon admin-delete-stud'></td>");
+            $(TR).find('.admin-delete-stud').data('_id', value._id);
+            $(TR).append("<td><img src='images/edit.png' class='basic-icon admin-edit-stud'></td>");
+            //
             $(tableTemplate).find('tbody').append(TR);
         });
         //
         $('#content-main').append(tableTemplate);
 
+    });
+}
+
+function addEventDeleteStud() {
+    $('body').on("click", '.admin-delete-stud', function (e) {
+        var stud_id = $(this).data('_id');
+        showConfirmModal("Radera?", "Bekräfta handling", 'sm', 'error', (yes) => {
+            if (!yes) {
+                return;
+            }
+            deleteById(STUDENT_REST, stud_id, function () {
+                adminDisplayStudents();
+            });
+        });
     });
 }
 
@@ -126,7 +91,7 @@ function addEventAddEduRefStud() {
                 }
                 //
                 var educationId = $(comboBox).val();
-                STUDENT_REST.createRef({primId: studId, refId: educationId},function(data){
+                STUDENT_REST.createRef({primId: studId, refId: educationId}, function (data) {
                     adminDisplayStudents();
                 });
             });
@@ -229,6 +194,7 @@ function addEventAdminAddLoginIcon() {
 }
 
 
+//==============================================================================
 //==============================================================================
 
 function adminDisplayEducations() {
