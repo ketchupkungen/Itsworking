@@ -58,7 +58,7 @@ function addListenerGetBtn() {
 
     //GET ALL
     $("#get-btn").click(function () {
-        EDUCATION_REST.find('',function (data, textStatus, jqXHR) {
+        STUDENT_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
@@ -111,7 +111,7 @@ function addListenerDeleteBtn() {
     //DELETE A TEACHERS ID FROM THE ARRAY OF TEACHERS REFERENSES
     //REMOVE A TEACHER FROM EDUCATION
      $("#delete-btn").click(function () {
-       EDUCATION_REST.deleteRef('deleteReference/' + 'EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
+       EDUCATION_REST.deleteRef('EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
           $('#output').text(JSON.stringify(data, null, 1));
         });
     });

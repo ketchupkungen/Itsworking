@@ -15,6 +15,8 @@ $(document).ready(function () {
     //
     addEventAdminProfileViewElem();
     addEventAdminAddLoginIcon();
+    addEventDeleteEduRefStud();
+    addEventAddEduRefStud();
 });
 
 //==============================================================================
@@ -84,9 +86,21 @@ function adminDisplayStudents() {
             //
             hasLogin(value, td_name);
             //
-            $(TR).append("<td>" + "<a class='admin-modal-preview'>" + value._education.name + "</a>" + "</td>");
-            $(TR).find('.admin-modal-preview').data('_id', value._education._id);
-            $(TR).find('.admin-modal-preview').data('rest', EDUCATION_REST);
+            if (value._education) {
+                var td_edu = $("<td>" + "<a class='admin-modal-preview'>" + value._education.name + "</a>" + "</td>");
+                $(td_edu).append("<img src='images/delete.png' class='basic-icon admin-delete-edu-ref-stud'>");
+                //
+                $(td_edu).find('.admin-modal-preview').data('_id', value._education._id);
+                $(td_edu).find('.admin-modal-preview').data('rest', EDUCATION_REST);
+                //
+                $(td_edu).find('.admin-delete-edu-ref-stud').data('_id', value._id);
+                $(td_edu).find('.admin-delete-edu-ref-stud').data('ref', value._education._id);
+                $(TR).append(td_edu);
+            } else {
+                var td_edu = $("<td><img src='images/add.png' class='basic-icon admin-add-edu-ref-stud'></td>");
+                $(td_edu).find('.admin-add-edu-ref-stud').data("_id",value._id);
+                $(TR).append(td_edu);
+            }
             //
             $(TR).append("<td>" + value.epost + "</td>");
             $(TR).append("<td>" + value.pnr + "</td>");
@@ -95,6 +109,42 @@ function adminDisplayStudents() {
         });
         //
         $('#content-main').append(tableTemplate);
+
+    });
+}
+
+//ADD EDU REF STUD 
+function addEventAddEduRefStud() {
+    $('body').on("click", '.admin-add-edu-ref-stud', function (e) {
+        //
+        var studId = $(this).data('_id');
+        //
+        buildComboAll(EDUCATION_REST, function (comboBox) {
+            showInputModalB("Läggtill utb.", "Välj utb.", comboBox, 'sm', function (modalInput) {
+                if (modalInput === false) {
+                    return;
+                }
+                //
+                var educationId = $(comboBox).val();
+                STUDENT_REST.createRef({primId: studId, refId: educationId},function(data){
+                    adminDisplayStudents();
+                });
+            });
+        });
+    });
+}
+
+//DELETE EDU REF STUD 
+function addEventDeleteEduRefStud() {
+    $('body').on("click", '.admin-delete-edu-ref-stud', function (e) {
+        var stud_id = $(this).data('_id');
+        var edu_id = $(this).data('ref');
+
+        STUDENT_REST.deleteRef(stud_id, {ref_id: edu_id}, function (data, textStatus, jqXHR) {
+            if (data.status) {
+                adminDisplayStudents();
+            }
+        });
 
     });
 }
@@ -154,7 +204,6 @@ function addEventAdminAddLoginIcon() {
         //
         if (edit) {
             var updatePass = isChecked("#cboxpass");
-
             LOGIN_SHEMA_REST.update(_find({epost: per.epost}), !updatePass ? {level: level} : {level: level, password: pass}, function (data, textStatus, jqXHR) {
                 showStatus(data, template);
             });
@@ -181,6 +230,68 @@ function addEventAdminAddLoginIcon() {
 
 
 //==============================================================================
+
+function adminDisplayEducations() {
+    $("#content-main").empty();
+    var tableTemplate = $(loadTemplate("templates/admin/adminEducations.html"));
+
+    var vals = [];
+
+    EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
+        $(data).each(function (index, value) {
+            var tr = $('<tr>');
+            var td_a = $("<td><a class='admin-modal-preview'>" + value.name + "</a></td>");
+            $(td_a).find(".admin-modal-preview").data('_id', value._id);
+            $(td_a).find(".admin-modal-preview").data('rest', EDUCATION_REST);
+            $(tr).append(td_a);
+            $(tr).append("<td>" + value.score + "</td>");
+
+            var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon delete-edu-icon'>" + "</td>");
+            $(tdDelete).data("_id", value._id);
+            $(tdDelete).data("tr", tr);
+            $(tr).append(tdDelete);
+
+            var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon edit-edu-icon'>" + "</td>");
+            $(tdEdit).data("_id", value._id);
+            $(tr).append(tdEdit);
+            //
+            $(value._teachers).each(function (index, teacher) {
+                //
+                var tdT = $("<td></td>");
+                var _a = $("<a class='admin-modal-preview'>" + teacher.name + "</a>");
+                $(_a).data('_id', teacher._id);
+                $(_a).data('rest', TEACHERS_REST);
+                $(tdT).append(_a);
+                //
+                var imgDel = $("<img src='images/delete.png' class='basic-icon delete-teacher-icon'>");
+                $(imgDel).data("teacher_id", teacher._id);
+                $(imgDel).data("edu_id", value._id);
+                $(tdT).append(imgDel);
+                $(tr).append(tdT);
+                //
+                if (vals.indexOf(index) === -1) {
+                    vals.push(index);
+                    var th = $('<th>Teacher ' + (index + 1) + '</th>');
+                    $(tableTemplate).find("thead tr").append(th);
+                }
+                //
+            });
+            //
+            var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
+            $(tdAddTeacher).data("_id", value._id);
+            $(tr).append(tdAddTeacher);
+            //
+            //
+            $(tableTemplate).find("tbody").append(tr);
+        });
+        //
+        var th = $('<th>L.till</th>');
+        $(tableTemplate).find("thead tr").append(th);
+        //
+        $("#content-main").append(tableTemplate);
+
+    });
+}
 
 //SUBMIT ADD/UPDATE
 function addEventAdminEduSubmitBtn() {
@@ -248,75 +359,12 @@ function addEventAdminDeleteEduIcon() {
     });
 }
 
-function adminDisplayEducations() {
-    $("#content-main").empty();
-    var tableTemplate = $(loadTemplate("templates/admin/adminEducations.html"));
-
-    var vals = [];
-
-    EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
-        $(data).each(function (index, value) {
-            var tr = $('<tr>');
-            var td_a = $("<td><a class='admin-modal-preview'>" + value.name + "</a></td>");
-            $(td_a).find(".admin-modal-preview").data('_id', value._id);
-            $(td_a).find(".admin-modal-preview").data('rest', EDUCATION_REST);
-            $(tr).append(td_a);
-            $(tr).append("<td>" + value.score + "</td>");
-
-            var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon delete-edu-icon'>" + "</td>");
-            $(tdDelete).data("_id", value._id);
-            $(tdDelete).data("tr", tr);
-            $(tr).append(tdDelete);
-
-            var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon edit-edu-icon'>" + "</td>");
-            $(tdEdit).data("_id", value._id);
-            $(tr).append(tdEdit);
-            //
-            $(value._teachers).each(function (index, teacher) {
-                //
-                var tdT = $("<td></td>");
-                var _a = $("<a class='admin-modal-preview'>" + teacher.name + "</a>");
-                $(_a).data('_id', teacher._id);
-                $(_a).data('rest', TEACHERS_REST);
-                $(tdT).append(_a);
-                //
-                var imgDel = $("<img src='images/delete.png' class='basic-icon delete-teacher-icon'>");
-                $(imgDel).data("teacher_id", teacher._id);
-                $(imgDel).data("edu_id", value._id);
-                $(tdT).append(imgDel);
-                $(tr).append(tdT);
-                //
-                if (vals.indexOf(index) === -1) {
-                    vals.push(index);
-                    var th = $('<th>Teacher ' + (index + 1) + '</th>');
-                    $(tableTemplate).find("thead tr").append(th);
-                }
-                //
-            });
-            //
-            var tdAddTeacher = $("<td>" + "<img src='images/add-user.png' class='basic-icon add-teacher-icon'>" + "</td>");
-            $(tdAddTeacher).data("_id", value._id);
-            $(tr).append(tdAddTeacher);
-            //
-            //
-            $(tableTemplate).find("tbody").append(tr);
-        });
-        //
-        var th = $('<th>Add</th>');
-        $(tableTemplate).find("thead tr").append(th);
-        //
-        $("#content-main").append(tableTemplate);
-
-    });
-}
-
-
 function addEventAdminAddTeacher() {
     $('body').on('click', '.add-teacher-icon', function (e) {
         var parent = $(this).parent();
         var eduId = $(parent).data('_id');
 
-        buildTeachersCombo(function (comboBox) {
+        buildComboAll(TEACHERS_REST, function (comboBox) {
 
             showInputModalB("Add Teacher", "Choose teacher", comboBox, 'sm', function (modalInput) {
                 //
@@ -326,9 +374,8 @@ function addEventAdminAddTeacher() {
                 //
                 var teacherId = $(comboBox).val();
                 EDUCATION_REST.createRef({primId: eduId, refId: teacherId}, function (data, textStatus, jqXHR) {
-                    console.log("add teacher -> edu", data);
+                    //
                     TEACHERS_REST.createRef({primId: teacherId, refId: eduId}, function (data, textStatus, jqXHR) {
-                        console.log("add edu -> teacher", data);
                         adminDisplayEducations();
                     });
                 });
@@ -338,19 +385,6 @@ function addEventAdminAddTeacher() {
 
     });
 }
-
-function buildTeachersCombo(cb) {
-
-    TEACHERS_REST.find('', function (data, textStatus, jqXHR) {
-        var select = $('<select></select>');
-        $(data).each(function (index, t) {
-            var option = $("<option value=" + t._id + ">" + t.name + "</option>");
-            $(select).append(option);
-        });
-        cb(select);
-    });
-}
-
 
 function addEventAdminDeleteTeacherIcon() {
     $('body').on("click", ".delete-teacher-icon", function () {

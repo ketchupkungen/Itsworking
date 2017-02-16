@@ -90,22 +90,12 @@ function getUserName(cb) {
 }
 
 
-function EXAMPLE_LOGIN() {
-    //LOGIN/CREATE/POST
-    LOGIN_REST.create({username: "gmor@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
-        if (!data.error) {
-        } else {
-        }
-    });
-
-    //LOGOUT/DELETE/
-    LOGIN_REST.delete('', function (data, textStatus, jqXHR) {
-    });
-}
-
 function EXAMPLE_CRUD() {
     //CREATE/POST
     STUDENT_REST.create({name: "pontus johansson", pnr: "850131-0737", epost: "pjohansson@gmail.com"}, function (data, textStatus, jqXHR) {
+    });
+
+    TEACHERS_REST.createRef({primId: teacherId, refId: eduId}, function (data, textStatus, jqXHR) {
     });
 
     //==========================================================================
@@ -119,11 +109,13 @@ function EXAMPLE_CRUD() {
     });
 
     //==========================================================================
-
+    //
+    //
     //GET WITH OPTIONS  -- ***************IMPORTANT****************************
     TEACHERS_REST.find(_find({_fields: 'name _id', _sort: 'name', _skip: 0, _limit: 3}), function (data, textStatus, jqXHR) {
     });
-
+    //
+    //
     //GET ALL
     STUDENT_REST.find('', function (data, textStatus, jqXHR) {
     });
@@ -156,11 +148,22 @@ function EXAMPLE_CRUD() {
 
     //DELETE A TEACHERS ID FROM THE ARRAY OF TEACHERS REFERENSES
     //REMOVE A TEACHER FROM EDUCATION
-    EDUCATION_REST.deleteRef('deleteReference/' + 'EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
+    EDUCATION_REST.deleteRef('EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
     });
 
 }
 
+
+function buildComboAll(rest, cb) {
+    rest.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 1000}), function (data, textStatus, jqXHR) {
+        var select = $('<select></select>');
+        $(data).each(function (index, obj) {
+            var option = $("<option value=" + obj._id + ">" + obj.name + "</option>");
+            $(select).append(option);
+        });
+        cb(select);
+    });
+}
 
 function createInstanse(rest, properties, cb) {
     rest.create(properties, function (data, textStatus, jqXHR) {
