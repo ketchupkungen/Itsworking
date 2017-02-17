@@ -26,16 +26,17 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
                 var tr = $('<tr>');
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    $(tr).append('<td>' + value[colName] + '</td>');
+                    var td = $("<td class='my-table-basic-td'>" + value[colName] + '</td>');
+                    td.data('_id', value._id);
+                    td.data('col', colName);
+                    td.data('value', value[colName]);
+                    $(tr).append(td);
                 });
                 //
                 var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
                 $(td_del).find('.my-table-delete').data('_id', value._id);
-                var td_edit = $("<td><img src='images/edit.png' class='basic-icon my-table-edit'></td>");
-                $(td_edit).find('.my-table-delete').data('_id', value._id);
                 //
                 $(tr).append(td_del);
-                $(tr).append(td_edit);
                 //
                 $(tbody).append(tr);
             });
@@ -47,13 +48,14 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
     this.setListeners = function () {
         var that = this;
         $(document).ready(function () {
-            
             $('body').on('click', '.my-table-delete', function () {
                 that.delete($(this).data('_id'));
             });
-            
-        });
 
+            $('body').on('click', '.my-table-basic-td', function () {
+                that.edit($(this).data('_id'), $(this).data('col'), $(this).data('value'));
+            });
+        });
     };
 
     this.delete = function (_id) {
@@ -64,8 +66,25 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
         });
     };
 
-    this.edit = function (_id) {
+    this.edit = function (_id, col, value) {
+        var that = this;
+        console.log("td clicked:" + _id + " / " + col + " / " + value);
 
+        var updateSetting = {};
+        var input = $("<input type='text' class='text-input' value='" + value + "'>");
+
+        showInputModalB("Edit", "", input, 'sm', function (modalInput) {
+            //
+            var input = $(modalInput).find('.text-input').val();
+            updateSetting[col] = input;
+            //
+            if (input) {
+                that.REST.update(_id, updateSetting, function (data, textStatus, jqXHR) {
+                    that.show();
+                });
+            }
+            //
+        });
     };
 
     this.setTableTitle = function () {
