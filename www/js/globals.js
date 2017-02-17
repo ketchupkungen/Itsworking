@@ -10,7 +10,10 @@ var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
 //
 //
 //
-var TABLE_TEACHER = new Table(TEACHERS_REST,'Administrera lärare', '#content-main',
+var TABLE_TEACHER = new Table(
+        TEACHERS_REST,
+        'Administrera lärare',
+        '#content-main',
         ['Namn', 'Pnr', 'Epost', 'Delete'],
         ['name', 'pnr', 'epost']);
 //

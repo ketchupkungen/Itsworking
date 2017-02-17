@@ -26,7 +26,7 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
                 var tr = $('<tr>');
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    var td = $("<td class='my-table-basic-td'>" + value[colName] + '</td>');
+                    var td = $("<td class='my-table-basic-edit'>" + value[colName] + '</td>');
                     td.data('_id', value._id);
                     td.data('col', colName);
                     td.data('value', value[colName]);
@@ -52,10 +52,40 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
                 that.delete($(this).data('_id'));
             });
 
-            $('body').on('click', '.my-table-basic-td', function () {
+            $('body').on('click', '.my-table-basic-edit', function () {
                 that.edit($(this).data('_id'), $(this).data('col'), $(this).data('value'));
             });
+
+            $('body').on('click', '#table-basic-add-new-btn', function () {
+                that.create();
+            });
         });
+    };
+
+    this.create = function () {
+        var that = this;
+        var updateSettings = {};
+        this.buildCreateInput(function (input) {
+            showInputModalB("Create new", "", input, 'sm', function (modalInput) {
+                $(that.fieldsArr).each(function (i, colName) {
+                    updateSettings[colName] = modalInput.find("#" + colName).val();
+                });
+                //
+                that.REST.create(updateSettings, function (data, textStatus, jqXHR) {
+                    that.show();
+                });
+            });
+        });
+    };
+
+    this.buildCreateInput = function (cb) {
+        var that = this;
+        var form = $("<form class='table-basic-auto-create-form'>");
+        $(this.fieldsArr).each(function (i, colName) {
+            $(form).append("<p>" + that.headers[i] + "</p>");
+            $(form).append("<input type='text' id='" + colName + "'>");
+        });
+        cb(form);
     };
 
     this.delete = function (_id) {
