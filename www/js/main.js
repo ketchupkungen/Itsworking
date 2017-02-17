@@ -18,9 +18,9 @@ $.loadTemplates(
         , function () {
             $(document).ready(go);
         });
-        
-        
-        $.loadTemplates(
+
+
+$.loadTemplates(
         [
             "adminAddEduForm"
         ]
@@ -37,10 +37,13 @@ function initializeHistoryRouter() {
             adminDisplayRooms();
         },
         '/education-admin': function () {
-            adminDisplayEducations();        
+            adminDisplayEducations();
         },
         '/student-admin': function () {
             adminDisplayStudents();
+        },
+        '/teacher-admin': function () {
+            TABLE_TEACHER.show();
         },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");

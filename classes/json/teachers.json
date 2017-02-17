@@ -1,20 +1,32 @@
 [
     {
-        "name": "tomas frank",
+        "name": "Tomas Frank",
         "pnr": "650115-5566",
         "epost": "tfrank@gmail.com",
         "educations": []
     },
     {
-        "name": "benjamin andersson",
+        "name": "Benjamin Andersson",
         "pnr": "560115-5566",
         "epost": "benja@gmail.com",
         "educations": []
     },
     {
-        "name": "hugo nillson",
+        "name": "Hugo Nillson",
         "pnr": "380115-5566",
         "epost": "hn@gmail.com",
+        "educations": []
+    },
+    {
+        "name": "Bertil Håkansson",
+        "pnr": "330215-8899",
+        "epost": "bh@gmail.com",
+        "educations": []
+    },
+     {
+        "name": "Anders Andersson",
+        "pnr": "780318-5566",
+        "epost": "aa@gmail.com",
         "educations": []
     }
     

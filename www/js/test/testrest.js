@@ -58,7 +58,7 @@ function addListenerGetBtn() {
 
     //GET ALL
     $("#get-btn").click(function () {
-        STUDENT_REST.find('',function (data, textStatus, jqXHR) {
+        BOOKING_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
