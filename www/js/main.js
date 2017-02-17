@@ -52,7 +52,7 @@ function initializeHistoryRouter() {
             openLink("#content-main", "templates/school.html");
         },
         '/profilemodal': function () {
-            $('.overlay').fadeIn(300);
+            $('.overlay').fadeIn(300); // should we have routes for modals ????
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking/booking.html");
