@@ -1,21 +1,31 @@
-$(document).ready(function() {
+$(document).on('click','.status-menu-choice',function(){
 
-/*
-// Opens profile-modal when clicked on "profil"
-profileModal();
 
-});
-*/
+	// Check if we are logged in and get the user info
+	LOGIN_REST.find('',function(data){
+	
+		// The data we know about the user
+		// !!!! Note login i separate collection
+		// a there are no names and relations to
+		// what student or teacher is actually logged in
+		// (unless the relation is supposed to be identical emails in the
+		// login collection and the teacher/student collections..?)
+		// data.user.epost data.user.pnr data.user.level etc.
+		showModal(data.user); 
 
-function profileModal(){
-
-	$('.modal-profile').click(function(){
-		$('.overlay').fadeIn(300);
 	});
 
-	$('.close-btn').click(function(){
-		$('.overlay').fadeOut(300);
-	});
-}
+	function showModal(userData){
+
+		$('body').template('profile-modal',{
+			name: "?",
+			birthday: userData.pnr,
+			email: userData.epost,
+			education: "?"
+		});
+
+		$('#profile-modal').modal('show');
+
+	}
 
 });
