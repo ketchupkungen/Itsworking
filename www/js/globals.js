@@ -14,8 +14,10 @@ var TABLE_TEACHER = new Table(
         TEACHERS_REST,
         'Administrera lärare',
         '#content-main',
-        ['Namn', 'Pnr', 'Epost', 'Delete'],
-        ['name', 'pnr', 'epost']
+        ['Namn', 'Pnr', 'Epost'],
+        ['name', 'pnr', 'epost'],
+        '_educations',
+        {name:'Education',score:'Score'}
         );
 //
 
