@@ -1,4 +1,4 @@
-function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
+function Table(rest, tableTitle, containerId, headersArr, fieldsArr,modalPreviewCollArr) {
 
     this.REST = rest;
     this.tableTitle = tableTitle;
@@ -26,7 +26,9 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
                 var tr = $('<tr>');
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    var td = $("<td class='my-table-basic-edit'>" + value[colName] + '</td>');
+                    var td = $("<td class='my-table-basic-edit'>" + "<a class='admin-modal-preview'>" + value[colName] + "</a>" +'</td>');
+                    $(td).find('.admin-modal-preview').data('_id',value._id);
+                    $(td).find('.admin-modal-preview').data('rest',that.REST);
                     td.data('_id', value._id);
                     td.data('col', colName);
                     td.data('value', value[colName]);
@@ -67,6 +69,9 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
         var updateSettings = {};
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
+                if(!modalInput){
+                    return;
+                }
                 $(that.fieldsArr).each(function (i, colName) {
                     updateSettings[colName] = modalInput.find("#" + colName).val();
                 });

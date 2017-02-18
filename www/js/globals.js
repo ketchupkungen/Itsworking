@@ -15,7 +15,8 @@ var TABLE_TEACHER = new Table(
         'Administrera lärare',
         '#content-main',
         ['Namn', 'Pnr', 'Epost', 'Delete'],
-        ['name', 'pnr', 'epost']);
+        ['name', 'pnr', 'epost']
+        );
 //
 
 function openFirstPage() {
@@ -228,6 +229,7 @@ $(document).ready(function () {
  */
 function addEventAdminModalPreviewElem() {
     $('body').on("click", ".admin-modal-preview", function (e) {
+        e.stopPropagation();
         var id = $(this).data('_id');
         var rest = $(this).data('rest');
         //
