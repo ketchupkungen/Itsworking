@@ -10,6 +10,10 @@ $(document).ready(function() {
 
 });
 
+/////////////////////////////////////////////////////////////////////////////////
+
+// The booking system
+
 function displayBookingRooms() {
 	$("#content-main").empty();
 	var tableTemplate = $(loadTemplate("templates/booking/booking.html"));
@@ -22,9 +26,9 @@ function displayBookingRooms() {
 
 		$(data).each(function (index, value) {
 			var tr = $("<tr>");
-			$(tr).append("<td>" + value.room + "</td>");
-			$(tr).append("<td>" + value.education + "</td>");
-			$(tr).append("<td>" + value.teacher + "</td>");
+			$(tr).append("<td>" + value._classroom + "</td>");
+			$(tr).append("<td>" + value._education + "</td>");
+			$(tr).append("<td>" + value.name + "</td>");
             $(tr).append("<td>" + value.date + "</td>");
 
             var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon booking-edit-icon'>" + "</td>");
@@ -48,21 +52,21 @@ function displayBookingRooms() {
 function addEventBookingRoomChangeBtn() {
 	$('body').on("click", "#booking-change-room-btn", function (e) {
 		e.preventDefault();
-		var room = $("#booking-room-select option:selected").text();
-        var education = $("#booking-room-education-select option:selected").text();
-        var teacher = $("#booking-room-teacher-select option:selected").text();
+		var _classroom = $("#booking-room-select option:selected").text();
+        var _education = $("#booking-room-education-select option:selected").text();
+        var name = $("#booking-room-teacher-select option:selected").text();
         var date = $("#booking-room-date-select option:selected").text();
 
         var isEditAction = $(this).attr('edit');
         console.log("EditAction:", isEditAction);
 
         if (isEditAction === 'true') { // update
-            BOOKING_REST.update(ACT_EDIT_ID, {room: room, education: education, teacher: teacher, date:  date}, function (data, textStatus, jqXHR) {
+            BOOKING_REST.update(ACT_EDIT_ID, {_classroom: _classroom, _education: _education, name: name, date:  date}, function (data, textStatus, jqXHR) {
                 console.log("UPDATE:", data)
                 displayBookingRooms();
             });
         } else { //create
-            createInstanse(BOOKING_REST, {room: room, education: education, teacher: teacher, date:  date}, function (ok, data) {
+            createInstanse(BOOKING_REST, {_classroom: _classroom, _education: _education, name: name, date:  date}, function (ok, data) {
                 if (ok) {
                     displayBookingRooms();
                 }
@@ -92,17 +96,17 @@ function addEventBookingEditIcon() {
 
         findById(BOOKING_REST, ACT_EDIT_ID, function (data, ok) {
             if (ok) {
-                var room = data.room;
-                var education = data.education;
-                var teacher = data.teacher;
+                var _classroom = data._classroom;
+                var _education = data._education;
+                var name = data.name;
                 var date = data.date;
-                console.log("EDIT:" + room + " / " + education + " / " + teacher + " / " + date);
+                console.log("EDIT:" + _classroom + " / " + _education + " / " + name + " / " + date);
 
                 var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
 
-                $(formTemplate).find('#booking-room-select').val('' + room);
-                $(formTemplate).find("#booking-room-education-select").val('' + education);
-                $(formTemplate).find("#booking-room-teacher-select").val('' + teacher);
+                $(formTemplate).find('#booking-room-select').val('' + _classroom);
+                $(formTemplate).find("#booking-room-education-select").val('' + _education);
+                $(formTemplate).find("#booking-room-teacher-select").val('' + name);
                 $(formTemplate).find("#booking-room-date-select").val('' + date);
 
                 $(formTemplate).find("#booking-change-btn").attr('edit', true);
@@ -135,6 +139,8 @@ function addEventBookingRoomDeleteIcon() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+//Shows booked rooms in booked
+
 function displayBookedRooms() {
     $("#content-main").empty();
     var tableTemplate = $(loadTemplate("templates/booking/booked.html"));
@@ -147,9 +153,9 @@ function displayBookedRooms() {
 
         $(data).each(function (index, value) {
             var tr = $("<tr>");
-            $(tr).append("<td>" + value.room + "</td>");
-            $(tr).append("<td>" + value.education + "</td>");
-            $(tr).append("<td>" + value.teacher + "</td>");
+            $(tr).append("<td>" + value._classroom + "</td>");
+            $(tr).append("<td>" + value._education + "</td>");
+            $(tr).append("<td>" + value.name + "</td>");
             $(tr).append("<td>" + value.date + "</td>");
 
 
