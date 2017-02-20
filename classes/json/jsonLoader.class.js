@@ -94,28 +94,28 @@ module.exports = function JSONLoader(models) {
 //        });
         
         //bind educations to booking 
-        this.educationModel.find({}, function (err, educations) {
-            me.bookingModel.find({}, function (err, bookings) {
-                bookings.forEach(function (booking) {
-                    var randomEdu = getRandom(educations);
-                    booking._education = randomEdu._id;
-                    booking.save();
-                    console.log("D:_id set for, booking: " + booking.name + " : " + randomEdu._id);
-                });
-            });
-        });
+//        this.educationModel.find({}, function (err, educations) {
+//            me.bookingModel.find({}, function (err, bookings) {
+//                bookings.forEach(function (booking) {
+//                    var randomEdu = getRandom(educations);
+//                    booking._education = randomEdu._id;
+//                    booking.save();
+//                    console.log("D:_id set for, booking: " + booking.name + " : " + randomEdu._id);
+//                });
+//            });
+//        });
         
         //bind classrooms to booking 
-        this.classModel.find({}, function (err, classrooms) {
-            me.bookingModel.find({}, function (err, bookings) {
-                bookings.forEach(function (booking) {
-                    var randomClass = getRandom(classrooms);
-                    booking._classroom = randomClass._id;
-                    booking.save();
-                    console.log("E:_id set for, booking: " + booking.name + " : " + randomClass._id);
-                });
-            });
-        });
+//        this.classModel.find({}, function (err, classrooms) {
+//            me.bookingModel.find({}, function (err, bookings) {
+//                bookings.forEach(function (booking) {
+//                    var randomClass = getRandom(classrooms);
+//                    booking._classroom = randomClass._id;
+//                    booking.save();
+//                    console.log("E:_id set for, booking: " + booking.name + " : " + randomClass._id);
+//                });
+//            });
+//        });
         
     }
 
