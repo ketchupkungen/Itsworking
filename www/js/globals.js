@@ -10,7 +10,6 @@ var ACCESS_REST = new REST('access');
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.class.js
 //
 //
-//
 var TABLE_TEACHER = new Table(
         'teacher',
         TEACHERS_REST,
