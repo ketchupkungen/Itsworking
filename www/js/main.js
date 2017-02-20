@@ -13,7 +13,8 @@ $.loadTemplates(
             "booked",
             "admin",
             "profile-modal",
-            "example-template"
+            "example-template",
+            "bookingForm"
         ]
         , 'templates'
         , function () {
