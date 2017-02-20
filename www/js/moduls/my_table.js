@@ -1,48 +1,136 @@
-function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
+function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, fieldsHeadersSettingsPop) {
 
     this.REST = rest;
     this.tableTitle = tableTitle;
-    this.containerId = containerId;
+    this.containerId = containerId; // the container where the table is inserted
     this.headers = headersArr;
     this.fieldsArr = fieldsArr;
+    this.fieldsHeadersSettingsPop = fieldsHeadersSettingsPop; // {name:'Education'} -> where name = real colName & Edu.. = name of Header
+    this.populate = populate; // EX: _educations
     this.template;
-
 
     this.show = function () {
         $(this.containerId).empty();
-        var tbody = $(this.template).find('tbody');
-        $(tbody).empty();
+        this.loadTemplateBasic();
+        this.setTableTitle();
+        this.buildTableHeaders();
         this.buildTable();
         $(this.containerId).append(this.template);
     };
 
+    this.maxPopDepth = 0;
 
     this.buildTable = function () {
         var tbody = $(this.template).find('tbody');
         var that = this;
+        this.maxPopDepth = 0;
 
         this.REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 10000}), function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
-                var tr = $('<tr>');
+                var tr = $("<tr class='tbody-tr'>");
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    var td = $("<td class='my-table-basic-edit'>" + value[colName] + '</td>');
+                    var td = $("<td class='my-table-basic-edit'>" + "<a class='admin-modal-preview'>" + value[colName] + "</a>" + '</td>');
+                    $(td).find('.admin-modal-preview').data('_id', value._id);
+                    $(td).find('.admin-modal-preview').data('rest', that.REST);
                     td.data('_id', value._id);
                     td.data('col', colName);
                     td.data('value', value[colName]);
                     $(tr).append(td);
                 });
                 //
-                var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
-                $(td_del).find('.my-table-delete').data('_id', value._id);
                 //
-                $(tr).append(td_del);
+                if (that.populate) {
+
+                    var colNames = Object.keys(that.fieldsHeadersSettingsPop);
+
+                    var pop = value[that.populate];
+
+                    var popDepth = 0;
+
+                    $(pop).each(function (i, popObj) {
+                        var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colNames[i]] + '</td>');
+                        $(td).data("_id", popObj._id);
+                        $(tr).append(td);
+                        //
+                        popDepth++;
+                        if (popDepth > that.maxPopDepth) {
+                            that.maxPopDepth = popDepth;
+                            console.log("depth", that.maxPopDepth);
+                            that.addTableHeadersIfPopulated(colNames[i]);
+                        }
+                        //
+                    });
+                }
+                //
                 //
                 $(tbody).append(tr);
+                //
             });
-
+            //
+            that.addTableControls(data);
         });
+    };
 
+    this.addTableControls = function (data) {
+        this.fillAllEmptyTrElems();
+
+        var trArr = $('.tbody-tr');
+
+        for (var i = 0; i < data.length; i++) {
+            var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
+            $(td_del).find('.my-table-delete').data('_id', data[i]._id);
+            $(trArr[i]).append(td_del);
+        }
+
+        //OBS! OBS! OBS! EACH NOT WORKING HERE!
+//        $(data).each(function (i, value) {
+//            var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
+//            $(td_del).find('.my-table-delete').data('_id', value._id);
+//            $(trArr[i]).append(td_del);
+//        });
+    };
+
+
+    this.findMaxTdInTr = function () {
+        var trArr = $('.tbody-tr');
+        var max = 0;
+        for (var i = 0; i < trArr.length; i++) {
+            var ammount = $(trArr[i]).children('td').length;
+            ammount > max ? max = ammount : max;
+        }
+        return max;
+    };
+
+
+    this.fillAllEmptyTrElems = function () {
+        var trArr = $('.tbody-tr');
+        var maxTDinTR = this.findMaxTdInTr();
+
+        for (var i = 0; i < trArr.length; i++) {
+            while ($(trArr[i]).children('td').length < maxTDinTR) {
+                $(trArr[i]).append("<td class='empty'>");
+            }
+        }
+    };
+
+    this.addTableHeadersIfPopulatedNew = function (colName) {
+        var thead_tr = $(this.template).find('#thead-tr');
+        var colHeader = this.fieldsHeadersSettingsPop[colName];
+        //
+        var th = $("<th class='th-population'>");
+        $(th).append(colHeader);
+        $(thead_tr).append(th);
+    };
+
+    this.addTableHeadersIfPopulated = function () {
+        var thead_tr = $(this.template).find('#thead-tr');
+//        var len = Object.keys(this.fieldsHeadersSettingsPop).length;
+        $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
+            var th = $("<th class='th-population'>");
+            $(th).append(colHeader);
+            $(thead_tr).append(th);
+        });
     };
 
     this.setListeners = function () {
@@ -67,6 +155,9 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
         var updateSettings = {};
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
+                if (!modalInput) {
+                    return;
+                }
                 $(that.fieldsArr).each(function (i, colName) {
                     updateSettings[colName] = modalInput.find("#" + colName).val();
                 });
@@ -136,9 +227,6 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr) {
         this.template = $(loadTemplate("templates/admin/basic/tableBasic.html"));
     };
 
-    this.loadTemplateBasic();
-    this.setTableTitle();
-    this.buildTableHeaders();
     this.setListeners();
 
 }

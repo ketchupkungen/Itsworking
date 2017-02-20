@@ -12,7 +12,8 @@ $.loadTemplates(
             "search",
             "booked",
             "admin",
-            "profile-modal"
+            "profile-modal",
+            "example-template"
         ]
         , 'templates'
         , function () {
@@ -70,10 +71,29 @@ function initializeHistoryRouter() {
         },
         '/profile-status-link': function () {
             openLink("#content-main", "templates/profile-modal.html");
+        },
+        '/thompa' : function(){
+            openLinkAlternate("#content-main","example-template",{
+                name: "Kalle",
+                color: "pink"
+            });
         }
 
     });
 
+/*    // Example of rewriting openLink to use Thomas' templating system
+    function openLinkAlternate(selector,templateName,data){
+
+
+        // wait for the selector / (#content-main) to be available - ugly hack
+        // what we should do is add things to dom in the right order
+        if($(selector).length === 0){
+            setTimeout(()=>{openLinkAlternate(selector,templateName,data)},20);
+        }
+
+        $(selector).empty().template(templateName,data);
+    }
+*/
     function openLink(contentId, templatePath) {
         $(contentId).empty();
         includeHtml(templatePath, contentId);
