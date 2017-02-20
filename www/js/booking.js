@@ -92,6 +92,16 @@ function addEventBookingRoomAddBtn() {
             
         });
 
+        TEACHERS_REST.find('', function (data, textStatus, jqXHR) {
+           var teacherCheckbox = $('#booking-room-teacher-select');
+           
+            $(data).each(function (index, value) {
+                var opt = $("<option value=" + value._id + ">" + value.name + "</option>");
+                $(teacherCheckbox).append(opt);
+            });
+            
+        });
+
         $("#content-main").append(formTemplate);
     });
 }
