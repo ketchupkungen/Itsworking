@@ -3,6 +3,12 @@ $(document).ready(function () {
     addEventBookingRoomAddBtn();
     addEventBookingEditIcon();
     addEventBookingRoomDeleteIcon();
+
+    $('body').on('click','#abort-booking',function(e){
+        e.preventDefault();
+        $('#booking-form').remove();
+    });
+
 });
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +55,7 @@ function addEventBookingRoomChangeBtn() {
         e.preventDefault();
         var classroom = $("#booking-room-select option:selected").text();
         var education = $("#booking-room-education-select option:selected").text();
-        //var name = $("#booking-room-teacher-select option:selected").text();
+        var name = $("#booking-room-teacher-select option:selected").text();
         var date = $("#booking-room-date-select option:selected").text();
 
         var isEditAction = $(this).attr('edit');
@@ -63,7 +69,7 @@ function addEventBookingRoomChangeBtn() {
 
                 displayBookingRooms();
             });
-            });
+        });
            
         } else { //create
             createInstanse(BOOKING_REST, {classroom: classroom, education: education, name: name, date: date}, function (ok, data) {
@@ -82,8 +88,16 @@ function addEventBookingRoomAddBtn() {
 
         var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
 
-        EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
-           var educationCheckbox = $('#booking-room-education-select');
+        fillCheckBoxes(formTemplate);
+
+        $("#content-main").append(formTemplate);
+    });
+}
+
+function fillCheckBoxes(formTemplate){
+    EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
+           //var educationCheckbox = $('#booking-room-education-select');
+           var educationCheckbox = $(formTemplate).find('#booking-room-education-select');
            
             $(data).each(function (index, value) {
                 var opt = $("<option value=" + value._id + ">" + value.name + "</option>");
@@ -101,9 +115,6 @@ function addEventBookingRoomAddBtn() {
             });
             
         });
-
-        $("#content-main").append(formTemplate);
-    });
 }
 
 var ACT_EDIT_ID;
@@ -124,6 +135,8 @@ function addEventBookingEditIcon() {
                 console.log("EDIT:" + classroom + " / " + education + " / " + name + " / " + date);
 
                 var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
+
+                fillCheckBoxes(formTemplate);
 
                 $(formTemplate).find('#booking-room-select').val('' + classroom);
                 $(formTemplate).find("#booking-room-education-select").val('' + education);
