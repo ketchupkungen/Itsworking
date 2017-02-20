@@ -26,18 +26,18 @@ module.exports = function (mongoose) {
             {collection: 'students'} // sets the name of Collection in Database
     );
 
-    //Do some stuff before making 'save',
-    shema.pre('save', function (next) {
 
-        //Validate pnr           
+    //    shema.pre('save', function (next) {
+//        //OBS! OBS! Validating is woorking without this one when inserting to database....
+//        //Validate pnr           
 //        err = this.validateSync();
 //        if(err){
 //            next(err);
 //        }else{
 //            next();
 //        }
-        next(); // OBS! 
-    });
+//        next(); // OBS! 
+//    });
 
 
     shema.statics.createFromJsonWithNotify = function (json, cb) {

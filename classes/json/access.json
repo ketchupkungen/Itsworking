@@ -40,6 +40,14 @@
         "post": "3",
         "put": "3",
         "delete": "3"
+    },
+    {
+        "basicroute": "/rest/access/",
+        "get": "1",
+        "post": "3",
+        "put": "3",
+        "delete": "3"
     }
-    
+
+
 ]

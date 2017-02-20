@@ -58,7 +58,7 @@ function addListenerGetBtn() {
 
     //GET ALL
     $("#get-btn").click(function () {
-        TEACHERS_REST.find('',function (data, textStatus, jqXHR) {
+        ACCESS_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
