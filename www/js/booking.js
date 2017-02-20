@@ -19,19 +19,21 @@ function displayBookingRooms() {
 
         $(data).each(function (index, value) {
             var tr = $("<tr class='debug'>");
-            $(tr).append("<td>" + value.classroom + "</td>");
-            $(tr).append("<td>" + value.education + "</td>");
-            $(tr).append("<td>" + value.name + "</td>");
-            $(tr).append("<td>" + value.date + "</td>");
+                
+                $(tr).append("<td>" + value.classroom + "</td>");
+                $(tr).append("<td>" + value.education + "</td>");
+                $(tr).append("<td>" + value.name + "</td>");
+                $(tr).append("<td>17-02-20</td>");  //+ value.date +
+                
+                var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon booking-edit-icon'>" + "</td>");
+                $(tdEdit).data("_id", value._id);
+                $(tr).append(tdEdit);
 
-            var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon booking-edit-icon'>" + "</td>");
-            $(tdEdit).data("_id", value._id);
-            $(tr).append(tdEdit);
-
-            var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon booking-delete-icon'>" + "</td>");
-            $(tdDelete).data("_id", value._id);
-            $(tdDelete).data("tr", tr);
-            $(tr).append(tdDelete);
+                var tdDelete = $("<td>" + "<img src='images/delete.png' class='basic-icon booking-delete-icon'>" + "</td>");
+                $(tdDelete).data("_id", value._id);
+                $(tdDelete).data("tr", tr);
+                $(tr).append(tdDelete);
+            
 
             $(tableTemplate).find("tbody").append(tr);
         });
@@ -45,21 +47,26 @@ function displayBookingRooms() {
 function addEventBookingRoomChangeBtn() {
     $('body').on("click", "#booking-change-room-btn", function (e) {
         e.preventDefault();
-        var _classroom = $("#booking-room-select option:selected").text();
-        var _education = $("#booking-room-education-select option:selected").text();
-        var name = $("#booking-room-teacher-select option:selected").text();
+        var classroom = $("#booking-room-select option:selected").text();
+        var education = $("#booking-room-education-select option:selected").text();
+        //var name = $("#booking-room-teacher-select option:selected").text();
         var date = $("#booking-room-date-select option:selected").text();
 
         var isEditAction = $(this).attr('edit');
         console.log("EditAction:", isEditAction);
 
         if (isEditAction === 'true') { // update
-            BOOKING_REST.update(ACT_EDIT_ID, {_classroom: _classroom, _education: _education, name: name, date: date}, function (data, textStatus, jqXHR) {
+            getUserName(function (name){
+                 BOOKING_REST.update(ACT_EDIT_ID, {classroom: classroom, education: education, name: name, date: date}, function (data, textStatus, jqXHR) {
                 console.log("UPDATE:", data)
+
+
                 displayBookingRooms();
             });
+            });
+           
         } else { //create
-            createInstanse(BOOKING_REST, {_classroom: _classroom, _education: _education, name: name, date: date}, function (ok, data) {
+            createInstanse(BOOKING_REST, {classroom: classroom, education: education, name: name, date: date}, function (ok, data) {
                 if (ok) {
                     displayBookingRooms();
                 }
@@ -72,7 +79,7 @@ function addEventBookingRoomChangeBtn() {
 function addEventBookingRoomAddBtn() {
     $('body').on("click", "#booking-add-room-btn", function () {
         $('.booking-add-room-form').remove();
-        var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
+         //$('#content-main').template('bookingForm',);
         $(formTemplate).find("#booking-change-btn").attr('edit', false);
         $("#content-main").append(formTemplate);
     });
@@ -89,16 +96,16 @@ function addEventBookingEditIcon() {
 
         findById(BOOKING_REST, ACT_EDIT_ID, function (data, ok) {
             if (ok) {
-                var _classroom = data._classroom;
-                var _education = data._education;
+                var classroom = data.classroom;
+                var education = data.education;
                 var name = data.name;
                 var date = data.date;
-                console.log("EDIT:" + _classroom + " / " + _education + " / " + name + " / " + date);
+                console.log("EDIT:" + classroom + " / " + education + " / " + name + " / " + date);
 
                 var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
 
-                $(formTemplate).find('#booking-room-select').val('' + _classroom);
-                $(formTemplate).find("#booking-room-education-select").val('' + _education);
+                $(formTemplate).find('#booking-room-select').val('' + classroom);
+                $(formTemplate).find("#booking-room-education-select").val('' + education);
                 $(formTemplate).find("#booking-room-teacher-select").val('' + name);
                 $(formTemplate).find("#booking-room-date-select").val('' + date);
 
@@ -142,10 +149,10 @@ function displayBookedRooms() {
 
         $(data).each(function (index, value) {
             var tr = $("<tr>");
-            $(tr).append("<td>" + value._classroom + "</td>");
-            $(tr).append("<td>" + value._education + "</td>");
+            $(tr).append("<td>" + value.classroom + "</td>");
+            $(tr).append("<td>" + value.education + "</td>");
             $(tr).append("<td>" + value.name + "</td>");
-            $(tr).append("<td>" + value.date + "</td>");
+            $(tr).append("<td>17-02-20</td>");  //+ value.date +
 
 
             $(tableTemplate).find("tbody").append(tr);
