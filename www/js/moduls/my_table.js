@@ -1,6 +1,17 @@
-function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr, populate, fieldsHeadersSettingsPop) {
+function Table(
+        uniquePrefix,
+        rest,
+        tableTitle,
+        containerId,
+        headersArr,
+        fieldsArr,
+        searchOptions,
+        populate,
+        fieldsHeadersSettingsPop
+        ) {
 
     this.REST = rest;
+    this.uniquePrefix = uniquePrefix;
     this.tableTitle = tableTitle;
     this.containerId = containerId; // the container where the table is inserted
     this.headers = headersArr;
@@ -8,11 +19,16 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
     this.fieldsHeadersSettingsPop = fieldsHeadersSettingsPop; // {name:'Education'} -> where name = real colName & Edu.. = name of Header
     this.populate = populate; // EX: _educations
     this.template;
-    this.uniquePrefix = uniquePrefix;
+    this.searchOptions = searchOptions;
+
 
     this.show = function () {
         $(this.containerId).empty();
         this.loadTemplateBasic();
+        //
+        var submit = $(this.template).find('input');
+        $(submit).attr('id', this.CREATE);
+        //
         this.setTableTitle();
         this.buildTableHeaders();
         this.buildTable();
@@ -26,12 +42,13 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
         var that = this;
         this.maxPopDepth = 0;
 
-        this.REST.find(_find({_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000}), function (data, textStatus, jqXHR) {
+        this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
                 var tr = $("<tr class='tbody-tr'>");
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    var td = $("<td class='my-table-basic-edit'>" + "<a class='admin-modal-preview'>" + value[colName] + "</a>" + '</td>');
+                    var td = $("<td>" + "<a class='admin-modal-preview'>" + value[colName] + "</a>" + '</td>');
+                    $(td).addClass(that.EDIT);
                     $(td).find('.admin-modal-preview').data('_id', value._id);
                     $(td).find('.admin-modal-preview').data('rest', that.REST);
                     td.data('_id', value._id);
@@ -78,14 +95,17 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
 
     this.addTableControls = function (data) {
         this.fillAllEmptyTrElems();
-
+        //
         var trArr = $('.tbody-tr');
-
+        //
         for (var i = 0; i < data.length; i++) {
-            var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
-            $(td_del).find('.my-table-delete').data('_id', data[i]._id);
+            var td_del = $("<td><img src='images/delete.png' class='basic-icon'></td>");
+            $(td_del).find('img').addClass(this.DELETE);
+            $(td_del).find("." + this.DELETE).data('_id', data[i]._id);
             $(trArr[i]).append(td_del);
         }
+        //
+        this.fillAllEmptyThElems();
 
         //OBS! OBS! OBS! EACH NOT WORKING HERE!
 //        $(data).each(function (i, value) {
@@ -96,16 +116,15 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
     };
 
 
-    this.findMaxTdInTr = function () {
-        var trArr = $('.tbody-tr');
-        var max = 0;
-        for (var i = 0; i < trArr.length; i++) {
-            var ammount = $(trArr[i]).children('td').length;
-            ammount > max ? max = ammount : max;
+    this.fillAllEmptyThElems = function () {
+        var thead_tr = $(this.template).find('#thead-tr');
+        var amount_th = $(thead_tr).children().length;
+        var maxTDinTR = this.findMaxTdInTr();
+        while (amount_th < maxTDinTR) {
+            $(thead_tr).append("<th class='empty-th'>");
+            amount_th++;
         }
-        return max;
     };
-
 
     this.fillAllEmptyTrElems = function () {
         var trArr = $('.tbody-tr');
@@ -118,18 +137,18 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
         }
     };
 
-    this.addTableHeadersIfPopulatedNew = function (colName) {
-        var thead_tr = $(this.template).find('#thead-tr');
-        var colHeader = this.fieldsHeadersSettingsPop[colName];
-        //
-        var th = $("<th class='th-population'>");
-        $(th).append(colHeader);
-        $(thead_tr).append(th);
+    this.findMaxTdInTr = function () {
+        var trArr = $('.tbody-tr');
+        var max = 0;
+        for (var i = 0; i < trArr.length; i++) {
+            var ammount = $(trArr[i]).children('td').length;
+            ammount > max ? max = ammount : max;
+        }
+        return max;
     };
 
     this.addTableHeadersIfPopulated = function () {
         var thead_tr = $(this.template).find('#thead-tr');
-//        var len = Object.keys(this.fieldsHeadersSettingsPop).length;
         $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
             var th = $("<th class='th-population'>");
             $(th).append(colHeader);
@@ -137,21 +156,29 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
         });
     };
 
-    
-    
+    this.DELETE = "" + this.uniquePrefix + "-" + "my-table-delete";
+    this.EDIT = "" + this.uniquePrefix + "-" + "my-table-basic-edit";
+    this.CREATE = this.uniquePrefix + "-" + "table-basic-add-new-btn";
+
     this.setListeners = function () {
         var that = this;
         $(document).ready(function () {
-            $('body').on('click', '.my-table-delete', function () {
+            $('body').on('click', "." + that.DELETE, function () {
                 that.delete($(this).data('_id'));
             });
 
-            $('body').on('click', '.my-table-basic-edit', function () {
+            $('body').on('click', "." + that.EDIT, function () {
                 that.edit($(this).data('_id'), $(this).data('col'), $(this).data('value'));
             });
 
-            $('body').on('click', '#table-basic-add-new-btn', function () {
+            $('body').on('click', "#" + that.CREATE, function () {
                 that.create();
+            });
+            
+            //=============
+             $('body').on('mouseover', "." + that.EDIT, function () {
+                $("."+ that.EDIT).css('cursor',"url('images/edit.png'), auto");
+                $("."+ that.EDIT).css('color','black');
             });
         });
     };
@@ -162,12 +189,12 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
                 if (!modalInput) {
-                    
+
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
                     updateSettings[colName] = modalInput.find("#" + colName).val();
-                    
+
                     console.log("settings: ", updateSettings);
                 });
                 //
@@ -191,9 +218,16 @@ function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr
 
     this.delete = function (_id) {
         var that = this;
-        this.REST.delete(_id, function (data, textStatus, jqXHR) {
-            console.log('deleted', data);
-            that.show();
+
+        showConfirmModal("OBS!", "Bekräfta handling", 'sm', 'error', function (yes) {
+            if (!yes) {
+                return;
+            }
+
+            this.REST.delete(_id, function (data, textStatus, jqXHR) {
+                that.show();
+            });
+
         });
     };
 

@@ -12,21 +12,25 @@ var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.
 //
 //
 var TABLE_TEACHER = new Table(
+        'teacher',
         TEACHERS_REST,
         'Administrera lärare',
         '#content-main',
         ['Namn', 'Pnr', 'Epost'],
         ['name', 'pnr', 'epost'],
+        {_fields: '', _sort: 'name', _skip: 0, _limit: 10000},
         '_educations',
         {name: 'Education', score: 'Score'}
 );
 
 var TABLE_ACCESS = new Table(
+        'access',
         ACCESS_REST,
         'Administrera tillgång',
         '#content-main',
         ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
-        ['basicroute', 'get_', 'post_', 'put_', 'delete_']
+        ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
+        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000}
         );
 //
 
