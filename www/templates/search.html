@@ -1,12 +1,23 @@
 <div class= "search-container">
-  <form id="search-form">
-      <div class="input-group input-group-sm"> 
-        <input id="search-text" type="text" class="form-control" placeholder="Vad letar du efter?">
-        <span class="input-group-btn">
-            <button id="searchButton" type="submit" class="search-btn btn btn-primary">Sök</button>
-        </span>
+    <form id="search-form" class="well well-large d-flex">
+        <div class="input-group input-group-sm"> 
+            <input id="search-text" type="text" class="form-control" placeholder="Vad letar du efter?">
+            <span class="input-group-btn">
+                <button id="searchButton" type="submit" class="search-btn btn btn-primary">Sök</button>
+            </span>
+        </div>
+        <form-group class="pull-left">
+            <label class="radio-inline"><input id="teacher" type="radio" name="optradio">Lärare</label>
+            <label class="radio-inline"><input id="student" type="radio" name="optradio">Studenter</label>
+            <label class="radio-inline"><input id="edu" type="radio" name="optradio">Utbildningar</label>
+        </form-group>
+    </form>
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 40%;"></div>
+        </div>
+    <div class="resultsContainer">
+        
     </div>
-  </form>
 </div>
 
 <!-- ======= OLD CODE =======
