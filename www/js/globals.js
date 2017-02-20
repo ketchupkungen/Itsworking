@@ -7,7 +7,19 @@ var CLASS_REST = new REST('class');
 var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema, not the login operations
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
-
+//
+//
+//
+var TABLE_TEACHER = new Table(
+        TEACHERS_REST,
+        'Administrera lärare',
+        '#content-main',
+        ['Namn', 'Pnr', 'Epost'],
+        ['name', 'pnr', 'epost'],
+        '_educations',
+        {name:'Education',score:'Score'}
+        );
+//
 
 function openFirstPage() {
     getAccessLevel(function (level) {
@@ -219,6 +231,7 @@ $(document).ready(function () {
  */
 function addEventAdminModalPreviewElem() {
     $('body').on("click", ".admin-modal-preview", function (e) {
+        e.stopPropagation();
         var id = $(this).data('_id');
         var rest = $(this).data('rest');
         //

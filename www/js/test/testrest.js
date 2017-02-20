@@ -34,7 +34,7 @@ function addListenerPutBtn() {
 
     //UPDATE BY QUERY
     $("#put-btn").click(function () {
-        STUDENT_REST.update(_find({name: 'george morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data, textStatus, jqXHR) {
+        STUDENT_REST.update(_find({name: 'George Morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
@@ -58,7 +58,7 @@ function addListenerGetBtn() {
 
     //GET ALL
     $("#get-btn").click(function () {
-        STUDENT_REST.find('',function (data, textStatus, jqXHR) {
+        TEACHERS_REST.find('',function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });

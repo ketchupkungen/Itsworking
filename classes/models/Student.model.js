@@ -62,11 +62,11 @@ module.exports = function (mongoose) {
             });
         });
     };
-    
+
     shema.methods.addReference = function (education_id, cb) {
         this._education = education_id;
         this.save(function (err, doc) {
-            cb(true, ''+err, education_id);
+            cb(true, '' + err, education_id);
         });
     };
 

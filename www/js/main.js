@@ -19,9 +19,9 @@ $.loadTemplates(
         , function () {
             $(document).ready(go);
         });
-        
-        
-        $.loadTemplates(
+
+
+$.loadTemplates(
         [
             "adminAddEduForm"
         ]
@@ -38,10 +38,13 @@ function initializeHistoryRouter() {
             adminDisplayRooms();
         },
         '/education-admin': function () {
-            adminDisplayEducations();        
+            adminDisplayEducations();
         },
         '/student-admin': function () {
             adminDisplayStudents();
+        },
+        '/teacher-admin': function () {
+            TABLE_TEACHER.show();
         },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
@@ -50,7 +53,7 @@ function initializeHistoryRouter() {
             openLink("#content-main", "templates/school.html");
         },
         '/profilemodal': function () {
-            $('.overlay').fadeIn(300);
+            $('.overlay').fadeIn(300); // should we have routes for modals ????
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking/booking.html");
