@@ -82,6 +82,7 @@ if(mset.connect === 'true'){
     new Restrouter(this.app,bookingModel,"book",pop2booking);// populate several / two
     new Restrouter(this.app,classModel,"class");
     new Restrouter(this.app,loginModel,"shemalogin");
+    new Restrouter(this.app,accessModel,"access");
     //
     new LoginhandlerRouter(this.app,loginModel);
     //

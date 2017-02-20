@@ -33,7 +33,7 @@ module.exports = class Mymiddleware {
     });
     
     this.app.get("/username",function(req,res){
-        res.json(req.session.content.user.epost);
+        res.json(req.session.content.user.name);
     });
   }
 //  

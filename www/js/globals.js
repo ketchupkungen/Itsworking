@@ -5,8 +5,9 @@ var TEACHERS_REST = new REST('teach');
 var BOOKING_REST = new REST('book');
 var CLASS_REST = new REST('class');
 var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema, not the login operations
+var ACCESS_REST = new REST('access');
 //
-var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS
+var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.class.js
 //
 //
 //
@@ -17,7 +18,15 @@ var TABLE_TEACHER = new Table(
         ['Namn', 'Pnr', 'Epost'],
         ['name', 'pnr', 'epost'],
         '_educations',
-        {name:'Education',score:'Score'}
+        {name: 'Education', score: 'Score'}
+);
+
+var TABLE_ACCESS = new Table(
+        ACCESS_REST,
+        'Administrera tillgång',
+        '#content-main',
+        ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
+        ['basicroute', 'get_', 'post_', 'put_', 'delete_']
         );
 //
 

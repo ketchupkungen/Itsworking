@@ -46,6 +46,9 @@ function initializeHistoryRouter() {
         '/teacher-admin': function () {
             TABLE_TEACHER.show();
         },
+        '/access-admin': function () {
+            TABLE_ACCESS.show();
+        },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
         },
@@ -72,8 +75,8 @@ function initializeHistoryRouter() {
         '/profile-status-link': function () {
             openLink("#content-main", "templates/profile-modal.html");
         },
-        '/thompa' : function(){
-            openLinkAlternate("#content-main","example-template",{
+        '/thompa': function () {
+            openLinkAlternate("#content-main", "example-template", {
                 name: "Kalle",
                 color: "pink"
             });
@@ -81,19 +84,19 @@ function initializeHistoryRouter() {
 
     });
 
-/*    // Example of rewriting openLink to use Thomas' templating system
-    function openLinkAlternate(selector,templateName,data){
-
-
-        // wait for the selector / (#content-main) to be available - ugly hack
-        // what we should do is add things to dom in the right order
-        if($(selector).length === 0){
-            setTimeout(()=>{openLinkAlternate(selector,templateName,data)},20);
-        }
-
-        $(selector).empty().template(templateName,data);
-    }
-*/
+    /*    // Example of rewriting openLink to use Thomas' templating system
+     function openLinkAlternate(selector,templateName,data){
+     
+     
+     // wait for the selector / (#content-main) to be available - ugly hack
+     // what we should do is add things to dom in the right order
+     if($(selector).length === 0){
+     setTimeout(()=>{openLinkAlternate(selector,templateName,data)},20);
+     }
+     
+     $(selector).empty().template(templateName,data);
+     }
+     */
     function openLink(contentId, templatePath) {
         $(contentId).empty();
         includeHtml(templatePath, contentId);

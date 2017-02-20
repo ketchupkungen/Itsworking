@@ -25,7 +25,7 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
         var that = this;
         this.maxPopDepth = 0;
 
-        this.REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 10000}), function (data, textStatus, jqXHR) {
+        this.REST.find(_find({_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000}), function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
                 var tr = $("<tr class='tbody-tr'>");
                 //
@@ -49,14 +49,17 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
                     var popDepth = 0;
 
                     $(pop).each(function (i, popObj) {
-                        var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colNames[i]] + '</td>');
-                        $(td).data("_id", popObj._id);
-                        $(tr).append(td);
+                        //
+                        $(colNames).each(function (i, val) {
+                            var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colNames[i]] + '</td>');
+                            $(td).data("_id", popObj._id);
+                            $(tr).append(td);
+                        });
                         //
                         popDepth++;
                         if (popDepth > that.maxPopDepth) {
                             that.maxPopDepth = popDepth;
-                            console.log("depth", that.maxPopDepth);
+//                            console.log("depth", that.maxPopDepth);
                             that.addTableHeadersIfPopulated(colNames[i]);
                         }
                         //
@@ -133,6 +136,7 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
         });
     };
 
+    
     this.setListeners = function () {
         var that = this;
         $(document).ready(function () {
@@ -156,13 +160,17 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
                 if (!modalInput) {
+                    
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
                     updateSettings[colName] = modalInput.find("#" + colName).val();
+                    
+                    console.log("settings: ", updateSettings);
                 });
                 //
                 that.REST.create(updateSettings, function (data, textStatus, jqXHR) {
+                    console.log("create teacher:", data);
                     that.show();
                 });
             });
