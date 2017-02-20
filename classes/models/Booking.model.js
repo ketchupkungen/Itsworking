@@ -4,8 +4,8 @@ module.exports = function (mongoose) {
     var shema = mongoose.Schema({
         name: {type: String, required: true},
         date: {type: Date, default: Date.now, required: false},
-        _education: {type: String, required: true}, // "foreignkey"  type:mongoose.Schema.Types.ObjectId
-        _classroom: {type: String, required: true}
+        education: {type: String, required: true}, // "foreignkey"  type:mongoose.Schema.Types.ObjectId
+        classroom: {type: String, required: true}
     },
             {collection: 'bookings'} // sets the name of Collection in Database
     );
@@ -21,8 +21,8 @@ module.exports = function (mongoose) {
             var booking = new me({
                 name: act.name,
                 date: act.date,
-                _education: act._education,
-                _classroom: act._classroom
+                education: act.education,
+                classroom: act.classroom
             });
             //
             booking.save(function (err, cat) {
