@@ -1,4 +1,4 @@
-function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, fieldsHeadersSettingsPop) {
+function Table(uniquePrefix,rest, tableTitle, containerId, headersArr, fieldsArr, populate, fieldsHeadersSettingsPop) {
 
     this.REST = rest;
     this.tableTitle = tableTitle;
@@ -8,6 +8,7 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
     this.fieldsHeadersSettingsPop = fieldsHeadersSettingsPop; // {name:'Education'} -> where name = real colName & Edu.. = name of Header
     this.populate = populate; // EX: _educations
     this.template;
+    this.uniquePrefix = uniquePrefix;
 
     this.show = function () {
         $(this.containerId).empty();
@@ -136,6 +137,7 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
         });
     };
 
+    
     
     this.setListeners = function () {
         var that = this;
