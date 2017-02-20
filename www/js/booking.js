@@ -20,9 +20,6 @@ function displayBookingRooms() {
 
 	BOOKING_REST.find("", function (data, textStatus, jqXHR) {
 
-		data.sort(function (a, b) {
-			return parseFloat(a.nr) - parseFloat(b.nr);
-		});
 
 		$(data).each(function (index, value) {
 			var tr = $("<tr>");
@@ -146,10 +143,6 @@ function displayBookedRooms() {
     var tableTemplate = $(loadTemplate("templates/booking/booked.html"));
 
     BOOKING_REST.find("", function (data, textStatus, jqXHR) {
-
-        data.sort(function (a, b) {
-            return parseFloat(a.nr) - parseFloat(b.nr);
-        });
 
         $(data).each(function (index, value) {
             var tr = $("<tr>");
