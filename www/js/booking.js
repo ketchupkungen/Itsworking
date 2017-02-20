@@ -14,8 +14,8 @@ function displayBookingRooms() {
     var tableTemplate = $(loadTemplate("templates/booking/booking.html"));
 
     BOOKING_REST.find("", function (data, textStatus, jqXHR) {
-        
-        console.log("Data",data);
+
+        console.log("Data", data);
 
         $(data).each(function (index, value) {
             var tr = $("<tr class='debug'>");
@@ -79,8 +79,19 @@ function addEventBookingRoomChangeBtn() {
 function addEventBookingRoomAddBtn() {
     $('body').on("click", "#booking-add-room-btn", function () {
         $('.booking-add-room-form').remove();
-         //$('#content-main').template('bookingForm',);
-        $(formTemplate).find("#booking-change-btn").attr('edit', false);
+
+        var formTemplate = $(loadTemplate("templates/booking/bookingForm.html"));
+
+        EDUCATION_REST.find('', function (data, textStatus, jqXHR) {
+           var educationCheckbox = $('#booking-room-education-select');
+           
+            $(data).each(function (index, value) {
+                var opt = $("<option value=" + value._id + ">" + value.name + "</option>");
+                $(educationCheckbox).append(opt);
+            });
+            
+        });
+
         $("#content-main").append(formTemplate);
     });
 }
