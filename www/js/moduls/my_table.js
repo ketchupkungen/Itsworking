@@ -41,24 +41,25 @@ function Table(rest, tableTitle, containerId, headersArr, fieldsArr, populate, f
                 //
                 //
                 if (that.populate) {
-                    $.each(that.fieldsHeadersSettingsPop, function (colName, colHeader) {
-                        var pop = value[that.populate];
 
-                        var popDepth = 0;
+                    var colNames = Object.keys(that.fieldsHeadersSettingsPop);
 
-                        $(pop).each(function (i, popObj) {
-                            var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colName] + '</td>');
-                            $(td).data("_id", popObj._id);
-                            $(tr).append(td);
-                            //
-                            popDepth++;
-                            if (popDepth > that.maxPopDepth) {
-                                that.maxPopDepth = popDepth;
-                                console.log("depth", that.maxPopDepth);
-                                that.addTableHeadersIfPopulated(colName);
-                            }
-                            //
-                        });
+                    var pop = value[that.populate];
+
+                    var popDepth = 0;
+
+                    $(pop).each(function (i, popObj) {
+                        var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colNames[i]] + '</td>');
+                        $(td).data("_id", popObj._id);
+                        $(tr).append(td);
+                        //
+                        popDepth++;
+                        if (popDepth > that.maxPopDepth) {
+                            that.maxPopDepth = popDepth;
+                            console.log("depth", that.maxPopDepth);
+                            that.addTableHeadersIfPopulated(colNames[i]);
+                        }
+                        //
                     });
                 }
                 //
