@@ -50,6 +50,9 @@ function initializeHistoryRouter() {
         '/access-admin': function () {
             TABLE_ACCESS.show();
         },
+        '/login-admin': function () {
+            TABLE_LOGIN.show();
+        },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
         },

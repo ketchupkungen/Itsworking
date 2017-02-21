@@ -8,7 +8,8 @@ function Table(
         searchOptions,
         modalPreviewCol,
         populate,
-        fieldsHeadersSettingsPop
+        fieldsHeadersSettingsPop,
+        modalPreviewColPop
         ) {
 
     this.REST = rest;
@@ -22,6 +23,7 @@ function Table(
     this.template;
     this.searchOptions = searchOptions;
     this.modalPreviewCol = modalPreviewCol;
+    this.modalPreviewColPop = modalPreviewColPop;
 
 
     this.show = function () {
@@ -57,8 +59,6 @@ function Table(
                         td.append(value[colName]);
                     }
                     //
-                    console.log("td:", td);
-                    //        
                     $(td).addClass(that.EDIT);
                     td.data('_id', value._id);
                     td.data('col', colName);
@@ -70,6 +70,7 @@ function Table(
                 if (that.populate) {
 
                     var colNames = Object.keys(that.fieldsHeadersSettingsPop);
+                    var colNameModalPreviewPop = Object.keys(that.fieldsHeadersSettingsPop)[0];
 
                     var pop = value[that.populate];
 
@@ -78,7 +79,14 @@ function Table(
                     $(pop).each(function (i, popObj) {
                         //
                         $(colNames).each(function (i, val) {
-                            var td = $("<td class='my-table-basic-edit-populated'>" + popObj[colNames[i]] + '</td>');
+                            var td = $("<td class='td-populated'>");
+                            //
+                            if (colNames[i] === colNameModalPreviewPop) {
+                                that.setModalPreviewPop(td, popObj, colNames[i]);
+                            } else {
+                                $(td).append(popObj[colNames[i]]);
+                            }
+                            //
                             $(td).data("_id", popObj._id);
                             $(tr).append(td);
                         });
@@ -102,12 +110,20 @@ function Table(
         });
     };
 
+    this.setModalPreviewPop = function (td, popObj, colName) {
+        var a = $("<a class='admin-modal-preview'>" + popObj[colName] + "</a>");
+        $(td).append(a);
+        $(td).find('.admin-modal-preview').data('_id', popObj._id);
+        $(td).find('.admin-modal-preview').data('rest', this.modalPreviewColPop[colName]);
+    };
+
     this.setModalPreview = function (td, value, colName) {
         var a = $("<a class='admin-modal-preview'>" + value[colName] + "</a>");
         $(td).append(a);
         $(td).find('.admin-modal-preview').data('_id', value._id);
         $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
+
 
     this.addTableControls = function (data) {
         this.fillAllEmptyTrElems();

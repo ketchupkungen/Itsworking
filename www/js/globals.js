@@ -20,7 +20,8 @@ var TABLE_TEACHER = new Table(
         {_fields: '', _sort: 'name', _skip: 0, _limit: 10000},
         'name',
         '_educations',
-        {name: 'Education', score: 'Score'}
+        {name: 'Education', score: 'Score'},
+        {name: EDUCATION_REST}
 );
 
 var TABLE_ACCESS = new Table(
@@ -30,8 +31,21 @@ var TABLE_ACCESS = new Table(
         '#content-main',
         ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
         ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
-        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000}
-        );
+        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000},
+        'basicroute'
+);
+
+var TABLE_LOGIN = new Table(
+        'login',
+        LOGIN_SHEMA_REST,
+        'Administrera inloggningar',
+        '#content-main',
+        ['ID', 'Epost', 'Nivå', 'Lösenord'],
+        ['pnr', 'epost', 'level', 'password'],
+        {_fields: '', _sort: 'level', _skip: 0, _limit: 10000},
+        'pnr'
+);
+
 //
 
 function openFirstPage() {
