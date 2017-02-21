@@ -27,6 +27,7 @@ function Table(
 
 
     this.show = function () {
+        $(document).off('DOMNodeInserted');
         $(this.containerId).empty();
         this.loadTemplateBasic();
         //
@@ -303,23 +304,16 @@ function Table(
 
     this.setListeners();
 
+    //==========================================================================
+    //==========================================================================
+
     this.showInvert = function () {
         var that = this;
-        $(this.containerId).empty();
-        this.loadTemplateBasic();
-        //
-        var submit = $(this.template).find('input');
-        $(submit).attr('id', this.CREATE);
-        //
-        this.setTableTitle();
-        this.buildTableHeaders();
-        this.buildTable();
-
-        $(this.containerId).append(this.template);
+        this.show();
         $('.admin-show-items').css('display', 'none');
         //
-        this.ready(function(){
-            that.tranformTable();
+        this.ready(function () {
+            that.transformTable();
         });
     };
 
@@ -328,27 +322,61 @@ function Table(
             console.log("Yay");
             cb();
         });
-      
+
     };
-    
-    
-    this.tranformTable = function(){
-        var container = $("<div class='table-show-invert'>");
-        var th_arr = $(this.template).find('th');
-        
-        $(th_arr).each(function (i, value) {
-            console.log("val: " + i,value);
-            $(container).append(value);
+
+    this.buildHeadersArr = function () {
+        th_arr = $('th');
+        var th_arr_b = [];
+        $(th_arr).each(function (x, th) {
+            th_arr_b.push($(th).text());
         });
-        
-        $("#content-main").append(container);
-        
+        return th_arr_b;
     };
 
 
+    this.transformTable = function () {
+        var container = $("<div class='table-show-invert'>");
 
+        var th_arr = this.buildHeadersArr();
+        var tr_arr = $('.tbody-tr');
 
+        this.buildHeadersArr(th_arr);
 
+        $(tr_arr).each(function (i, tr) {
+            var td_arr = $(tr).children('td');
+
+            $(th_arr).each(function (x, th) {
+                var row_invert = $("<div class='row-invert'></div>");
+                var row_invert_empty = $("<div class='row-invert-empty'></div>");
+
+                $(row_invert).append("<th>" + th + "</th>");
+                var td = $(td_arr[x]);
+                $(td).addClass('td-invert');
+                $(row_invert).append(td);
+                $(container).append(row_invert);
+                containsElement(td, 'img') ? $(container).append(row_invert_empty) : undefined;
+            });
+
+        });
+
+        $("#content-main").append(container);
+        this.removeEmptyRowsPopulation();
+        
+        var title = $("#table-title");
+        $("#content-main").prepend(title);
+        
+
+    };
+
+    this.removeEmptyRowsPopulation = function () {
+        var td_empty_arr = $('.empty');
+
+        $(td_empty_arr).each(function (i, td_empty) {
+            $(td_empty).parent().remove();
+        });
+
+    };
 
 
 }

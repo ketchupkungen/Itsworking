@@ -1,3 +1,13 @@
+function containsElement(elemToCheck,containsElem){
+    var elems =  $(elemToCheck).find(containsElem);
+    if(elems.length > 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
 function isChecked(selector){
     if($(selector).is(':checked')){
         return true;
