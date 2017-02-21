@@ -133,7 +133,7 @@ function Table(
         for (var i = 0; i < data.length; i++) {
             var td_del = $("<td><img src='images/delete.png' class='basic-icon'></td>");
             $(td_del).find('img').addClass(this.DELETE);
-            $(td_del).find("." + this.DELETE).data('_id', data[i]._id);
+            $(td_del).find('img').data('_id', data[i]._id);
             $(trArr[i]).append(td_del);
         }
         //
@@ -249,13 +249,12 @@ function Table(
 
     this.delete = function (_id) {
         var that = this;
-
         showConfirmModal("OBS!", "Bekräfta handling", 'sm', 'error', function (yes) {
             if (!yes) {
                 return;
             }
 
-            this.REST.delete(_id, function (data, textStatus, jqXHR) {
+            that.REST.delete(_id, function (data, textStatus, jqXHR) {
                 that.show();
             });
 
