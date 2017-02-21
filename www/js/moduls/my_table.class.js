@@ -303,4 +303,52 @@ function Table(
 
     this.setListeners();
 
+    this.showInvert = function () {
+        var that = this;
+        $(this.containerId).empty();
+        this.loadTemplateBasic();
+        //
+        var submit = $(this.template).find('input');
+        $(submit).attr('id', this.CREATE);
+        //
+        this.setTableTitle();
+        this.buildTableHeaders();
+        this.buildTable();
+
+        $(this.containerId).append(this.template);
+        $('.admin-show-items').css('display', 'none');
+        //
+        this.ready(function(){
+            that.tranformTable();
+        });
+    };
+
+    this.ready = function (cb) {
+        $(document).on('DOMNodeInserted', '.empty-th', function () {
+            console.log("Yay");
+            cb();
+        });
+      
+    };
+    
+    
+    this.tranformTable = function(){
+        var container = $("<div class='table-show-invert'>");
+        var th_arr = $(this.template).find('th');
+        
+        $(th_arr).each(function (i, value) {
+            console.log("val: " + i,value);
+            $(container).append(value);
+        });
+        
+        $("#content-main").append(container);
+        
+    };
+
+
+
+
+
+
+
 }

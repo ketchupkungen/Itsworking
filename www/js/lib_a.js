@@ -201,3 +201,12 @@ function exists(selector) {
         return false;
     }
 }
+
+function existsWithFind(selectorOrObj,toFindSelector) {
+    var rst = $(selectorOrObj).find(toFindSelector);
+    if (rst.length > 0) {
+        return true;
+    }else{
+        return false;
+    }
+}
