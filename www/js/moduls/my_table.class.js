@@ -6,6 +6,7 @@ function Table(
         headersArr,
         fieldsArr,
         searchOptions,
+        modalPreviewCol,
         populate,
         fieldsHeadersSettingsPop
         ) {
@@ -20,6 +21,7 @@ function Table(
     this.populate = populate; // EX: _educations
     this.template;
     this.searchOptions = searchOptions;
+    this.modalPreviewCol = modalPreviewCol;
 
 
     this.show = function () {
@@ -47,10 +49,17 @@ function Table(
                 var tr = $("<tr class='tbody-tr'>");
                 //
                 $(that.fieldsArr).each(function (i, colName) {
-                    var td = $("<td>" + "<a class='admin-modal-preview'>" + value[colName] + "</a>" + '</td>');
+                    var td = $('<td>');
+                    //
+                    if (colName === that.modalPreviewCol) {
+                        that.setModalPreview(td, value, colName);
+                    } else {
+                        td.append(value[colName]);
+                    }
+                    //
+                    console.log("td:", td);
+                    //        
                     $(td).addClass(that.EDIT);
-                    $(td).find('.admin-modal-preview').data('_id', value._id);
-                    $(td).find('.admin-modal-preview').data('rest', that.REST);
                     td.data('_id', value._id);
                     td.data('col', colName);
                     td.data('value', value[colName]);
@@ -91,6 +100,13 @@ function Table(
             //
             that.addTableControls(data);
         });
+    };
+
+    this.setModalPreview = function (td, value, colName) {
+        var a = $("<a class='admin-modal-preview'>" + value[colName] + "</a>");
+        $(td).append(a);
+        $(td).find('.admin-modal-preview').data('_id', value._id);
+        $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
 
     this.addTableControls = function (data) {
@@ -174,11 +190,10 @@ function Table(
             $('body').on('click', "#" + that.CREATE, function () {
                 that.create();
             });
-            
+
             //=============
-             $('body').on('mouseover', "." + that.EDIT, function () {
-                $("."+ that.EDIT).css('cursor',"url('images/edit.png'), auto");
-                $("."+ that.EDIT).css('color','black');
+            $('body').on('mouseover', "." + that.EDIT, function () {
+                $("." + that.EDIT).css('cursor', "url('images/edit.png'), auto");
             });
         });
     };

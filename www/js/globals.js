@@ -18,6 +18,7 @@ var TABLE_TEACHER = new Table(
         ['Namn', 'Pnr', 'Epost'],
         ['name', 'pnr', 'epost'],
         {_fields: '', _sort: 'name', _skip: 0, _limit: 10000},
+        'name',
         '_educations',
         {name: 'Education', score: 'Score'}
 );
