@@ -14,7 +14,8 @@ $.loadTemplates(
             "admin",
             "profile-modal",
             "example-template",
-            "bookingForm"
+            "bookingForm",
+            "userProfile"
         ]
         , 'templates'
         , function () {
@@ -79,6 +80,9 @@ function initializeHistoryRouter() {
         },
         '/profile-status-link': function () {
             openLink("#content-main", "templates/profile-modal.html");
+        },
+        '/Profile-link': function () {
+            openLink("#content-main", "templates/userProfile.html");
         },
         '/thompa': function () {
             openLinkAlternate("#content-main", "example-template", {

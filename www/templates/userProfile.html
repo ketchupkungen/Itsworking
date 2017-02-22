@@ -1,0 +1,60 @@
+<div class="container">
+      <div class="row">
+      <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
+        <a href="#" id="log-out-btn-one">Logga ut</a>
+       <br>
+<p class="date-info"></p>
+      </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">${name}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://image.flaticon.com/icons/svg/149/149071.svg" class="img-circle img-responsive"> </div>
+
+<!--profile information start-->
+
+                <div class=" col-md-9 col-lg-9 "> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Utbildning:</td>
+                        <td>${education}</td>
+                      </tr>
+                      <tr>
+                        <td>Person nummer:</td>
+                        <td>${birthday}</td>
+                      </tr>
+                      <tr>
+                        <td>Adress:</td>
+                        <td>${address}</td>
+                      </tr>
+                      <tr>
+                        <td>E-post:</td>
+                        <td><a href="mailto:${email}">${email}</a></td>
+                      </tr>
+                        <td>Telefonnummer:</td>
+                        <td>${phone}<br>
+                      </td>
+                    </tbody>
+                  </table>
+
+<!--profile information ends-->
+                </div>
+              </div>
+            </div>
+<!-- profile footer start-->
+
+                <div class="panel-footer userprofile-footer">
+                    <button type="button" class="btn btn-default pull-right profile-change-btn">ÄNDRA</button>
+                </div>
+
+<!-- profile footer ends-->
+          </div>
+        </div>
+      </div>
+    </div>
