@@ -377,8 +377,6 @@ function Table(
             $(th).append(value);
             $(thead_tr).append(th);
         });
-
-        console.log("sort_map", this.sort_map);
     };
 
     this.loadTemplateBasic = function () {
@@ -412,7 +410,7 @@ function Table(
         th_arr = $('th');
         var th_arr_b = [];
         $(th_arr).each(function (x, th) {
-            th_arr_b.push($(th).text());
+            th_arr_b.push(th);
         });
         return th_arr_b;
     };
@@ -431,7 +429,7 @@ function Table(
                 var row_invert = $("<div class='row-invert'></div>");
                 var row_invert_empty = $("<div class='row-invert-empty'></div>");
 
-                $(row_invert).append("<th>" + th + "</th>");
+                $(row_invert).append(th.cloneNode(true));
                 var td = $(td_arr[x]);
                 $(td).addClass('td-invert');
                 $(row_invert).append(td);
