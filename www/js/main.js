@@ -16,6 +16,7 @@ $.loadTemplates(
             "example-template",
             "bookingForm",
             "userProfile",
+            "person-search-results",
             "userProfileForm"
         ]
         , 'templates'
