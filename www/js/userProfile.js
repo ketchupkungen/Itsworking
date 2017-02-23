@@ -11,14 +11,14 @@ function showUserProfile(){
 	// ==============================-> Input logged in useds information
 	function getProfileData(userData){
 		getLoggedInUserName(function(getName){
-			console.log('here',getName);
-		});
+		
+			$('#content-main').empty().template('userProfile',{
+				name: getName,
+				birthday: userData.pnr,
+				email: userData.epost,
+				education: "?",
+			});
 
-		$('#content-main').empty().template('userProfile',{
-			name: "getName",
-			birthday: userData.pnr,
-			email: userData.epost,
-			education: "?",
 		});
 	}
 	// ==============================-> Empty content-main and load Forms
@@ -38,16 +38,12 @@ function showUserProfile(){
 			e.preventDefault();
 			var name = $("#changeUserName").val();
 			var email = $("#changeUserEmail").val();
-
 			getUserEmail(function(getEmail){
 				STUDENT_REST.update(_find({epost: getEmail}), {epost: email, name: name}, function (data, textStatus, jqXHR){
+				console.log("SAVE:",data);
+				showUserProfile();
 				});
 			});
-
-			$('#content-main').empty();
-			var formTemplate = $(loadTemplate('templates/userProfile.html'));
-			$("#content-main").append(formTemplate);
-
 		});
 	}
 }
