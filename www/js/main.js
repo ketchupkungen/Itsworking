@@ -15,7 +15,8 @@ $.loadTemplates(
             "profile-modal",
             "example-template",
             "bookingForm",
-            "userProfile"
+            "userProfile",
+            "person-search-results"
         ]
         , 'templates'
         , function () {
