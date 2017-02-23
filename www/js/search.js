@@ -1,6 +1,12 @@
 var STUDENT_REST = new REST('student');
 var TEACHER_REST = new REST('teach');
 
+$(document).on('click', '.radio-inline', function(event) {
+    $('input[name=optradio]').change(function(){
+        $('button.search-btn').attr('disabled', false);
+    });
+});
+
 $(document).on('submit', '#search-form', function(event) {
     // console.log(123);
     event.preventDefault();
