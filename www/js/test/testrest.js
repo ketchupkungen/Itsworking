@@ -7,7 +7,7 @@ $(document).ready(function () {
     addListenerLoginBtn();
     addListenerLoginAdminBtn();
     addListenerLogoutBtn();
-    
+
     addListenerCheckSessionBtn();
     addListenerGetLoginStatusBtn();
 });
@@ -21,7 +21,7 @@ function addListenerPostBtn() {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
-    
+
     //CREATE
 //    $("#post-btn").click(function () {
 //        LOGIN_SHEMA_REST.create({pnr: "850131-0737", epost: "gmor@gmail.com",password:"0000",level:"1"}, function (data, textStatus, jqXHR) {
@@ -50,17 +50,32 @@ function addListenerPutBtn() {
 //GET
 function addListenerGetBtn() {
     //GET WITH OPTIONS  -- IMPORTANT
-     $("#get-options-btn").click(function () {
-        STUDENT_REST.find(_find({_fields:'',_sort:'name',_skip:0,_limit:3}), function (data, textStatus, jqXHR) {
+    $("#get-options-btn").click(function () {
+        STUDENT_REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 3}), function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
 
     //GET ALL
+//    $("#get-btn").click(function () {
+//        ACCESS_REST.find('',function (data, textStatus, jqXHR) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
+
     $("#get-btn").click(function () {
-        ACCESS_REST.find('',function (data, textStatus, jqXHR) {
-            $('#output').text(JSON.stringify(data, null, 1));
-        });
+//        console.log("aaaa");
+//          getLoggedInUser(function (user){
+//              $('#output').text(JSON.stringify(user, null, 1));
+//          });
+
+//        getLoggedInUserName(function(username){
+//            $('#output').text(JSON.stringify(username, null, 1));
+//        });
+
+          getLoggedInEducation(function(data){
+               $('#output').text(JSON.stringify(data, null, 1));
+          });
     });
 
     //GET BY ID
@@ -110,9 +125,9 @@ function addListenerDeleteBtn() {
 
     //DELETE A TEACHERS ID FROM THE ARRAY OF TEACHERS REFERENSES
     //REMOVE A TEACHER FROM EDUCATION
-     $("#delete-btn").click(function () {
-       EDUCATION_REST.deleteRef('EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
-          $('#output').text(JSON.stringify(data, null, 1));
+    $("#delete-btn").click(function () {
+        EDUCATION_REST.deleteRef('EDU_ID', {ref_id: 'TEACHER_ID'}, function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));
         });
     });
 
@@ -135,7 +150,7 @@ function _findEduBook(obj) {
 function addListenerCheckSessionBtn() {
     //CHECK SESSION
     $("#check-session-btn").click(function () {
-        $.getJSON('/checksession',function (data, textStatus, jqXHR){
+        $.getJSON('/checksession', function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
@@ -147,9 +162,9 @@ function addListenerLoginAdminBtn() {
     $("#login-admin-btn").click(function () {
         LOGIN_REST.create({username: "admin@mail.com", password: "0000"}, function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
-            if(!data.error){
+            if (!data.error) {
                 console.log("LOGGED IN, ACCESS_LEVEL:" + data.user.level);
-            }else{
+            } else {
                 console.log("LOGG IN FAILED");
             }
         });
@@ -160,12 +175,12 @@ function addListenerLoginBtn() {
     //LOGIN/POST/CREATE
     //pass: 0000 = 60048db7dc9ca2f753b4e5d87f33162844f1210d
     $("#login-btn").click(function () {
-        
-        LOGIN_REST.create({username: "jdoe@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
+
+        LOGIN_REST.create({username: "aa@gmail.com", password: "0000"}, function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
-            if(!data.error){
+            if (!data.error) {
                 console.log("LOGGED IN, ACCESS_LEVEL:" + data.user.level);
-            }else{
+            } else {
                 console.log("LOGG IN FAILED");
             }
         });
@@ -185,7 +200,7 @@ function addListenerGetLoginStatusBtn() {
     //GET STATUS/GET/FIND
     $("#check-session-status-btn").click(function () {
         LOGIN_REST.find('', function (data, textStatus, jqXHR) {
-            $('#output').text(JSON.stringify(data, null, 1));           
+            $('#output').text(JSON.stringify(data, null, 1));
         });
     });
 }
