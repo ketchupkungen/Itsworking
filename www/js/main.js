@@ -16,7 +16,8 @@ $.loadTemplates(
             "example-template",
             "bookingForm",
             "userProfile",
-            "person-search-results"
+            "person-search-results",
+            "userProfileForm"
         ]
         , 'templates'
         , function () {
@@ -40,7 +41,7 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
 //            adminDisplayRooms();
             TABLE_ROOMS.test();
-            TABLE_ROOMS.show();
+            TABLE_ROOMS.show(true);
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -49,23 +50,20 @@ function initializeHistoryRouter() {
             adminDisplayStudents();
         },
         '/teacher-admin': function () {
-            TABLE_TEACHER.show();
+            TABLE_TEACHER.show(true);
         },
         '/access-admin': function () {
-            TABLE_ACCESS.show();
+            TABLE_ACCESS.show(true);
             
         },
         '/login-admin': function () {
-            TABLE_LOGIN.show();
+            TABLE_LOGIN.show(true);
         },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");
         },
         '/school-link': function () {
             openLink("#content-main", "templates/school.html");
-        },
-        '/profilemodal': function () {
-            $('.overlay').fadeIn(300); // should we have routes for modals ????
         },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking/booking.html");
@@ -84,8 +82,9 @@ function initializeHistoryRouter() {
         '/profile-status-link': function () {
             openLink("#content-main", "templates/profile-modal.html");
         },
-        '/Profile-link': function () {
-            openLink("#content-main", "templates/userProfile.html");
+        '/profile-link': function () {
+            showUserProfile();
+            //openLink("#content-main", "templates/userProfile.html");
         },
         '/thompa': function () {
             openLinkAlternate("#content-main", "example-template", {
@@ -119,7 +118,6 @@ function initializeHistoryRouter() {
 function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
-
     openFirstPage();
 
     function addEventLogOutBtn() {
@@ -142,10 +140,8 @@ function go() {
                     $(".wrong-credentials").css("display", "block");
                 }
             });
-
         });
     }
-
 }
 
 function initMenuItemClick() {
