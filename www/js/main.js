@@ -61,9 +61,6 @@ function initializeHistoryRouter() {
         '/school-link': function () {
             openLink("#content-main", "templates/school.html");
         },
-        '/profilemodal': function () {
-            $('.overlay').fadeIn(300); // should we have routes for modals ????
-        },
         '/booking-link': function () {
             openLink("#content-main", "templates/booking/booking.html");
             displayBookingRooms();
@@ -81,8 +78,9 @@ function initializeHistoryRouter() {
         '/profile-status-link': function () {
             openLink("#content-main", "templates/profile-modal.html");
         },
-        '/Profile-link': function () {
-            openLink("#content-main", "templates/userProfile.html");
+        '/profile-link': function () {
+            showUserProfile();
+            //openLink("#content-main", "templates/userProfile.html");
         },
         '/thompa': function () {
             openLinkAlternate("#content-main", "example-template", {
@@ -116,7 +114,6 @@ function initializeHistoryRouter() {
 function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
-
     openFirstPage();
 
     function addEventLogOutBtn() {
@@ -139,10 +136,8 @@ function go() {
                     $(".wrong-credentials").css("display", "block");
                 }
             });
-
         });
     }
-
 }
 
 function initMenuItemClick() {
