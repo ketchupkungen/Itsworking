@@ -26,7 +26,6 @@ function Table(
     this.modalPreviewColPop = modalPreviewColPop;
 
 
-    
     this.SHOW_INVERT = false;
     this.SHOW_NORMAL = false;
     this.show = function () {
@@ -37,7 +36,7 @@ function Table(
         $(window).resize(function () {
             check();
         });
-        //
+
         function check() {
             if ($(document).width() < 1000 && that.SHOW_INVERT === false) {
                 that.showInvert();
@@ -84,7 +83,7 @@ function Table(
                     if (colName === that.modalPreviewCol) {
                         that.setModalPreview(td, value, colName);
                     } else {
-                        td.append(value[colName]);
+                        td.append(""+value[colName]);
                     }
                     //
                     $(td).addClass(that.EDIT);
@@ -256,7 +255,9 @@ function Table(
                 });
                 //
                 that.REST.create(updateSettings, function (data, textStatus, jqXHR) {
-                    console.log("create teacher:", data);
+                    console.log("create entity:", data);
+                    that.SHOW_INVERT = false;
+                    that.SHOW_NORMAL = false;
                     that.show();
                 });
             });

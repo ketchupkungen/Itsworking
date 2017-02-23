@@ -16,7 +16,7 @@ module.exports = class Server {
 
   setup() {
     // tell express to use middleware to parse JSON
-    this.app.use(m.bodyparser.json());
+    this.app.use(m.bodyparser.json({limit: '5mb'}));
     // declare a webroot
     this.app.use(
       m.express.static(
@@ -33,7 +33,7 @@ module.exports = class Server {
     // parse all urlencoded request body data
     // for example from "standard" HTML forms
     //Restrouter also needs this
-    this.app.use(m.bodyparser.urlencoded({extended: false}));
+    this.app.use(m.bodyparser.urlencoded({extended: false,limit: '5mb'}));
   }
     
 main(){

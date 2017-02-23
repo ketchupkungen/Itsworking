@@ -9,6 +9,15 @@ var ACCESS_REST = new REST('access');
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.class.js
 //
+var TABLE_ROOMS = new RoomTable(
+        'classes',
+        CLASS_REST,
+        'Administrera Klassrum',
+        '#content-main',
+        ['Nr', 'Storlek', 'Projektor'],
+        ['nr', 'size', 'projector'],
+        {_fields: '', _sort: 'nr', _skip: 0, _limit: 10000}
+        );
 //
 var TABLE_TEACHER = new Table(
         'teacher',
@@ -146,15 +155,11 @@ function getLoggedInUser(cb) {
 function getLoggedInUserName(cb) {
     getLoggedInUser(function (user) {
         STUDENT_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
-            if (data[0]) {
-                cb(data[0].name);
-            }
+            data[0] ? cb(data[0].name) : false;
         });
 
         TEACHERS_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
-            if (data[0]) {
-                cb(data[0].name);
-            }
+             data[0] ? cb(data[0].name) : false;
         });
     });
 }

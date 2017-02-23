@@ -37,7 +37,9 @@ function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
         '/classroom-admin': function () {
-            adminDisplayRooms();
+//            adminDisplayRooms();
+            TABLE_ROOMS.test();
+            TABLE_ROOMS.show();
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -50,6 +52,7 @@ function initializeHistoryRouter() {
         },
         '/access-admin': function () {
             TABLE_ACCESS.show();
+            
         },
         '/login-admin': function () {
             TABLE_LOGIN.show();
