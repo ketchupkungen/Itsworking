@@ -6,16 +6,14 @@ class RoomTable extends Table {
     
     super(uniquePrefix,rest,tableTitle,containerId,headersArr,fieldsArr,searchOptions,modalPreviewCol,populate,fieldsHeadersSettingsPop,modalPreviewColPop);
   
+//      this.show = show;
+  
     }
   
   
   show(){
      console.log("extended");
-//     super();
   }
   
-  test(){
-      console.log("test: ", this.headers);
-  }
   
 }

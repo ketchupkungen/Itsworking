@@ -25,10 +25,12 @@ function Table(
     this.modalPreviewCol = modalPreviewCol;
     this.modalPreviewColPop = modalPreviewColPop;
 
-
     this.SHOW_INVERT = false;
     this.SHOW_NORMAL = false;
-    this.show = function (initial) {
+
+    this.headersFieldsMap = {};
+
+    Table.prototype.show = function (initial) {
         var that = this;
 
         if (initial) {
@@ -57,6 +59,7 @@ function Table(
         }
     };
 
+
     this.showNormal = function () {
         $(document).off('DOMNodeInserted');
         $(this.containerId).empty();
@@ -66,8 +69,10 @@ function Table(
         $(submit).attr('id', this.CREATE);
         //
         this.setTableTitle();
+        this.mapHeadersAndFields();
         this.buildTableHeaders();
         this.buildTable();
+
         $(this.containerId).append(this.template);
     };
 
@@ -222,9 +227,11 @@ function Table(
     this.EDIT = "" + this.uniquePrefix + "-" + "my-table-basic-edit";
     this.CREATE = this.uniquePrefix + "-" + "table-basic-add-new-btn";
 
+    //This is launched only once uppon instantiation of class
     this.setListeners = function () {
         var that = this;
         $(document).ready(function () {
+            //=============
             $('body').on('click', "." + that.DELETE, function () {
                 that.delete($(this).data('_id'));
             });
@@ -236,12 +243,43 @@ function Table(
             $('body').on('click', "#" + that.CREATE, function () {
                 that.create();
             });
+            //=============
+
+            $('body').on('click', ".th-" + that.uniquePrefix, function () {
+                that.sort(this);
+            });
 
             //=============
             $('body').on('mouseover', "." + that.EDIT, function () {
                 $("." + that.EDIT).css('cursor', "url('images/edit.png'), auto");
             });
+
+            $('body').on('mouseover', ".th-" + that.uniquePrefix, function () {
+                var colName = $(this).attr('col');
+                var path;
+                that.sort_map[colName] === 'asc' ? path = 'images/sort-asc.png' : path = 'images/sort-desc.png';
+                $(this).css('cursor', "url(" + path + "), auto");
+            });
+            //=============
+
         });
+    };
+
+    this.sort_asc = true;
+    this.sort_map = {};
+
+    this.sort = function (thiss) {
+        var colName = $(thiss).attr('col');
+
+        if (this.sort_map[colName] === 'asc') {
+            this.sort_map[colName] = 'desc';
+        } else {
+            this.sort_map[colName] = 'asc';
+            colName = "-" + colName;
+        }
+
+        this.searchOptions['_sort'] = colName;
+        this.show(true);
     };
 
     this.create = function () {
@@ -319,14 +357,28 @@ function Table(
         $(h3).text(this.tableTitle);
     };
 
+
+    this.mapHeadersAndFields = function () {
+        var that = this;
+
+        $(this.headers).each(function (index, value) {
+            that.headersFieldsMap[value] = that.fieldsArr[index];
+        });
+    };
+
     this.buildTableHeaders = function () {
+        var that = this;
         var thead_tr = $(this.template).find('#thead-tr');
 
         $(this.headers).each(function (index, value) {
-            var th = $('<th>');
+            var th = $("<th class=th-" + that.uniquePrefix + ">");
+            var col = that.headersFieldsMap[value];
+            $(th).attr('col', col);
             $(th).append(value);
             $(thead_tr).append(th);
         });
+
+        console.log("sort_map", this.sort_map);
     };
 
     this.loadTemplateBasic = function () {
@@ -371,8 +423,6 @@ function Table(
 
         var th_arr = this.buildHeadersArr();
         var tr_arr = $('.tbody-tr');
-
-        this.buildHeadersArr(th_arr);
 
         $(tr_arr).each(function (i, tr) {
             var td_arr = $(tr).children('td');

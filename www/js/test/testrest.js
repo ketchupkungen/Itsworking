@@ -34,7 +34,7 @@ function addListenerPutBtn() {
 
     //UPDATE BY QUERY
     $("#put-btn").click(function () {
-        STUDENT_REST.update(_find({name: 'George Morge'}), {epost: 'jn@gmail.com', pnr: '450131-0737'}, function (data, textStatus, jqXHR) {
+        STUDENT_REST.update(_find({name: 'admin@mail.com'}), {epost: 'aaa@gmail.com', name: 'aaa'}, function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
