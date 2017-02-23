@@ -69,13 +69,13 @@ function addListenerGetBtn() {
 //              $('#output').text(JSON.stringify(user, null, 1));
 //          });
 
-//        getLoggedInUserName(function(username){
-//            $('#output').text(JSON.stringify(username, null, 1));
-//        });
+        getLoggedInUserName(function(username){
+            $('#output').text(JSON.stringify(username, null, 1));
+        });
 
-          getLoggedInEducation(function(data){
-               $('#output').text(JSON.stringify(data, null, 1));
-          });
+//          getLoggedInEducation(function(data){
+//               $('#output').text(JSON.stringify(data, null, 1));
+//          });
     });
 
     //GET BY ID
