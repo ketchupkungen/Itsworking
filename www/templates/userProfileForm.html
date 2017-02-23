@@ -1,0 +1,65 @@
+<div class="container">
+      <div class="row">
+      <div class="col-md-5  toppad  pull-right col-md-offset-3">
+        <a href="#" id="log-out-btn-one">Logga ut</a>
+       <br>
+<p class="date-info"></p>
+      </div>
+        <div class="col-xs-12">
+   
+   
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Min profilsidan</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-2 col-lg-2 " align="center"> <img alt="User Pic" src="https://image.flaticon.com/icons/svg/149/149071.svg" class="img-circle img-responsive"> </div>
+
+<!--profile information start-->
+
+                <div class=" col-md-10 col-lg-10"> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Förnamn, Efternamn:</td>
+                        <td>
+                          <form> 
+                            <input type="text" class="form-control" id="changeUserName" placeholder="Förnamn, Efternamn">
+                          </form>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Utbildning:</td>
+                        <td>${education}</td>
+                      </tr>
+                      <tr>
+                        <td>Person nummer:</td>
+                        <td>${birthday}</td>
+                      </tr>
+                      <tr>
+                        <td>E-post:</td>
+                        <td>
+                          <form> 
+                            <input type="text" class="form-control" id="changeUserEmail" placeholder="E-post">
+                          </form>
+                        </td>
+                    </tbody>
+                  </table>
+
+<!--profile information ends-->
+                </div>
+              </div>
+            </div>
+<!-- profile footer start-->
+
+                <div class="panel-footer userprofile-footer">
+                    <button type="button" class="btn btn-success pull-right profile-save-btn">SPARA</button>
+                    <button type="button" class="btn btn-danger pull-right profile-exit-btn">AVBRYT</button>
+                </div>
+
+<!-- profile footer ends-->
+          </div>
+        </div>
+      </div>
+    </div>
