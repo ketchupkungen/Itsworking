@@ -18,6 +18,4 @@ class RoomTable extends Table {
       console.log("test: ", this.headers);
   }
   
-  
-  
 }

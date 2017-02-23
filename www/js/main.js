@@ -39,7 +39,7 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
 //            adminDisplayRooms();
             TABLE_ROOMS.test();
-            TABLE_ROOMS.show();
+            TABLE_ROOMS.show(true);
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -48,14 +48,14 @@ function initializeHistoryRouter() {
             adminDisplayStudents();
         },
         '/teacher-admin': function () {
-            TABLE_TEACHER.show();
+            TABLE_TEACHER.show(true);
         },
         '/access-admin': function () {
-            TABLE_ACCESS.show();
+            TABLE_ACCESS.show(true);
             
         },
         '/login-admin': function () {
-            TABLE_LOGIN.show();
+            TABLE_LOGIN.show(true);
         },
         '/main-link': function () {
             openLink("#content-main", "templates/main.html");

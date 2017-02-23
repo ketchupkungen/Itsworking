@@ -28,8 +28,13 @@ function Table(
 
     this.SHOW_INVERT = false;
     this.SHOW_NORMAL = false;
-    this.show = function () {
+    this.show = function (initial) {
         var that = this;
+
+        if (initial) {
+            this.SHOW_INVERT = false;
+            this.SHOW_NORMAL = false;
+        }
 
         check();
 
@@ -83,7 +88,7 @@ function Table(
                     if (colName === that.modalPreviewCol) {
                         that.setModalPreview(td, value, colName);
                     } else {
-                        td.append(""+value[colName]);
+                        td.append("" + value[colName]);
                     }
                     //
                     $(td).addClass(that.EDIT);
@@ -256,9 +261,7 @@ function Table(
                 //
                 that.REST.create(updateSettings, function (data, textStatus, jqXHR) {
                     console.log("create entity:", data);
-                    that.SHOW_INVERT = false;
-                    that.SHOW_NORMAL = false;
-                    that.show();
+                    that.show(true);
                 });
             });
         });
@@ -282,6 +285,8 @@ function Table(
             }
 
             that.REST.delete(_id, function (data, textStatus, jqXHR) {
+                that.SHOW_INVERT = false;
+                that.SHOW_NORMAL = false;
                 that.show();
             });
 
@@ -302,7 +307,7 @@ function Table(
             //
             if (input) {
                 that.REST.update(_id, updateSetting, function (data, textStatus, jqXHR) {
-                    that.show();
+                    that.show(true);
                 });
             }
             //
