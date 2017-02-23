@@ -26,7 +26,34 @@ function Table(
     this.modalPreviewColPop = modalPreviewColPop;
 
 
+    
+    this.SHOW_INVERT = false;
+    this.SHOW_NORMAL = false;
     this.show = function () {
+        var that = this;
+
+        check();
+
+        $(window).resize(function () {
+            check();
+        });
+        //
+        function check() {
+            if ($(document).width() < 1000 && that.SHOW_INVERT === false) {
+                that.showInvert();
+                that.SHOW_INVERT = true;
+                that.SHOW_NORMAL = false;
+            }
+
+            if ($(document).width() > 1000 && that.SHOW_NORMAL === false) {
+                that.showNormal();
+                that.SHOW_INVERT = false;
+                that.SHOW_NORMAL = true;
+            }
+        }
+    };
+
+    this.showNormal = function () {
         $(document).off('DOMNodeInserted');
         $(this.containerId).empty();
         this.loadTemplateBasic();
@@ -306,8 +333,9 @@ function Table(
     //==========================================================================
 
     this.showInvert = function () {
+
         var that = this;
-        this.show();
+        this.showNormal();
         $('.admin-show-items').css('display', 'none');
         //
         this.ready(function () {
@@ -320,7 +348,6 @@ function Table(
             console.log("Yay");
             cb();
         });
-
     };
 
     this.buildHeadersArr = function () {
@@ -360,7 +387,12 @@ function Table(
 
         $("#content-main").append(container);
         this.removeEmptyRowsPopulation();
-        
+
+
+        var addNewBtn = $(".add-new-btn");
+        $("#content-main").prepend(addNewBtn);
+
+
         var title = $("#table-title");
         $("#content-main").prepend(title);
     };

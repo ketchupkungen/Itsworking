@@ -9,11 +9,11 @@ $( document ).ready(function() {
 
 	function getProfileData(userData){
 
-		$('body').template('userProfile',{
-			name: "?",
-			birthday: userData.pnr,
-			email: userData.epost,
-			education: "?"
-		});
+//		$('body').template('userProfile',{
+//			name: "?",
+//			birthday: userData.pnr,
+//			email: userData.epost,
+//			education: "?"
+//		});
 	}
 });
