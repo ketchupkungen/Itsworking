@@ -33,7 +33,7 @@ var TABLE_ACCESS = new Table(
         ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
         {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000},
         'basicroute'
-);
+        );
 
 var TABLE_LOGIN = new Table(
         'login',
@@ -44,7 +44,7 @@ var TABLE_LOGIN = new Table(
         ['pnr', 'epost', 'level', 'password'],
         {_fields: '', _sort: 'level', _skip: 0, _limit: 10000},
         'pnr'
-);
+        );
 
 //
 
@@ -118,16 +118,63 @@ function getAccessLevel(cb) {
     });
 }
 
-function getUserName(cb) {
-    $.getJSON('/username', function (email, textStatus, jqXHR) {
-        if (email) {
-            cb(email);
+function getUserEmail(cb) {
+    $.getJSON('/useremail', function (username, textStatus, jqXHR) {
+        if (username) {
+            cb(username);
         } else {
             cb(false);
         }
     });
 }
 
+/**
+ * .pnr, 
+ * @param {type} cb
+ * @returns {undefined}
+ */
+function getLoggedInUser(cb) {
+    $.getJSON('/loggedIn', function (loggedInUser, textStatus, jqXHR) {
+        if (loggedInUser) {
+            cb(loggedInUser);
+        } else {
+            cb(false);
+        }
+    });
+}
+
+function getLoggedInUserName(cb) {
+    getLoggedInUser(function (user) {
+        STUDENT_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
+            if (data[0]) {
+                cb(data[0].name);
+            }
+        });
+
+        TEACHERS_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
+            if (data[0]) {
+                cb(data[0].name);
+            }
+        });
+    });
+}
+
+function getLoggedInEducation(cb) {
+    getLoggedInUser(function (user) {
+        STUDENT_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
+            if (data[0]) {
+                cb(data[0]._education.name);
+            }
+        });
+
+        TEACHERS_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
+            if (data[0]) {
+                cb(data[0]._educations); // OBS! här får du tillbaka en array
+            }
+        });
+    });
+
+}
 
 function EXAMPLE_CRUD() {
     //CREATE/POST

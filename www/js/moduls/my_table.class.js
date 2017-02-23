@@ -125,7 +125,6 @@ function Table(
         $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
 
-
     this.addTableControls = function (data) {
         this.fillAllEmptyTrElems();
         //
@@ -147,7 +146,6 @@ function Table(
 //            $(trArr[i]).append(td_del);
 //        });
     };
-
 
     this.fillAllEmptyThElems = function () {
         var thead_tr = $(this.template).find('#thead-tr');
@@ -365,8 +363,6 @@ function Table(
         
         var title = $("#table-title");
         $("#content-main").prepend(title);
-        
-
     };
 
     this.removeEmptyRowsPopulation = function () {

@@ -20,6 +20,8 @@ module.exports = class Mymiddleware {
   }
   
   get(){
+       
+      
     this.app.get("/checksession",function(req,res){
         res.json(req.session);
     });
@@ -32,8 +34,12 @@ module.exports = class Mymiddleware {
         }
     });
     
-    this.app.get("/username",function(req,res){
-        res.json(req.session.content.user.name);
+    this.app.get("/useremail",function(req,res){
+        res.json(req.session.content.user.epost);
+    });
+    
+     this.app.get("/loggedIn",function(req,res){
+        res.json(req.session.content.user);
     });
   }
 //  

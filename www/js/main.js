@@ -46,8 +46,8 @@ function initializeHistoryRouter() {
             adminDisplayStudents();
         },
         '/teacher-admin': function () {
-            TABLE_TEACHER.show();
-//            TABLE_TEACHER.showInvert();
+//            TABLE_TEACHER.show();
+            TABLE_TEACHER.showInvert();
         },
         '/access-admin': function () {
             TABLE_ACCESS.show();
