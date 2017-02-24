@@ -80,64 +80,21 @@ function Table(
 
     this.buildTable = function () {
         var tbody = $(this.template).find('tbody');
+        $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
         var that = this;
         this.maxPopDepth = 0;
 
         this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
+                //
                 var tr = $("<tr class='tbody-tr'>");
                 //
-                $(that.fieldsArr).each(function (i, colName) {
-                    var td = $('<td>');
-                    //
-                    if (colName === that.modalPreviewCol) {
-                        that.setModalPreview(td, value, colName);
-                    } else {
-                        td.append("" + value[colName]);
-                    }
-                    //
-                    $(td).addClass(that.EDIT);
-                    td.data('_id', value._id);
-                    td.data('col', colName);
-                    td.data('value', value[colName]);
-                    $(tr).append(td);
-                });
+                that.buildRegular(value, tr);
                 //
                 //
-                if (that.populate) {
-
-                    var colNames = Object.keys(that.fieldsHeadersSettingsPop);
-                    var colNameModalPreviewPop = Object.keys(that.fieldsHeadersSettingsPop)[0];
-
-                    var pop = value[that.populate];
-
-                    var popDepth = 0;
-
-                    $(pop).each(function (i, popObj) {
-                        //
-                        $(colNames).each(function (i, val) {
-                            var td = $("<td class='td-populated'>");
-                            //
-                            if (colNames[i] === colNameModalPreviewPop) {
-                                that.setModalPreviewPop(td, popObj, colNames[i]);
-                            } else {
-                                $(td).append(popObj[colNames[i]]);
-                            }
-                            //
-                            $(td).data("_id", popObj._id);
-                            $(tr).append(td);
-                        });
-                        //
-                        popDepth++;
-                        if (popDepth > that.maxPopDepth) {
-                            that.maxPopDepth = popDepth;
-//                            console.log("depth", that.maxPopDepth);
-                            that.addTableHeadersIfPopulated(colNames[i]);
-                        }
-                        //
-                    });
-                }
+                that.buildPopulattion(value, tr);
                 //
+                that.markLastRow(tr, data, i, 'last-tr-' + that.uniquePrefix);
                 //
                 $(tbody).append(tr);
                 //
@@ -145,6 +102,95 @@ function Table(
             //
             that.addTableControls(data);
         });
+    };
+
+    this.monitorLastRowVisible = function (uniquePrefix) {
+        var last_tr = '.last-tr-' + uniquePrefix;
+        var last_tr_invert = '.last-tr-invert-' + uniquePrefix;
+
+        var id = setInterval(function () {
+
+            if (exists(last_tr) && $(last_tr).is(':visible')) {
+                console.log("CHECKING", last_tr);
+
+                if (scrolledToView(last_tr) && $(last_tr).is(':visible')) {
+                    console.log('visible', last_tr);
+                    $(last_tr).removeClass('last-tr-' + uniquePrefix);
+                }
+            }
+
+            if (exists(last_tr_invert) && $(last_tr_invert).is(':visible')) {
+                console.log("CHECKING", last_tr_invert);
+                if (scrolledToView(last_tr_invert) && $(last_tr_invert).is(':visible')) {
+                    console.log('visible', last_tr_invert);
+                    $(last_tr_invert).removeClass('last-tr-invert-' + uniquePrefix);
+                }
+            }
+
+
+        }, 2000);
+    };
+
+
+    this.markLastRow = function (elem, arr, i, _class) {
+        if (arr.length === (i + 1)) {
+            console.log("LAST__", _class);
+            $(elem).addClass(_class);
+        }
+    };
+
+    this.buildRegular = function (value, tr) {
+        //
+        $(this.fieldsArr).each(function (i, colName) {
+            var td = $('<td>');
+            //
+            if (colName === this.modalPreviewCol) {
+                this.setModalPreview(td, value, colName);
+            } else {
+                td.append("" + value[colName]);
+            }
+            //
+            $(td).addClass(this.EDIT);
+            td.data('_id', value._id);
+            td.data('col', colName);
+            td.data('value', value[colName]);
+            $(tr).append(td);
+        });
+    };
+
+    this.buildPopulattion = function (value, tr) {
+        if (this.populate) {
+
+            var colNames = Object.keys(this.fieldsHeadersSettingsPop);
+            var colNameModalPreviewPop = Object.keys(this.fieldsHeadersSettingsPop)[0];
+
+            var pop = value[this.populate];
+
+            var popDepth = 0;
+
+            $(pop).each(function (i, popObj) {
+                //
+                $(colNames).each(function (i, val) {
+                    var td = $("<td class='td-populated'>");
+                    //
+                    if (colNames[i] === colNameModalPreviewPop) {
+                        this.setModalPreviewPop(td, popObj, colNames[i]);
+                    } else {
+                        $(td).append(popObj[colNames[i]]);
+                    }
+                    //
+                    $(td).data("_id", popObj._id);
+                    $(tr).append(td);
+                });
+                //
+                popDepth++;
+                if (popDepth > this.maxPopDepth) {
+                    this.maxPopDepth = popDepth;
+                    this.addTableHeadersIfPopulated(colNames[i]);
+                }
+                //
+            });
+        }
     };
 
     this.setModalPreviewPop = function (td, popObj, colName) {
@@ -384,6 +430,7 @@ function Table(
     };
 
     this.setListeners();
+    this.monitorLastRowVisible(this.uniquePrefix);
 
     //==========================================================================
     //==========================================================================
@@ -417,7 +464,8 @@ function Table(
 
 
     this.transformTable = function () {
-        var container = $("<div class='table-show-invert'>");
+        var that = this;
+        var container = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
 
         var th_arr = this.buildHeadersArr();
         var tr_arr = $('.tbody-tr');
@@ -435,6 +483,11 @@ function Table(
                 $(row_invert).append(td);
                 $(container).append(row_invert);
                 containsElement(td, 'img') ? $(container).append(row_invert_empty) : undefined;
+                //
+                if (th_arr.length === (x + 1)) {
+                    that.markLastRow(row_invert, tr_arr, i, 'last-tr-invert-' + that.uniquePrefix);
+                }
+                //
             });
 
         });
@@ -459,6 +512,23 @@ function Table(
         });
 
     };
+
+    //==========================================================================
+    function scrolledToView(selector) {
+        var docViewTop = $(window).scrollTop();
+        var docViewBottom = docViewTop + $(window).height();
+        var elemTop = $(selector).offset().top;
+        var elemBottom = elemTop + $(selector).height();
+        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    }
+
+    function exists(selector) {
+        if ($(selector).length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 }
