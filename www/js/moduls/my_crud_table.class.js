@@ -24,11 +24,14 @@ function Table(
     this.searchOptions = searchOptions;
     this.modalPreviewCol = modalPreviewCol;
     this.modalPreviewColPop = modalPreviewColPop;
-
+    this.maxPopDepth = 0;
     this.SHOW_INVERT = false;
     this.SHOW_NORMAL = false;
-
     this.headersFieldsMap = {};
+    this.offset = 0;
+    this.initialLimit = searchOptions._limit;
+    this.limit = 0;
+
 
     Table.prototype.show = function (initial) {
         var that = this;
@@ -71,17 +74,22 @@ function Table(
         this.setTableTitle();
         this.mapHeadersAndFields();
         this.buildTableHeaders();
+        //
+        this.offset = 0;
+        this.searchOptions._skip = 0;
+        this.limit !== 0 ? this.searchOptions._limit = this.limit * 2 : undefined;
+        //
         this.buildTable();
-
+        //
         $(this.containerId).append(this.template);
     };
 
-    this.maxPopDepth = 0;
+    
 
     this.buildTable = function () {
+        var that = this;
         var tbody = $(this.template).find('tbody');
         $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
-        var that = this;
         this.maxPopDepth = 0;
 
         this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
@@ -100,11 +108,12 @@ function Table(
                 //
             });
             //
-            that.addTableControls(data);
+            that.addDeleteControl(data);
+            //
         });
     };
 
-    this.monitorLastRowVisible = function (uniquePrefix) {
+    this.monitorLastRowVisible = function (uniquePrefix, that) {
         var last_tr = '.last-tr-' + uniquePrefix;
         var last_tr_invert = '.last-tr-invert-' + uniquePrefix;
 
@@ -116,6 +125,7 @@ function Table(
                 if (scrolledToView(last_tr) && $(last_tr).is(':visible')) {
                     console.log('visible', last_tr);
                     $(last_tr).removeClass('last-tr-' + uniquePrefix);
+                    that.calcOffset(uniquePrefix, false);
                 }
             }
 
@@ -124,11 +134,28 @@ function Table(
                 if (scrolledToView(last_tr_invert) && $(last_tr_invert).is(':visible')) {
                     console.log('visible', last_tr_invert);
                     $(last_tr_invert).removeClass('last-tr-invert-' + uniquePrefix);
+                    that.calcOffset(uniquePrefix, true);
                 }
             }
 
+        }, 500);
+    };
 
-        }, 2000);
+
+    this.calcOffset = function (uniquePrefix, invert) {
+        this.offset += this.searchOptions._limit;
+        this.limit = this.offset;
+        this.searchOptions._skip = this.offset;
+
+        if (invert) {
+            this.buildTable();
+            this.transformTable();
+        }
+
+        if (!invert) {
+            this.buildTable();
+        }
+
     };
 
 
@@ -140,17 +167,18 @@ function Table(
     };
 
     this.buildRegular = function (value, tr) {
+        var that = this;
         //
         $(this.fieldsArr).each(function (i, colName) {
             var td = $('<td>');
             //
-            if (colName === this.modalPreviewCol) {
-                this.setModalPreview(td, value, colName);
+            if (colName === that.modalPreviewCol) {
+                that.setModalPreview(td, value, colName);
             } else {
                 td.append("" + value[colName]);
             }
             //
-            $(td).addClass(this.EDIT);
+            $(td).addClass(that.EDIT);
             td.data('_id', value._id);
             td.data('col', colName);
             td.data('value', value[colName]);
@@ -159,6 +187,7 @@ function Table(
     };
 
     this.buildPopulattion = function (value, tr) {
+        var that = this;
         if (this.populate) {
 
             var colNames = Object.keys(this.fieldsHeadersSettingsPop);
@@ -174,7 +203,7 @@ function Table(
                     var td = $("<td class='td-populated'>");
                     //
                     if (colNames[i] === colNameModalPreviewPop) {
-                        this.setModalPreviewPop(td, popObj, colNames[i]);
+                        that.setModalPreviewPop(td, popObj, colNames[i]);
                     } else {
                         $(td).append(popObj[colNames[i]]);
                     }
@@ -184,9 +213,9 @@ function Table(
                 });
                 //
                 popDepth++;
-                if (popDepth > this.maxPopDepth) {
-                    this.maxPopDepth = popDepth;
-                    this.addTableHeadersIfPopulated(colNames[i]);
+                if (popDepth > that.maxPopDepth) {
+                    that.maxPopDepth = popDepth;
+                    that.addTableHeadersIfPopulated(colNames[i]);
                 }
                 //
             });
@@ -207,7 +236,7 @@ function Table(
         $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
 
-    this.addTableControls = function (data) {
+    this.addDeleteControl = function (data) {
         this.fillAllEmptyTrElems();
         //
         var trArr = $('.tbody-tr');
@@ -216,17 +245,24 @@ function Table(
             var td_del = $("<td><img src='images/delete.png' class='basic-icon'></td>");
             $(td_del).find('img').addClass(this.DELETE);
             $(td_del).find('img').data('_id', data[i]._id);
-            $(trArr[i]).append(td_del);
+            //
+            //
+            var actLength = $(trArr[this.offset + i]).children('td').length;
+            var prevLength = 0;
+            [(this.offset + i) - 1] ? prevLength = $(trArr[(this.offset + i) - 1]).children('td').length : prevLength = 0;
+            //
+            if (prevLength === actLength) {
+                var lastChild = $(trArr[this.offset + i]).children('td').last();
+                $(lastChild).remove();
+                $(trArr[this.offset + i]).append(td_del);
+            } else {
+                $(trArr[this.offset + i]).append(td_del);
+            }
+            //
+            //
         }
         //
         this.fillAllEmptyThElems();
-
-        //OBS! OBS! OBS! EACH NOT WORKING HERE!
-//        $(data).each(function (i, value) {
-//            var td_del = $("<td><img src='images/delete.png' class='basic-icon my-table-delete'></td>");
-//            $(td_del).find('.my-table-delete').data('_id', value._id);
-//            $(trArr[i]).append(td_del);
-//        });
     };
 
     this.fillAllEmptyThElems = function () {
@@ -430,7 +466,7 @@ function Table(
     };
 
     this.setListeners();
-    this.monitorLastRowVisible(this.uniquePrefix);
+    this.monitorLastRowVisible(this.uniquePrefix, this);
 
     //==========================================================================
     //==========================================================================

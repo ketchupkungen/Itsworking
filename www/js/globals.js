@@ -26,7 +26,7 @@ var TABLE_TEACHER = new Table(
         '#content-main',
         ['Namn', 'Pnr', 'Epost'],
         ['name', 'pnr', 'epost'],
-        {_fields: '', _sort: 'name', _skip: 0, _limit: 10000},
+        {_fields: '', _sort: 'name', _skip: 0, _limit: 15},
         'name',
         '_educations',
         {name: 'Education', score: 'Score'},
@@ -40,7 +40,7 @@ var TABLE_ACCESS = new Table(
         '#content-main',
         ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
         ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
-        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 10000},
+        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 3},
         'basicroute'
         );
 
