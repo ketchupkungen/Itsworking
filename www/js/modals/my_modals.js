@@ -85,6 +85,57 @@ function showInputModalB(title, infoMsg, customizedObj, size, cb) {
     $('#gridSystemModalLabel').modal();
     //
 }
+//------------------------------------------------------------------------------
+
+var CRUD_TABLE_MODAL_CB;
+
+$("html").on('click', '#modal-crud-table-abort-btn', function () {
+    CRUD_TABLE_MODAL_CB(false);
+});
+
+$("html").on('click', '#modal-crud-table-ok-btn', function () {
+    //
+    CRUD_TABLE_MODAL_CB($('#modal-input'));
+});
+
+$("html").on('click', '#modal-crud-table-delete-btn', function () {
+    CRUD_TABLE_MODAL_CB('delete');
+});
+
+function showCrudEditDeleteModal(title, infoMsg, customizedObj, size, cb) {
+    //
+    $('body').on('shown.bs.modal', '#gridSystemModalLabel', function () {
+        $('#modal-input-text').focus();
+    });
+    //
+    CRUD_TABLE_MODAL_CB = cb;
+    //
+    var modalObj = $.parseHTML(loadTemplate(PATH + "special/modal_crud_table_edit.html"));
+    //
+    $(modalObj).find(".modal-title").text(title);
+    $(modalObj).find(".modal-body p").text(infoMsg);
+    //
+    if (customizedObj) {
+        $(modalObj).find("#modal-input").append(customizedObj);
+        $(modalObj).find('#modal-input-text').remove();
+    }
+    //
+    if (size === 'sm') {
+        $(modalObj).find(".modal-dialog").addClass("modal-sm");
+    } else if (size === 'lg') {
+        $(modalObj).find(".modal-dialog").addClass("modal-lg");
+    }
+    //
+    if (exists("#gridSystemModalLabel")) {
+        $("#gridSystemModalLabel").remove();
+        $("body").append(modalObj);
+    } else {
+        $("body").append(modalObj);
+    }
+    //
+    $('#gridSystemModalLabel').modal();
+    //
+}
 
 //------------------------------------------------------------------------------
 

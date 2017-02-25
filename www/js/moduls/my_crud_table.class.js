@@ -40,6 +40,10 @@ function Table(
             this.SHOW_INVERT = false;
             this.SHOW_NORMAL = false;
         }
+        
+        this.maxPopDepth = 0;
+        
+        console.log("Show Invert: " + this.SHOW_INVERT + "  / Show Normal: " + this.SHOW_NORMAL + " / initial: " + initial);
 
         check();
 
@@ -84,13 +88,12 @@ function Table(
         $(this.containerId).append(this.template);
     };
 
-    
+
 
     this.buildTable = function () {
         var that = this;
         var tbody = $(this.template).find('tbody');
         $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
-        this.maxPopDepth = 0;
 
         this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
@@ -108,10 +111,71 @@ function Table(
                 //
             });
             //
-            that.addDeleteControl(data);
+            that.fillAllEmptyTrElems();
+            that.fillAllEmptyThElems();
             //
         });
     };
+
+
+    this.buildPopulattion = function (value, tr) {
+        var that = this;
+        if (this.populate) {
+
+            var colNames = Object.keys(this.fieldsHeadersSettingsPop);
+            var colNameModalPreviewPop = Object.keys(this.fieldsHeadersSettingsPop)[0];
+
+            var pop = value[this.populate];
+
+            var popDepth = 0;
+
+            $(pop).each(function (i, popObj) {
+                //
+                $(colNames).each(function (i, val) {
+                    var td = $("<td class='td-populated'>");
+                    //
+                    if (colNames[i] === colNameModalPreviewPop) {
+                        that.setModalPreviewPop(td, popObj, colNames[i]);
+                    } else {
+                        $(td).append(popObj[colNames[i]]);
+                    }
+                    //
+                    $(td).data("_id", popObj._id);
+                    $(tr).append(td);
+                });
+                //
+                popDepth++;
+                //
+                if (popDepth > that.maxPopDepth) {
+                    that.maxPopDepth = popDepth;
+                    that.addTableHeadersIfPopulated(colNames[i]);
+                }
+                //
+            });
+        }
+    };
+
+
+    this.buildRegular = function (value, tr) {
+        var that = this;
+        //
+        $(this.fieldsArr).each(function (i, colName) {
+            var td = $('<td>');
+            //
+            if (colName === that.modalPreviewCol) {
+                that.setModalPreview(td, value, colName);
+            } else {
+                td.append("" + value[colName]);
+            }
+            //
+            $(td).addClass(that.EDIT);
+            td.data('_id', value._id);
+            td.data('col', colName);
+            td.data('value', value[colName]);
+            $(tr).append(td);
+        });
+    };
+
 
     this.monitorLastRowVisible = function (uniquePrefix, that) {
         var last_tr = '.last-tr-' + uniquePrefix;
@@ -166,61 +230,7 @@ function Table(
         }
     };
 
-    this.buildRegular = function (value, tr) {
-        var that = this;
-        //
-        $(this.fieldsArr).each(function (i, colName) {
-            var td = $('<td>');
-            //
-            if (colName === that.modalPreviewCol) {
-                that.setModalPreview(td, value, colName);
-            } else {
-                td.append("" + value[colName]);
-            }
-            //
-            $(td).addClass(that.EDIT);
-            td.data('_id', value._id);
-            td.data('col', colName);
-            td.data('value', value[colName]);
-            $(tr).append(td);
-        });
-    };
 
-    this.buildPopulattion = function (value, tr) {
-        var that = this;
-        if (this.populate) {
-
-            var colNames = Object.keys(this.fieldsHeadersSettingsPop);
-            var colNameModalPreviewPop = Object.keys(this.fieldsHeadersSettingsPop)[0];
-
-            var pop = value[this.populate];
-
-            var popDepth = 0;
-
-            $(pop).each(function (i, popObj) {
-                //
-                $(colNames).each(function (i, val) {
-                    var td = $("<td class='td-populated'>");
-                    //
-                    if (colNames[i] === colNameModalPreviewPop) {
-                        that.setModalPreviewPop(td, popObj, colNames[i]);
-                    } else {
-                        $(td).append(popObj[colNames[i]]);
-                    }
-                    //
-                    $(td).data("_id", popObj._id);
-                    $(tr).append(td);
-                });
-                //
-                popDepth++;
-                if (popDepth > that.maxPopDepth) {
-                    that.maxPopDepth = popDepth;
-                    that.addTableHeadersIfPopulated(colNames[i]);
-                }
-                //
-            });
-        }
-    };
 
     this.setModalPreviewPop = function (td, popObj, colName) {
         var a = $("<a class='admin-modal-preview'>" + popObj[colName] + "</a>");
@@ -236,34 +246,6 @@ function Table(
         $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
 
-    this.addDeleteControl = function (data) {
-        this.fillAllEmptyTrElems();
-        //
-        var trArr = $('.tbody-tr');
-        //
-        for (var i = 0; i < data.length; i++) {
-            var td_del = $("<td><img src='images/delete.png' class='basic-icon'></td>");
-            $(td_del).find('img').addClass(this.DELETE);
-            $(td_del).find('img').data('_id', data[i]._id);
-            //
-            //
-            var actLength = $(trArr[this.offset + i]).children('td').length;
-            var prevLength = 0;
-            [(this.offset + i) - 1] ? prevLength = $(trArr[(this.offset + i) - 1]).children('td').length : prevLength = 0;
-            //
-            if (prevLength === actLength) {
-                var lastChild = $(trArr[this.offset + i]).children('td').last();
-                $(lastChild).remove();
-                $(trArr[this.offset + i]).append(td_del);
-            } else {
-                $(trArr[this.offset + i]).append(td_del);
-            }
-            //
-            //
-        }
-        //
-        this.fillAllEmptyThElems();
-    };
 
     this.fillAllEmptyThElems = function () {
         var thead_tr = $(this.template).find('#thead-tr');
@@ -305,7 +287,6 @@ function Table(
         });
     };
 
-    this.DELETE = "" + this.uniquePrefix + "-" + "my-table-delete";
     this.EDIT = "" + this.uniquePrefix + "-" + "my-table-basic-edit";
     this.CREATE = this.uniquePrefix + "-" + "table-basic-add-new-btn";
 
@@ -314,10 +295,6 @@ function Table(
         var that = this;
         $(document).ready(function () {
             //=============
-            $('body').on('click', "." + that.DELETE, function () {
-                that.delete($(this).data('_id'));
-            });
-
             $('body').on('click', "." + that.EDIT, function () {
                 that.edit($(this).data('_id'), $(this).data('col'), $(this).data('value'));
             });
@@ -326,14 +303,15 @@ function Table(
                 that.create();
             });
             //=============
-
-            $('body').on('click', ".th-" + that.uniquePrefix, function () {
-                that.sort(this);
-            });
-
-            //=============
+            
             $('body').on('mouseover', "." + that.EDIT, function () {
                 $("." + that.EDIT).css('cursor', "url('images/edit.png'), auto");
+            });
+            
+            //=============
+            
+            $('body').on('click', ".th-" + that.uniquePrefix, function () {
+                that.sort(this);
             });
 
             $('body').on('mouseover', ".th-" + that.uniquePrefix, function () {
@@ -420,9 +398,13 @@ function Table(
         var updateSetting = {};
         var input = $("<input type='text' class='text-input' value='" + value + "'>");
 
-        showInputModalB("Edit", "", input, 'sm', function (modalInput) {
+        showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (response) {
             //
-            var input = $(modalInput).find('.text-input').val();
+            if (response === 'delete') {
+                that.delete(_id);
+            }
+            //
+            var input = $(response).find('.text-input').val();
             updateSetting[col] = input;
             //
             if (input) {
@@ -433,6 +415,7 @@ function Table(
             //
         });
     };
+
 
     this.setTableTitle = function () {
         var h3 = $(this.template).find('#table-title');
