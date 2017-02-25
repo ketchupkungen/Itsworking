@@ -40,10 +40,8 @@ function Table(
             this.SHOW_INVERT = false;
             this.SHOW_NORMAL = false;
         }
-        
+
         this.maxPopDepth = 0;
-        
-        console.log("Show Invert: " + this.SHOW_INVERT + "  / Show Normal: " + this.SHOW_NORMAL + " / initial: " + initial);
 
         check();
 
@@ -53,12 +51,14 @@ function Table(
 
         function check() {
             if ($(document).width() < 1000 && that.SHOW_INVERT === false) {
+                that.maxPopDepth = 0;
                 that.showInvert();
                 that.SHOW_INVERT = true;
                 that.SHOW_NORMAL = false;
             }
 
             if ($(document).width() > 1000 && that.SHOW_NORMAL === false) {
+                that.maxPopDepth = 0;
                 that.showNormal();
                 that.SHOW_INVERT = false;
                 that.SHOW_NORMAL = true;
@@ -92,6 +92,7 @@ function Table(
 
     this.buildTable = function () {
         var that = this;
+        var table = $(this.template).find('table');
         var tbody = $(this.template).find('tbody');
         $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
 
@@ -114,9 +115,31 @@ function Table(
             that.fillAllEmptyTrElems();
             that.fillAllEmptyThElems();
             //
+            $(table).prepend($("<div class='table-ready'></div>"));
+            //
         });
     };
 
+    this.fillAllEmptyThElems = function () {
+        var thead_tr = $(this.template).find('#thead-tr');
+        var amount_th = $(thead_tr).children().length;
+        var maxTDinTR = this.findMaxTdInTr();
+        while (amount_th < maxTDinTR) {
+            $(thead_tr).append("<th class='empty-th'>");
+            amount_th++;
+        }
+    };
+
+    this.fillAllEmptyTrElems = function () {
+        var trArr = $('.tbody-tr');
+        var maxTDinTR = this.findMaxTdInTr();
+
+        for (var i = 0; i < trArr.length; i++) {
+            while ($(trArr[i]).children('td').length < maxTDinTR) {
+                $(trArr[i]).append("<td class='empty'>");
+            }
+        }
+    };
 
     this.buildPopulattion = function (value, tr) {
         var that = this;
@@ -187,7 +210,7 @@ function Table(
                 console.log("CHECKING", last_tr);
 
                 if (scrolledToView(last_tr) && $(last_tr).is(':visible')) {
-                    console.log('visible', last_tr);
+                    console.log('_________VISIBLE_________NORMAL', last_tr);
                     $(last_tr).removeClass('last-tr-' + uniquePrefix);
                     that.calcOffset(uniquePrefix, false);
                 }
@@ -196,9 +219,9 @@ function Table(
             if (exists(last_tr_invert) && $(last_tr_invert).is(':visible')) {
                 console.log("CHECKING", last_tr_invert);
                 if (scrolledToView(last_tr_invert) && $(last_tr_invert).is(':visible')) {
-                    console.log('visible', last_tr_invert);
+                    console.log('_________VISIBLE_________INVERT', last_tr_invert);
                     $(last_tr_invert).removeClass('last-tr-invert-' + uniquePrefix);
-                    that.calcOffset(uniquePrefix, true);
+//                    that.calcOffset(uniquePrefix, true);
                 }
             }
 
@@ -225,7 +248,6 @@ function Table(
 
     this.markLastRow = function (elem, arr, i, _class) {
         if (arr.length === (i + 1)) {
-            console.log("LAST__", _class);
             $(elem).addClass(_class);
         }
     };
@@ -246,27 +268,6 @@ function Table(
         $(td).find('.admin-modal-preview').data('rest', this.REST);
     };
 
-
-    this.fillAllEmptyThElems = function () {
-        var thead_tr = $(this.template).find('#thead-tr');
-        var amount_th = $(thead_tr).children().length;
-        var maxTDinTR = this.findMaxTdInTr();
-        while (amount_th < maxTDinTR) {
-            $(thead_tr).append("<th class='empty-th'>");
-            amount_th++;
-        }
-    };
-
-    this.fillAllEmptyTrElems = function () {
-        var trArr = $('.tbody-tr');
-        var maxTDinTR = this.findMaxTdInTr();
-
-        for (var i = 0; i < trArr.length; i++) {
-            while ($(trArr[i]).children('td').length < maxTDinTR) {
-                $(trArr[i]).append("<td class='empty'>");
-            }
-        }
-    };
 
     this.findMaxTdInTr = function () {
         var trArr = $('.tbody-tr');
@@ -303,13 +304,13 @@ function Table(
                 that.create();
             });
             //=============
-            
+
             $('body').on('mouseover', "." + that.EDIT, function () {
                 $("." + that.EDIT).css('cursor', "url('images/edit.png'), auto");
             });
-            
+
             //=============
-            
+
             $('body').on('click', ".th-" + that.uniquePrefix, function () {
                 that.sort(this);
             });
@@ -455,25 +456,24 @@ function Table(
     //==========================================================================
 
     this.showInvert = function () {
-
         var that = this;
+
         this.showNormal();
         $('.admin-show-items').css('display', 'none');
         //
-        this.ready(function () {
+        this.ready(function (res) {
             that.transformTable();
         });
     };
 
     this.ready = function (cb) {
-        $(document).on('DOMNodeInserted', '.empty-th', function () {
-            console.log("Yay");
-            cb();
+        $(document).on('DOMNodeInserted', '.table-ready', function () {
+            cb(true);
         });
     };
 
     this.buildHeadersArr = function () {
-        th_arr = $('th');
+        var th_arr = $('th');
         var th_arr_b = [];
         $(th_arr).each(function (x, th) {
             th_arr_b.push(th);
@@ -484,26 +484,29 @@ function Table(
 
     this.transformTable = function () {
         var that = this;
-        var container = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
+        var table_invert = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
 
         var th_arr = this.buildHeadersArr();
         var tr_arr = $('.tbody-tr');
 
         $(tr_arr).each(function (i, tr) {
+            var table_invert_entry = $("<div class='table-invert-entry'></div>");
+
             var td_arr = $(tr).children('td');
 
             $(th_arr).each(function (x, th) {
                 var row_invert = $("<div class='row-invert'></div>");
-                var row_invert_empty = $("<div class='row-invert-empty'></div>");
 
                 $(row_invert).append(th.cloneNode(true));
                 var td = $(td_arr[x]);
                 $(td).addClass('td-invert');
                 $(row_invert).append(td);
-                $(container).append(row_invert);
-                containsElement(td, 'img') ? $(container).append(row_invert_empty) : undefined;
                 //
-                if (th_arr.length === (x + 1)) {
+                $(table_invert_entry).append(row_invert);
+                $(table_invert).append(table_invert_entry);
+                //
+                //
+                if (x === 0) {
                     that.markLastRow(row_invert, tr_arr, i, 'last-tr-invert-' + that.uniquePrefix);
                 }
                 //
@@ -511,7 +514,7 @@ function Table(
 
         });
 
-        $("#content-main").append(container);
+        $("#content-main").append(table_invert);
         this.removeEmptyRowsPopulation();
 
 
