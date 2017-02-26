@@ -179,6 +179,17 @@ function Table(
     };
 
 
+    this.addTableHeadersIfPopulated = function () {
+        var thead_tr = $(this.template).find('#thead-tr');
+        $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
+            var th = $("<th class='th-population'>");
+            $(th).addClass('initial-th');
+            $(th).append(colHeader);
+            $(thead_tr).append(th);
+        });
+    };
+
+
     this.buildRegular = function (value, tr) {
         var that = this;
         //
@@ -221,7 +232,7 @@ function Table(
                 if (scrolledToView(last_tr_invert) && $(last_tr_invert).is(':visible')) {
                     console.log('_________VISIBLE_________INVERT', last_tr_invert);
                     $(last_tr_invert).removeClass('last-tr-invert-' + uniquePrefix);
-//                    that.calcOffset(uniquePrefix, true);
+                    that.calcOffset(uniquePrefix, true);
                 }
             }
 
@@ -235,8 +246,9 @@ function Table(
         this.searchOptions._skip = this.offset;
 
         if (invert) {
+            var tbody = $(this.template).find('tbody');
+            $(tbody).empty(); //important
             this.buildTable();
-            this.transformTable();
         }
 
         if (!invert) {
@@ -279,14 +291,7 @@ function Table(
         return max;
     };
 
-    this.addTableHeadersIfPopulated = function () {
-        var thead_tr = $(this.template).find('#thead-tr');
-        $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
-            var th = $("<th class='th-population'>");
-            $(th).append(colHeader);
-            $(thead_tr).append(th);
-        });
-    };
+
 
     this.EDIT = "" + this.uniquePrefix + "-" + "my-table-basic-edit";
     this.CREATE = this.uniquePrefix + "-" + "table-basic-add-new-btn";
@@ -438,6 +443,7 @@ function Table(
 
         $(this.headers).each(function (index, value) {
             var th = $("<th class=th-" + that.uniquePrefix + ">");
+            $(th).addClass('initial-th');
             var col = that.headersFieldsMap[value];
             $(th).attr('col', col);
             $(th).append(value);
@@ -457,9 +463,10 @@ function Table(
 
     this.showInvert = function () {
         var that = this;
-
+        //
         this.showNormal();
-        $('.admin-show-items').css('display', 'none');
+        //
+        $('.admin-show-items').css('display', 'none'); 
         //
         this.ready(function (res) {
             that.transformTable();
@@ -468,6 +475,7 @@ function Table(
 
     this.ready = function (cb) {
         $(document).on('DOMNodeInserted', '.table-ready', function () {
+            console.log("DOMNodeInserted");
             cb(true);
         });
     };
@@ -484,20 +492,32 @@ function Table(
 
     this.transformTable = function () {
         var that = this;
-        var table_invert = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
-
-        var th_arr = this.buildHeadersArr();
+        //
+        var td_inverts_len = $('.table-show-invert').children().length;
+//        console.log("inverts length:", td_inverts_len);
+        //
+        var table_invert;
+        //
+        if (td_inverts_len === 0) {
+            table_invert = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
+        } else {
+            table_invert = $('.table-show-invert');
+        }
+        //
+        var th_arr = $('.initial-th');
         var tr_arr = $('.tbody-tr');
-
+        //
         $(tr_arr).each(function (i, tr) {
             var table_invert_entry = $("<div class='table-invert-entry'></div>");
-
             var td_arr = $(tr).children('td');
 
             $(th_arr).each(function (x, th) {
                 var row_invert = $("<div class='row-invert'></div>");
-
-                $(row_invert).append(th.cloneNode(true));
+                //
+                var th_clone = th.cloneNode(true);
+                $(th_clone).removeClass('initial-th'); // OBS!
+                $(row_invert).append(th_clone);
+                //
                 var td = $(td_arr[x]);
                 $(td).addClass('td-invert');
                 $(row_invert).append(td);
@@ -514,16 +534,19 @@ function Table(
 
         });
 
-        $("#content-main").append(table_invert);
+        // only at first attempt
+        if (td_inverts_len === 0) {
+            $("#content-main").append(table_invert);
+
+            var addNewBtn = $(".add-new-btn");
+            $("#content-main").prepend(addNewBtn);
+
+            var title = $("#table-title");
+            $("#content-main").prepend(title);
+        }
+        //
         this.removeEmptyRowsPopulation();
-
-
-        var addNewBtn = $(".add-new-btn");
-        $("#content-main").prepend(addNewBtn);
-
-
-        var title = $("#table-title");
-        $("#content-main").prepend(title);
+        //
     };
 
     this.removeEmptyRowsPopulation = function () {
