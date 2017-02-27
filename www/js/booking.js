@@ -56,7 +56,7 @@ function addEventBookingRoomChangeBtn() {
         var classroom = $("#booking-room-select option:selected").text();
         var education = $("#booking-room-education-select option:selected").text();
         var name = $("#booking-room-teacher-select option:selected").text();
-        var date = $("#booking-room-date-select option:selected").text();
+        var date = $("#booking-room-date").text();
 
         var isEditAction = $(this).attr('edit');
         console.log("EditAction:", isEditAction);
@@ -104,17 +104,19 @@ function fillCheckBoxes(formTemplate){
                 $(educationCheckbox).append(opt);
             });
             
-        });
+    });
 
-        TEACHERS_REST.find('', function (data, textStatus, jqXHR) {
-           var teacherCheckbox = $('#booking-room-teacher-select');
-           
-            $(data).each(function (index, value) {
-                var opt = $("<option value=" + value._id + ">" + value.name + "</option>");
-                $(teacherCheckbox).append(opt);
-            });
-            
+    TEACHERS_REST.find('', function (data, textStatus, jqXHR) {
+       var teacherCheckbox = $('#booking-room-teacher-select');
+       
+        $(data).each(function (index, value) {
+            var opt = $("<option value=" + value._id + ">" + value.name + "</option>");
+            $(teacherCheckbox).append(opt);
         });
+        
+    });
+
+    
 }
 
 var ACT_EDIT_ID;
@@ -141,7 +143,7 @@ function addEventBookingEditIcon() {
                 $(formTemplate).find('#booking-room-select').val('' + classroom);
                 $(formTemplate).find("#booking-room-education-select").val('' + education);
                 $(formTemplate).find("#booking-room-teacher-select").val('' + name);
-                $(formTemplate).find("#booking-room-date-select").val('' + date);
+                $(formTemplate).find("#booking-room-date").val('' + date);
 
                 $(formTemplate).find("#booking-change-btn").attr('edit', true);
 
