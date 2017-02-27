@@ -3,16 +3,16 @@ module.exports = function (mongoose) {
     // Mongoose Schema, One-to-Few relation
     var shema = mongoose.Schema({
         name:  {type:String,required: true},
-         pnr: {type: String,
-            validate: {
-              validator: function(v) {
-                return /^(?:19|[2-9][0-9]){0,1}(?:[0-9]{2})(?!0229|0230|0231|0431|0631|0931|1131)(?:(?:0[1-9])|(?:1[0-2]))(?:(?:0[1-9])|(?:1[0-9])|(?:2[0-9])|(?:3[01]))[-+](?!0000)(?:[0-9]{4})$/.test(v);
-              },
-              message: 'ERROR: {VALUE} is not a valid personal id!'
-            },
-            required: [true, 'ERROR: Personal id required']
-        },
-        epost: {type:String,required: true,unique:true},
+         pnr: {type: String,required:true},
+//            validate: {
+//              validator: function(v) {
+//                return /^(?:19|[2-9][0-9]){0,1}(?:[0-9]{2})(?!0229|0230|0231|0431|0631|0931|1131)(?:(?:0[1-9])|(?:1[0-2]))(?:(?:0[1-9])|(?:1[0-9])|(?:2[0-9])|(?:3[01]))[-+](?!0000)(?:[0-9]{4})$/.test(v);
+//              },
+//              message: 'ERROR: {VALUE} is not a valid personal id!'
+//            },
+//            required: [true, 'ERROR: Personal id required']
+//        },
+        epost: {type:String,required: true,unique:false},
         _educations: [{type:mongoose.Schema.Types.ObjectId, ref: 'education' }] // "foreignkey"  type:mongoose.Schema.Types.ObjectId
     },
        {collection: 'teachers'} // sets the name of Collection in Database
