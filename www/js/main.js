@@ -177,3 +177,10 @@ function initMenuItemClick() {
     });
 
 }
+
+function hideMenu () {
+    $('html').on('.click', !'.navbar-nav li', function(e) {
+     $('.navbar-nav').toggle();
+     console.log('bob');
+     });
+}
