@@ -56,7 +56,7 @@ function addEventBookingRoomChangeBtn() {
         var classroom = $("#booking-room-select option:selected").text();
         var education = $("#booking-room-education-select option:selected").text();
         var name = $("#booking-room-teacher-select option:selected").text();
-        var date = $("#booking-room-date").text();
+        var date = $("#booking-room-date").val();
 
         var isEditAction = $(this).attr('edit');
         console.log("EditAction:", isEditAction);
