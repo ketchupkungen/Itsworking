@@ -6,7 +6,12 @@ function showUserProfile() {
         getProfileData(data.user);
         loadUserFormTemplate();
         updateUserProfileForm();
-
+        $('body').on('click','.profile-exit-btn',function(e){
+        e.preventDefault();
+        $('#userProfileForm').remove();
+        getProfileData(data.user);
+        
+        });
     });
     // ==============================-> Input logged in useds information
     function getProfileData(userData) {
