@@ -40,8 +40,7 @@ function showUserProfile() {
             var name = $("#changeUserName").val();
             var email = $("#changeUserEmail").val();
             getUserEmail(function (getEmail) {
-                STUDENT_REST.update(_find({epost: getEmail}), {epost: email, name: name}, function (data, textStatus, jqXHR) {
-                    console.log("SAVE:", data);
+                TEACHERS_REST.update(_find({epost: getEmail}), {epost: email, name: name}, function (data, textStatus, jqXHR) {
                     showUserProfile();
                 });
             });
