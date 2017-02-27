@@ -24,7 +24,7 @@ function displayBookingRooms() {
         console.log("Data", data);
 
         $(data).each(function (index, value) {
-            var tr = $("<tr class='debug'>");
+            var tr = $('<tr class="debug" data-booking-id="' + value._id + '">');
                 
                 $(tr).append("<td>" + value.classroom + "</td>");
                 $(tr).append("<td>" + value.education + "</td>");
@@ -62,16 +62,14 @@ function addEventBookingRoomChangeBtn() {
         console.log("EditAction:", isEditAction);
 
         if (isEditAction === 'true') { // update
-            getUserName(function (name){
-                 BOOKING_REST.update(ACT_EDIT_ID, {classroom: classroom, education: education, name: name, date: date}, function (data, textStatus, jqXHR) {
+            //getUserName(function (name){
+            BOOKING_REST.update(ACT_EDIT_ID, {classroom: classroom, education: education, name: name, date: date}, function (data, textStatus, jqXHR) {
                 console.log("UPDATE:", data)
-
-
                 displayBookingRooms();
             });
-        });
            
         } else { //create
+            console.log("CREATE NEW");
             createInstanse(BOOKING_REST, {classroom: classroom, education: education, name: name, date: date}, function (ok, data) {
                 if (ok) {
                     displayBookingRooms();
@@ -140,12 +138,12 @@ function addEventBookingEditIcon() {
 
                 fillCheckBoxes(formTemplate);
 
-                $(formTemplate).find('#booking-room-select').val('' + classroom);
-                $(formTemplate).find("#booking-room-education-select").val('' + education);
-                $(formTemplate).find("#booking-room-teacher-select").val('' + name);
-                $(formTemplate).find("#booking-room-date").val('' + date);
+                $(formTemplate).find('#booking-room-select').val(classroom);
+                $(formTemplate).find("#booking-room-education-select").val(education);
+                $(formTemplate).find("#booking-room-teacher-select").val(name);
+                $(formTemplate).find("#booking-room-date").val(date);
 
-                $(formTemplate).find("#booking-change-btn").attr('edit', true);
+                $(formTemplate).find("#booking-change-room-btn").attr('edit', 'true');
 
                 $("#content-main").append(formTemplate);
             }
