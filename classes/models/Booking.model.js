@@ -3,7 +3,7 @@ module.exports = function (mongoose) {
     // Mongoose Schema, One-to-Few relation
     var shema = mongoose.Schema({
         name: {type: String, required: true},
-        date: {type: Date, default: Date.now, required: false},
+        date:  {type:String, required: true},  // date: {type: Date, default: Date.now, required: false},
         education: {type: String, required: true}, // "foreignkey"  type:mongoose.Schema.Types.ObjectId
         classroom: {type: String, required: true}
     },
