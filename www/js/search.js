@@ -8,14 +8,24 @@ $(document).on('click', '.radio-inline', function(event) {
 });
 
 $(document).on('submit', '#search-form', function(event) {
-    // console.log(123);
+    console.log(123);
     event.preventDefault();
     var searchString = $('#search-text').val();
     var searchType = $("input[name='optradio']:checked").val();
     search(searchString, searchType);
 });
 
-function search(str, type){
+
+var dataForSearchResultTemplate;
+$(document).on('click','.goto-a-search-result-page',function(){
+   var no = $(this).text();
+   console.log("CLICKED BUTTON",no)
+   dataForSearchResultTemplate.currentPage = no/1 - 1;
+   $('.resultsContainer').empty().template('person-search-results',dataForSearchResultTemplate);
+});
+
+
+function search(str, type) {
     var resourceName = type + '_REST';
     window[resourceName].find('', function (data, textStatus, jqXHR) {
 
@@ -31,9 +41,32 @@ function search(str, type){
                 return true;
             }
         });
-        console.log(results);
+
+        // divide results into seperate pages of results
+        var pagedResults = [];
+        var itemsPerPage = 3;
+        var currentPage = 0;
+        while(results.length){
+            pagedResults[currentPage] = pagedResults[currentPage] || [];
+            pagedResults[currentPage].push(results.shift());
+            if(pagedResults[currentPage].length >= itemsPerPage){
+                currentPage++;
+            }
+        }
+        console.log("PAGED RESULTS",pagedResults);
+
+        
+        dataForSearchResultTemplate = {
+          pages:pagedResults, 
+          currentPage: 0
+        }
+        $('.resultsContainer').empty().template('person-search-results',dataForSearchResultTemplate);
     });
     //alert(resourceName);
+}
+
+function display(str) {
+    
 }
 
 /*function TEACHER_REST(){

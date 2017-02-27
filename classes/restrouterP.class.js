@@ -260,9 +260,25 @@ module.exports = class RestrouterP {
         //   
         that.rights(req,res,function(ret){
             if(ret){
-              _class.update({_id:req.params.id},req.body,function(err,result){
-              res.json(err || result);
-             }); 
+                //OBS! This to be able to encode the pass before saving, OBS! (shema.pre update is not working as pre save)
+                if(req.body.password && Object.keys(req.body).length === 1){
+                   _class.findOne({_id:req.params.id},function(err,doc){
+                       doc.password = req.body.password;
+                       doc.save(function(err,doc){
+                           res.json(err || doc);
+                       });
+                   }); 
+                }else{
+                      //this one returns the doc, the old one above dont
+                     _class.findByIdAndUpdate(req.params.id,req.body,{new:true},function(err,result){
+                            res.json(err || result);
+                     }); 
+                }
+             
+             //OLD and proven   
+//             class.update({_id:req.params.id},req.body,function(err,result){
+//              res.json(err || result);
+//             }); 
            }
         });
     });
