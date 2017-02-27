@@ -1,11 +1,11 @@
 <div class="search-results">
     [repeat pages, no, results]
         <button 
-            [if currentPage == no]style="background-color:blue"[endif]
+            [if currentPage == no]style="background-color:teal"[endif]
             class="button btn goto-a-search-result-page">${no/1 + 1}
         </button>
     [endrepeat]
-
+    <div class="vertical-spacer"></div>    
     [repeat pages, no, results]
         <div class="search-result-page" style="display:[if currentPage == no]block[else]none[endif]">
             [repeat results, result]
@@ -20,7 +20,7 @@
 
      [repeat pages, no, results]
         <button 
-            [if currentPage == no]style="background-color:blue"[endif]
+            [if currentPage == no]style="background-color:teal"[endif]
             class="button btn goto-a-search-result-page">${no/1 + 1}
         </button>
     [endrepeat]
