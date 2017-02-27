@@ -46,7 +46,6 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
 //            adminDisplayRooms();
             TABLE_ROOMS.show(true);
-            
         },
         '/education-admin': function () {
             adminDisplayEducations();

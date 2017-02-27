@@ -31,6 +31,7 @@ function Table(
     this.offset = 0;
     this.initialLimit = searchOptions._limit;
     this.limit = 0;
+    this.newElemMap = {};
 
 
     Table.prototype.show = function (initial) {
@@ -349,6 +350,42 @@ function Table(
         this.show(true);
     };
 
+    //#Static
+    Table.buildComboRest = function (rest, searchParams, colName, cb) {
+        rest.find(_find(searchParams), function (data, textStatus, jqXHR) {
+            var select = $('<select></select>');
+            $(data).each(function (index, obj) {
+                var option = $('<option value="' + obj[colName] + '">' + obj[colName] + "</option>");
+                $(select).append(option);
+            });
+            cb(select);
+        });
+    };
+
+    //#Static
+    Table.buildComboManual = function (arr, cb) {
+        var select = $('<select></select>');
+        $(arr).each(function (index, item) {
+            var option = $('<option value="' + item + '">' + item + "</option>");
+            $(select).append(option);
+        });
+        cb(select);
+    };
+
+    this.addSelectOptions = function (arr, colName) {
+        var that = this;
+        Table.buildComboManual(arr, function (elem) {
+            that.newElemMap[colName] = elem;
+        });
+    };
+
+    this.addSelectOptionsRest = function (rest, searchParams, colName) {
+        var that = this;
+        Table.buildComboRest(rest, searchParams, colName, function (elem) {
+            that.newElemMap[colName] = elem;
+        });
+    };
+
     this.create = function () {
         var that = this;
         var updateSettings = {};
@@ -358,16 +395,16 @@ function Table(
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
-                    
-                    if(modalInput.find("#" + colName).is('input')){
+
+                    if (modalInput.find("#" + colName).is('input')) {
                         updateSettings[colName] = modalInput.find("#" + colName).val();
-                    }else if(modalInput.find("#" + colName).is('div')){
+                    } else if (modalInput.find("#" + colName).is('div')) {
                         //
-                        if(modalInput.find("#" + colName).children('.special-input').length > 0){
+                        if (modalInput.find("#" + colName).children('.special-input').length > 0) {
                             updateSettings[colName] = modalInput.find("#" + colName).find('select').val();
                         }
                     }
-                    
+
                     console.log("settings: ", updateSettings);
                 });
                 //
@@ -379,15 +416,26 @@ function Table(
         });
     };
 
-    Table.prototype.buildCreateInput = function (cb) {
+    this.buildCreateInput = function (cb) {
         var that = this;
         var form = $("<form class='table-basic-auto-create-form'>");
         $(this.fieldsArr).each(function (i, colName) {
+            //
             $(form).append("<p>" + that.headers[i] + "</p>");
-            $(form).append("<input type='text' id='" + colName + "'>");
+            //
+            if (that.newElemMap[colName]) {
+                var specialInput = $("<div id='" + colName + "'></div>");
+                $(that.newElemMap[colName]).addClass('special-input');
+                $(specialInput).append(that.newElemMap[colName]);
+                $(form).append(specialInput);
+            } else {
+                $(form).append("<input type='text' id='" + colName + "'>");
+            }
+            //
         });
         cb(form);
     };
+
 
     this.delete = function (_id) {
         var that = this;
@@ -405,21 +453,40 @@ function Table(
         });
     };
 
-    this.edit = function (_id, col, value) {
+    this.edit = function (_id, colName, value) {
         var that = this;
-//        console.log("td clicked:" + _id + " / " + col + " / " + value);
-
+        //
         var updateSetting = {};
-        var input = $("<input type='text' class='text-input' value='" + value + "'>");
-
-        showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (response) {
+        var input;
+        //
+        if (that.newElemMap[colName]) {
+            $(that.newElemMap[colName]).addClass('special-input');
+            input = that.newElemMap[colName];
+        } else {
+            input = $("<input type='text' class='text-input' value='" + value + "'>");
+        }
+        //
+        //
+        showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (modalInput) {
             //
-            if (response === 'delete') {
-                that.delete(_id);
+            if(modalInput === false){
+                return;
             }
             //
-            var input = $(response).find('.text-input').val();
-            updateSetting[col] = input;
+            if (modalInput === 'delete') {
+                that.delete(_id);
+                return;
+            }
+            //
+            var input;
+            //
+            if (modalInput.find('.special-input').length === 1) {
+                input = modalInput.find('.special-input').val();
+            } else {
+                input = $(modalInput).find('.text-input').val();
+            }
+            //
+            updateSetting[colName] = input;
             //
             if (input) {
                 that.REST.update(_id, updateSetting, function (data, textStatus, jqXHR) {
