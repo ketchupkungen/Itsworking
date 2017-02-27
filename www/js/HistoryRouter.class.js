@@ -8,6 +8,8 @@ class HistoryRouter {
 //    },
 //    '/options-link': function(){
 //         openLink("#content-main","templates/optionsTest.html");
+//    },
+//    '/student/:id': function(params){
 //    }
 //});
 
