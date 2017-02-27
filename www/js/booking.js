@@ -29,7 +29,7 @@ function displayBookingRooms() {
                 $(tr).append("<td>" + value.classroom + "</td>");
                 $(tr).append("<td>" + value.education + "</td>");
                 $(tr).append("<td>" + value.name + "</td>");
-                $(tr).append("<td>" + value.date +"</td>");
+                $(tr).append("<td>" + value.date + "</td>");
                 
                 var tdEdit = $("<td>" + "<img src='images/edit.png' class='basic-icon booking-edit-icon'>" + "</td>");
                 $(tdEdit).data("_id", value._id);
