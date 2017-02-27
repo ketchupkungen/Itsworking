@@ -17,7 +17,14 @@ var TABLE_ROOMS = new RoomTable(
         ['Nr', 'Storlek', 'Projektor'],
         ['nr', 'size', 'projector'],
         {_fields: '', _sort: 'nr', _skip: 0, _limit: 10000}
-        );
+);
+//
+var room_nr_arr = ['1', '2', '3', '4', '5'];
+buildComboFromArr(room_nr_arr, function (comboBox) {
+    TABLE_ROOMS.setAddNewElementColumn('nr', comboBox);
+});
+//
+//
 //
 var TABLE_TEACHER = new Table(
         'teacher',
@@ -159,7 +166,7 @@ function getLoggedInUserName(cb) {
         });
 
         TEACHERS_REST.find(_find({pnr: user.pnr}), function (data, textStatus, jqXHR) {
-             data[0] ? cb(data[0].name) : false;
+            data[0] ? cb(data[0].name) : false;
         });
     });
 }
@@ -262,11 +269,20 @@ function buildComboAll(rest, cb) {
     rest.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 1000}), function (data, textStatus, jqXHR) {
         var select = $('<select></select>');
         $(data).each(function (index, obj) {
-            var option = $("<option value=" + obj._id + ">" + obj.name + "</option>");
+            var option = $('<option value="' + obj._id + '">' + obj.name + "</option>");
             $(select).append(option);
         });
         cb(select);
     });
+}
+
+function buildComboFromArr(arr, cb) {
+    var select = $('<select></select>');
+    $(arr).each(function (index, item) {
+        var option = $('<option value="' + item + '">' + item + "</option>");
+        $(select).append(option);
+    });
+    cb(select);
 }
 
 function createInstanse(rest, properties, cb) {

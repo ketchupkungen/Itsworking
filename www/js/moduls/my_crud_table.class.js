@@ -358,8 +358,16 @@ function Table(
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
-                    updateSettings[colName] = modalInput.find("#" + colName).val();
-
+                    
+                    if(modalInput.find("#" + colName).is('input')){
+                        updateSettings[colName] = modalInput.find("#" + colName).val();
+                    }else if(modalInput.find("#" + colName).is('div')){
+                        //
+                        if(modalInput.find("#" + colName).children('.special-input').length > 0){
+                            updateSettings[colName] = modalInput.find("#" + colName).find('select').val();
+                        }
+                    }
+                    
                     console.log("settings: ", updateSettings);
                 });
                 //
@@ -371,7 +379,7 @@ function Table(
         });
     };
 
-    this.buildCreateInput = function (cb) {
+    Table.prototype.buildCreateInput = function (cb) {
         var that = this;
         var form = $("<form class='table-basic-auto-create-form'>");
         $(this.fieldsArr).each(function (i, colName) {
