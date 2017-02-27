@@ -1,5 +1,10 @@
 $(document).ready(function () {
     initializeHistoryRouter();
+
+});
+
+$(window).load(function () {
+    addScrollTopListener();
 });
 
 
@@ -31,7 +36,7 @@ $.loadTemplates(
         ]
         , 'templates/admin'
         , function () {
-            $(document).ready(go);
+            $(document).ready();
         });
 
 
@@ -41,6 +46,7 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
 //            adminDisplayRooms();
             TABLE_ROOMS.show(true);
+            
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -53,7 +59,6 @@ function initializeHistoryRouter() {
         },
         '/access-admin': function () {
             TABLE_ACCESS.show(true);
-            
         },
         '/login-admin': function () {
             TABLE_LOGIN.show(true);
@@ -83,7 +88,6 @@ function initializeHistoryRouter() {
         },
         '/profile-link': function () {
             showUserProfile();
-            //openLink("#content-main", "templates/userProfile.html");
         },
         '/thompa': function () {
             openLinkAlternate("#content-main", "example-template", {
@@ -118,6 +122,7 @@ function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
     openFirstPage();
+
 
     function addEventLogOutBtn() {
         $("body").on("click", "#log-out-btn-one", function (evt) {

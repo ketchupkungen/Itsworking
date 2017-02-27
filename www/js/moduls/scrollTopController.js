@@ -25,9 +25,10 @@ var IMAGE_PATH = "images/up.png";
  * @returns {undefined}
  */
 function addScrollTopListener() {
-
+    
+    //OBS! Make sure that body, html is not set to height: 100%, use min-height instead
     $(window).on('scroll', function () {
-        if ($(window).scrollTop() > 100) {
+        if ($(window).scrollTop() > 400) {
             addScrollTopController();
         } else if ($(window).scrollTop() === 0) {
             $("#scrollTopBtn").remove();
@@ -44,7 +45,7 @@ function addScrollTopListener() {
         //
         var html = "<img src='' alt='scrollToTop' id='scrollTopBtn'>";
         var elem = $.parseHTML(html);
-        $(elem).attr("src",IMAGE_PATH);
+        $(elem).attr("src", IMAGE_PATH);
         $(elem).css("position", "fixed");
         $(elem).css("top", "80px");
         $(elem).css("right", "20px");

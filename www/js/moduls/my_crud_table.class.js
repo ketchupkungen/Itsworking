@@ -79,6 +79,8 @@ function Table(
         this.mapHeadersAndFields();
         this.buildTableHeaders();
         //
+        this.maxTDinTR = 0;
+        //
         this.offset = 0;
         this.searchOptions._skip = 0;
         this.limit !== 0 ? this.searchOptions._limit = this.limit * 2 : undefined;
@@ -87,7 +89,6 @@ function Table(
         //
         $(this.containerId).append(this.template);
     };
-
 
 
     this.buildTable = function () {
@@ -123,16 +124,19 @@ function Table(
     this.fillAllEmptyThElems = function () {
         var thead_tr = $(this.template).find('#thead-tr');
         var amount_th = $(thead_tr).children().length;
-        var maxTDinTR = this.findMaxTdInTr();
+        maxTDinTR = this.findMaxTdInTr();
         while (amount_th < maxTDinTR) {
             $(thead_tr).append("<th class='empty-th'>");
             amount_th++;
         }
     };
 
+    this.maxTDinTR = 0;
+
     this.fillAllEmptyTrElems = function () {
         var trArr = $('.tbody-tr');
-        var maxTDinTR = this.findMaxTdInTr();
+        maxTDinTR = this.findMaxTdInTr();
+
 
         for (var i = 0; i < trArr.length; i++) {
             while ($(trArr[i]).children('td').length < maxTDinTR) {
@@ -236,7 +240,7 @@ function Table(
                 }
             }
 
-        }, 500);
+        }, 1000);
     };
 
 
@@ -264,8 +268,6 @@ function Table(
         }
     };
 
-
-
     this.setModalPreviewPop = function (td, popObj, colName) {
         var a = $("<a class='admin-modal-preview'>" + popObj[colName] + "</a>");
         $(td).append(a);
@@ -288,10 +290,9 @@ function Table(
             var ammount = $(trArr[i]).children('td').length;
             ammount > max ? max = ammount : max;
         }
-        return max;
+        max > this.maxTDinTR ? this.maxTDinTR = max : undefined;
+        return this.maxTDinTR;
     };
-
-
 
     this.EDIT = "" + this.uniquePrefix + "-" + "my-table-basic-edit";
     this.CREATE = this.uniquePrefix + "-" + "table-basic-add-new-btn";
@@ -354,7 +355,6 @@ function Table(
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
                 if (!modalInput) {
-
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
@@ -399,7 +399,7 @@ function Table(
 
     this.edit = function (_id, col, value) {
         var that = this;
-        console.log("td clicked:" + _id + " / " + col + " / " + value);
+//        console.log("td clicked:" + _id + " / " + col + " / " + value);
 
         var updateSetting = {};
         var input = $("<input type='text' class='text-input' value='" + value + "'>");
@@ -466,7 +466,7 @@ function Table(
         //
         this.showNormal();
         //
-        $('.admin-show-items').css('display', 'none'); 
+        $('.admin-show-items').css('display', 'none');
         //
         this.ready(function (res) {
             that.transformTable();
@@ -475,7 +475,7 @@ function Table(
 
     this.ready = function (cb) {
         $(document).on('DOMNodeInserted', '.table-ready', function () {
-            console.log("DOMNodeInserted");
+            console.log("DOMNodeInserted: Building invert");
             cb(true);
         });
     };
@@ -494,7 +494,6 @@ function Table(
         var that = this;
         //
         var td_inverts_len = $('.table-show-invert').children().length;
-//        console.log("inverts length:", td_inverts_len);
         //
         var table_invert;
         //
