@@ -208,10 +208,11 @@ function Table(
 
 
     this.addTableHeadersIfPopulated = function () {
+        var that = this;
         var thead_tr = $(this.template).find('#thead-tr');
         $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
             var th = $("<th class='th-population'>");
-            $(th).addClass('initial-th');
+            $(th).addClass('initial-th-' + that.uniquePrefix);
             $(th).append(colHeader);
             $(thead_tr).append(th);
         });
@@ -240,10 +241,10 @@ function Table(
 
 
     this.monitorLastRowVisible = function (uniquePrefix, that) {
-        if(this.canEdit === false){
+        if (this.canEdit === false) {
             return;
         }
-        
+
         var last_tr = '.last-tr-' + uniquePrefix;
         var last_tr_invert = '.last-tr-invert-' + uniquePrefix;
 
@@ -551,7 +552,7 @@ function Table(
 
         $(this.headers).each(function (index, value) {
             var th = $("<th class=th-" + that.uniquePrefix + ">");
-            $(th).addClass('initial-th');
+            $(th).addClass('initial-th-' + that.uniquePrefix);
             var col = that.headersFieldsMap[value];
             $(th).attr('col', col);
             $(th).append(value);
@@ -601,17 +602,17 @@ function Table(
     this.transformTable = function () {
         var that = this;
         //
-        var td_inverts_len = $('.table-show-invert').children().length;
+        var td_inverts_len = $('.' + this.uniquePrefix + '-invert-table>').children().length;
         //
         var table_invert;
         //
         if (td_inverts_len === 0) {
-            table_invert = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
+            table_invert = $("<div class='table-show-invert " + this.uniquePrefix + "-invert-table'>");
         } else {
-            table_invert = $('.table-show-invert');
+            table_invert = $('.' + this.uniquePrefix + '-invert-table>');
         }
         //
-        var th_arr = $('.initial-th');
+        var th_arr = $('.initial-th-' + that.uniquePrefix);
         var tr_arr = $('.tbody-tr');
         //
         $(tr_arr).each(function (i, tr) {
@@ -626,7 +627,7 @@ function Table(
                 $(row_invert).append(th_clone);
                 //
                 var td = $(td_arr[x]);
-                $(td).addClass('td-invert');
+                $(td).addClass(that.uniquePrefix + '-td-invert');
                 $(row_invert).append(td);
                 //
                 $(table_invert_entry).append(row_invert);
@@ -646,7 +647,7 @@ function Table(
             $(containerId).append(table_invert);
 
             var addNewBtn = $(".add-new-btn");
-            that.canEdit?$(containerId).prepend(addNewBtn):undefined;
+            that.canEdit ? $(containerId).prepend(addNewBtn) : undefined;
 
             var title = $("#table-title");
             $(containerId).prepend(title);
@@ -666,7 +667,7 @@ function Table(
     };
 
     //==========================================================================
-    
+
     function scrolledToView(selector) {
         var docViewTop = $(window).scrollTop();
         var docViewBottom = docViewTop + $(window).height();

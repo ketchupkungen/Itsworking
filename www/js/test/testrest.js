@@ -98,6 +98,8 @@ function addListenerGetBtn() {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
+    
+    
 
     //GET - SPECIAL QUERY - GET BOOKINGS FOR EDUCATION X
 //     $("#get-btn").click(function () {

@@ -33,13 +33,13 @@ function openFirstPage() {
 //
 function show() {
     getAccessLevel(function (level) {
-        if (level === 1 || level === 3) {
-            console.log("show student info");
+        if (level === 1) {//|| level === 3
             showStudentInfo();
         }
         //
         if (level === 3) {
             createTablesAdmin();
+             TABLE_ACCESS.show(true);
         }
     });
 }
@@ -51,7 +51,7 @@ function loggedIn() {
     //
     //
     getAccessLevel(function (level) {
-        console.log("ACCESS LEVEL:", level);
+    console.log("ACCESS LEVEL:", level);
 
         show();
 
@@ -67,37 +67,39 @@ function loggedIn() {
 
 
 function showStudentInfo() {
-//    getLoggedInEducation(function (actEdu) {
-//        console.log("act edu:", actEdu);
-//        BOOKING_TABLE_CLASS = new Table(
-//                'booking',
-//                false,
-//                BOOKING_REST,
-//                'Din klass idag',
-//                '#start-page-content-b',//start-page-content-b
-//                ['Utb.', 'Datum', 'Klass'],
-//                ['education', 'date', 'classroom'],
-//                {education: 'suw16', _fields: '', _sort: '-date', _skip: 0, _limit: 1}
-//        );
-//        BOOKING_TABLE_CLASS.setShowAlwaysInvert();
-//        BOOKING_TABLE_CLASS.show(true);
-//    });
-//    
-//    getLoggedInEducation(function (actEdu) {
-//        STUD_EDU_TABLE = new Table(
-//                'studedu',
-//                false,
-//                STUDENT_REST,
-//                'Dina klasskamrater',
-//                '#start-page-content-a',//start-page-content-b
-//                ['Namn', 'epost'],
-//                ['name', 'epost'],
-//                {_fields: '', _sort: '', _skip: 0, _limit: 1}
-//        );
-//        STUD_EDU_TABLE.setSpecialUrl(_findEduStud({name: 'suw17'}));
-//        STUD_EDU_TABLE.setShowAlwaysInvert();
-//        STUD_EDU_TABLE.show(true);
-//    });
+    getLoggedInEducation(function (actEdu) {
+        console.log("act edu:", actEdu);
+        BOOKING_TABLE_CLASS = new Table(
+                'booking',
+                false,
+                BOOKING_REST,
+                'Din klass idag',
+                '#start-page-content-b', //start-page-content-b
+                ['Utb.', 'Datum', 'Klass'],
+                ['education', 'date', 'classroom'],
+                {education: actEdu, _fields: '', _sort: '-date', _skip: 0, _limit: 1}
+        );
+        BOOKING_TABLE_CLASS.setShowAlwaysInvert();
+        BOOKING_TABLE_CLASS.show(true);
+    });
+
+    setTimeout(function () {
+        getLoggedInEducation(function (actEdu) {
+            STUD_EDU_TABLE = new Table(
+                    'studedu',
+                    false,
+                    STUDENT_REST,
+                    'Dina klasskamrater',
+                    '#start-page-content-a', //start-page-content-b
+                    ['Namn', 'epost'],
+                    ['name', 'epost'],
+                    {_fields: '', _sort: '', _skip: 0, _limit: 1}
+            );
+            STUD_EDU_TABLE.setSpecialUrl(_findEduStud({name: actEdu}));
+            STUD_EDU_TABLE.setShowAlwaysInvert();
+            STUD_EDU_TABLE.show(true);
+        });
+    }, 100);
 }
 
 function createTablesAdmin() {

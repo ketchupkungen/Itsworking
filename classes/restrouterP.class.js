@@ -152,6 +152,37 @@ module.exports = class RestrouterP {
     //==========================================================================
     //==========================================================================
     
+    //CUSTOM QUERY - GET TEACHERS FOR EDUCATION X (EDUCATION_REST)
+     this.app.get(this.baseRoute + 'findEduTeach/*',function(req,res){
+        //   
+        that.rights(req,res,function(ret){
+            if(ret){
+               var searchStr = decodeURIComponent(req.url.split('/findEduStud/')[1]);
+                var searchObj; 
+                eval('searchObj = ' + searchStr);
+
+                _class.find({})
+                    .populate({
+                        path: '_teachers',
+                        match: {name:searchObj.name},
+                        select: 'name'
+                      })
+                    .exec(function (err, students) {
+                        if (err) return handleError(err);
+                        students = students.filter(filtering);
+                        res.json(students);              
+                });
+
+                function filtering(element, index, array){
+                    if(element._education){
+                       return element._education.name === searchObj.name;
+                    }
+                }        
+            }
+        });//rights
+        //
+    });
+    
     //CUSTOM QUERY - GET STUDENTS FOR EDUCATION X (EDUCATION_REST)
      this.app.get(this.baseRoute + 'findEduStud/*',function(req,res){
         //   
