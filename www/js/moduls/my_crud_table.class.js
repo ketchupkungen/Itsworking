@@ -32,7 +32,7 @@ function Table(
     this.initialLimit = searchOptions._limit;
     this.limit = 0;
     this.newElemMap = {};
-
+    this.specialUrl;
 
     Table.prototype.show = function (initial) {
         var that = this;
@@ -90,15 +90,27 @@ function Table(
         //
         $(this.containerId).append(this.template);
     };
-
+    
+    //#STATIC
+    Table._find = function(obj){
+        return "find/" + JSON.stringify(obj);
+    };
+    
+    this.setSpecialUrl = function(specialUrl){
+      this.specialUrl = specialUrl;  
+    };
 
     this.buildTable = function () {
         var that = this;
         var table = $(this.template).find('table');
         var tbody = $(this.template).find('tbody');
         $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
+        //
+        var url;
+        //
+        this.specialUrl?url = this.specialUrl:url = Table._find(this.searchOptions);
 
-        this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
+        this.REST.find(url, function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
                 //
                 var tr = $("<tr class='tbody-tr'>");

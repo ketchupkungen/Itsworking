@@ -9,6 +9,25 @@ var ACCESS_REST = new REST('access');
 //
 var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.class.js
 //
+//
+//
+//
+var BOOKING_TABLE_CLASS;
+//
+getLoggedInEducation(function (actEdu) {
+    console.log("act edu:", actEdu);
+    BOOKING_TABLE_CLASS = new Table(
+            'booking',
+            BOOKING_REST,
+            '',
+            '#content-main',
+            ['Utbildning', 'Datum', 'Klass'],
+            ['education', 'date', 'classroom'],
+            {education: actEdu, _fields: '', _sort: '-date', _skip: 0, _limit: 15}
+    );
+});
+
+//
 var TABLE_ROOMS = new Table(
         'classes',
         CLASS_REST,
@@ -20,9 +39,9 @@ var TABLE_ROOMS = new Table(
 );
 //
 //Adding 'select' options
-TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5'],'nr');
-TABLE_ROOMS.addSelectOptionsRest(CLASS_REST,{_fields: 'size', _sort: 'size', _skip: 0, _limit: 10},'size');
-TABLE_ROOMS.addSelectOptions(['true', 'false'],'projector');
+TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5'], 'nr');
+TABLE_ROOMS.addSelectOptionsRest(CLASS_REST, {_fields: 'size', _sort: 'size', _skip: 0, _limit: 10}, 'size');
+TABLE_ROOMS.addSelectOptions(['true', 'false'], 'projector');
 //
 //
 //
@@ -51,10 +70,10 @@ var TABLE_ACCESS = new Table(
         'basicroute'
         );
 //
-TABLE_ACCESS.addSelectOptions(['0','1', '2', '3'],'get_');
-TABLE_ACCESS.addSelectOptions(['0','1', '2', '3'],'post_');
-TABLE_ACCESS.addSelectOptions(['0','1', '2', '3'],'put_');
-TABLE_ACCESS.addSelectOptions(['0','1', '2', '3'],'delete_');
+TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'get_');
+TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'post_');
+TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'put_');
+TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'delete_');
 //
 //
 var TABLE_LOGIN = new Table(
@@ -68,7 +87,7 @@ var TABLE_LOGIN = new Table(
         'pnr'
         );
 //
-TABLE_LOGIN.addSelectOptions(['0','1', '2', '3'],'level');
+TABLE_LOGIN.addSelectOptions(['0', '1', '2', '3'], 'level');
 //
 
 function openFirstPage() {

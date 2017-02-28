@@ -34,7 +34,6 @@ module.exports = function (mongoose) {
         });
     };
 
-
     shema.statics.deleteAll = function (cb) {
         return this.remove({}, cb);
     };
