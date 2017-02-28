@@ -1,5 +1,6 @@
 function Table(
         uniquePrefix,
+        canEdit,
         rest,
         tableTitle,
         containerId,
@@ -14,6 +15,7 @@ function Table(
 
     this.REST = rest;
     this.uniquePrefix = uniquePrefix;
+    this.canEdit = canEdit;
     this.tableTitle = tableTitle;
     this.containerId = containerId; // the container where the table is inserted
     this.headers = headersArr;
@@ -33,16 +35,25 @@ function Table(
     this.limit = 0;
     this.newElemMap = {};
     this.specialUrl;
+    this.alwaysInvert;
+
+    this.setShowAlwaysInvert = function () {
+        this.alwaysInvert = true;
+    };
 
     Table.prototype.show = function (initial) {
         var that = this;
+        this.maxPopDepth = 0;
+
+        if (this.alwaysInvert) {
+            that.showInvert();
+            return;
+        }
 
         if (initial) {
             this.SHOW_INVERT = false;
             this.SHOW_NORMAL = false;
         }
-
-        this.maxPopDepth = 0;
 
         check();
 
@@ -90,14 +101,14 @@ function Table(
         //
         $(this.containerId).append(this.template);
     };
-    
+
     //#STATIC
-    Table._find = function(obj){
+    Table._find = function (obj) {
         return "find/" + JSON.stringify(obj);
     };
-    
-    this.setSpecialUrl = function(specialUrl){
-      this.specialUrl = specialUrl;  
+
+    this.setSpecialUrl = function (specialUrl) {
+        this.specialUrl = specialUrl;
     };
 
     this.buildTable = function () {
@@ -108,7 +119,7 @@ function Table(
         //
         var url;
         //
-        this.specialUrl?url = this.specialUrl:url = Table._find(this.searchOptions);
+        this.specialUrl ? url = this.specialUrl : url = Table._find(this.searchOptions);
 
         this.REST.find(url, function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
@@ -229,6 +240,10 @@ function Table(
 
 
     this.monitorLastRowVisible = function (uniquePrefix, that) {
+        if(this.canEdit === false){
+            return;
+        }
+        
         var last_tr = '.last-tr-' + uniquePrefix;
         var last_tr_invert = '.last-tr-invert-' + uniquePrefix;
 
@@ -313,6 +328,11 @@ function Table(
     //This is launched only once uppon instantiation of class
     this.setListeners = function () {
         var that = this;
+        //
+        if (canEdit === false) {
+            return;
+        }
+        //
         $(document).ready(function () {
             //=============
             $('body').on('click', "." + that.EDIT, function () {
@@ -344,6 +364,7 @@ function Table(
 
         });
     };
+
 
     this.sort_asc = true;
     this.sort_map = {};
@@ -481,7 +502,7 @@ function Table(
         //
         showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (modalInput) {
             //
-            if(modalInput === false){
+            if (modalInput === false) {
                 return;
             }
             //
@@ -622,13 +643,13 @@ function Table(
 
         // only at first attempt
         if (td_inverts_len === 0) {
-            $("#content-main").append(table_invert);
+            $(containerId).append(table_invert);
 
             var addNewBtn = $(".add-new-btn");
-            $("#content-main").prepend(addNewBtn);
+            that.canEdit?$(containerId).prepend(addNewBtn):undefined;
 
             var title = $("#table-title");
-            $("#content-main").prepend(title);
+            $(containerId).prepend(title);
         }
         //
         this.removeEmptyRowsPopulation();
@@ -645,6 +666,7 @@ function Table(
     };
 
     //==========================================================================
+    
     function scrolledToView(selector) {
         var docViewTop = $(window).scrollTop();
         var docViewBottom = docViewTop + $(window).height();

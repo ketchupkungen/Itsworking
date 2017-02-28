@@ -11,85 +11,16 @@ var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.
 //
 //
 //
-//
 var BOOKING_TABLE_CLASS;
+var TABLE_ROOMS;
+var TABLE_TEACHER;
+var TABLE_ACCESS;
+var TABLE_LOGIN;
 //
-getLoggedInEducation(function (actEdu) {
-    console.log("act edu:", actEdu);
-    BOOKING_TABLE_CLASS = new Table(
-            'booking',
-            BOOKING_REST,
-            '',
-            '#content-main',
-            ['Utbildning', 'Datum', 'Klass'],
-            ['education', 'date', 'classroom'],
-            {education: actEdu, _fields: '', _sort: '-date', _skip: 0, _limit: 15}
-    );
+$(document).ready(function () {
+    openFirstPage();
 });
-
 //
-var TABLE_ROOMS = new Table(
-        'classes',
-        CLASS_REST,
-        'Administrera Klassrum',
-        '#content-main',
-        ['Nr', 'Storlek', 'Projektor'],
-        ['nr', 'size', 'projector'],
-        {_fields: '', _sort: 'nr', _skip: 0, _limit: 10000}
-);
-//
-//Adding 'select' options
-TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5'], 'nr');
-TABLE_ROOMS.addSelectOptionsRest(CLASS_REST, {_fields: 'size', _sort: 'size', _skip: 0, _limit: 10}, 'size');
-TABLE_ROOMS.addSelectOptions(['true', 'false'], 'projector');
-//
-//
-//
-var TABLE_TEACHER = new Table(
-        'teacher',
-        TEACHERS_REST,
-        'Administrera lärare',
-        '#content-main',
-        ['Namn', 'Pnr', 'Epost'],
-        ['name', 'pnr', 'epost'],
-        {_fields: '', _sort: 'name', _skip: 0, _limit: 15},
-        'name',
-        '_educations',
-        {name: 'Education', score: 'Score'},
-        {name: EDUCATION_REST}
-);
-
-var TABLE_ACCESS = new Table(
-        'access',
-        ACCESS_REST,
-        'Administrera tillgång',
-        '#content-main',
-        ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
-        ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
-        {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 15},
-        'basicroute'
-        );
-//
-TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'get_');
-TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'post_');
-TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'put_');
-TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'delete_');
-//
-//
-var TABLE_LOGIN = new Table(
-        'login',
-        LOGIN_SHEMA_REST,
-        'Administrera inloggningar',
-        '#content-main',
-        ['Pnr', 'Epost', 'Nivå'],
-        ['pnr', 'epost', 'level'],
-        {_fields: '', _sort: 'level', _skip: 0, _limit: 15},
-        'pnr'
-        );
-//
-TABLE_LOGIN.addSelectOptions(['0', '1', '2', '3'], 'level');
-//
-
 function openFirstPage() {
     getAccessLevel(function (level) {
         if (level === 0) {
@@ -99,7 +30,20 @@ function openFirstPage() {
         }
     });
 }
-
+//
+function show() {
+    getAccessLevel(function (level) {
+        if (level === 1 || level === 3) {
+            console.log("show student info");
+            showStudentInfo();
+        }
+        //
+        if (level === 3) {
+            createTablesAdmin();
+        }
+    });
+}
+//
 function loggedIn() {
     //
     $("body").empty();
@@ -108,16 +52,120 @@ function loggedIn() {
     //
     getAccessLevel(function (level) {
         console.log("ACCESS LEVEL:", level);
-        if (level < 3) {
-            $('#access-admin-panel').css('display', 'none');
-        }
-        //
-        if (level < 2) {
-            $('#access-booking-panel').css('display', 'none');
-        }
+
+        show();
+
+//        if (level < 3) {
+//            $('#access-admin-panel').css('display', 'none');
+//        }
+//        //
+//        if (level < 2) {
+//            $('#access-booking-panel').css('display', 'none');
+//        }
     });
 }
 
+
+function showStudentInfo() {
+//    getLoggedInEducation(function (actEdu) {
+//        console.log("act edu:", actEdu);
+//        BOOKING_TABLE_CLASS = new Table(
+//                'booking',
+//                false,
+//                BOOKING_REST,
+//                'Din klass idag',
+//                '#start-page-content-b',//start-page-content-b
+//                ['Utb.', 'Datum', 'Klass'],
+//                ['education', 'date', 'classroom'],
+//                {education: 'suw16', _fields: '', _sort: '-date', _skip: 0, _limit: 1}
+//        );
+//        BOOKING_TABLE_CLASS.setShowAlwaysInvert();
+//        BOOKING_TABLE_CLASS.show(true);
+//    });
+//    
+//    getLoggedInEducation(function (actEdu) {
+//        STUD_EDU_TABLE = new Table(
+//                'studedu',
+//                false,
+//                STUDENT_REST,
+//                'Dina klasskamrater',
+//                '#start-page-content-a',//start-page-content-b
+//                ['Namn', 'epost'],
+//                ['name', 'epost'],
+//                {_fields: '', _sort: '', _skip: 0, _limit: 1}
+//        );
+//        STUD_EDU_TABLE.setSpecialUrl(_findEduStud({name: 'suw17'}));
+//        STUD_EDU_TABLE.setShowAlwaysInvert();
+//        STUD_EDU_TABLE.show(true);
+//    });
+}
+
+function createTablesAdmin() {
+    TABLE_ROOMS = new Table(
+            'classes',
+            true,
+            CLASS_REST,
+            'Administrera Klassrum',
+            '#content-main',
+            ['Nr', 'Storlek', 'Projektor'],
+            ['nr', 'size', 'projector'],
+            {_fields: '', _sort: 'nr', _skip: 0, _limit: 10000}
+    );
+//
+//Adding 'select' options
+    TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5'], 'nr');
+    TABLE_ROOMS.addSelectOptionsRest(CLASS_REST, {_fields: 'size', _sort: 'size', _skip: 0, _limit: 10}, 'size');
+    TABLE_ROOMS.addSelectOptions(['true', 'false'], 'projector');
+//
+//
+    TABLE_TEACHER = new Table(
+            'teacher',
+            true,
+            TEACHERS_REST,
+            'Administrera lärare',
+            '#content-main',
+            ['Namn', 'Pnr', 'Epost'],
+            ['name', 'pnr', 'epost'],
+            {_fields: '', _sort: 'name', _skip: 0, _limit: 15},
+            'name',
+            '_educations',
+            {name: 'Education', score: 'Score'},
+            {name: EDUCATION_REST}
+    );
+
+    TABLE_ACCESS = new Table(
+            'access',
+            true,
+            ACCESS_REST,
+            'Administrera tillgång',
+            '#content-main',
+            ['Basicroute', 'GET', 'POST', 'PUT', 'DELETE'],
+            ['basicroute', 'get_', 'post_', 'put_', 'delete_'],
+            {_fields: '', _sort: 'basicroute', _skip: 0, _limit: 15},
+            'basicroute'
+            );
+//
+    TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'get_');
+    TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'post_');
+    TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'put_');
+    TABLE_ACCESS.addSelectOptions(['0', '1', '2', '3'], 'delete_');
+//
+//
+    TABLE_LOGIN = new Table(
+            'login',
+            true,
+            LOGIN_SHEMA_REST,
+            'Administrera inloggningar',
+            '#content-main',
+            ['Pnr', 'Epost', 'Nivå'],
+            ['pnr', 'epost', 'level'],
+            {_fields: '', _sort: 'level', _skip: 0, _limit: 15},
+            'pnr'
+            );
+//
+    TABLE_LOGIN.addSelectOptions(['0', '1', '2', '3'], 'level');
+//
+}
 
 function login(username, password, cb) {
     LOGIN_REST.create({username: username, password: password}, function (data, textStatus, jqXHR) {

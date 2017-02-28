@@ -63,20 +63,20 @@ function addListenerGetBtn() {
 //        });
 //    });
 
-    $("#get-btn").click(function () {
-//        console.log("aaaa");
-//          getLoggedInUser(function (user){
-//              $('#output').text(JSON.stringify(user, null, 1));
-//          });
-
-        getLoggedInUserName(function(username){
-            $('#output').text(JSON.stringify(username, null, 1));
-        });
-
-//          getLoggedInEducation(function(data){
-//               $('#output').text(JSON.stringify(data, null, 1));
-//          });
-    });
+//    $("#get-btn").click(function () {
+////        console.log("aaaa");
+////          getLoggedInUser(function (user){
+////              $('#output').text(JSON.stringify(user, null, 1));
+////          });
+//
+//        getLoggedInUserName(function(username){
+//            $('#output').text(JSON.stringify(username, null, 1));
+//        });
+//
+////          getLoggedInEducation(function(data){
+////               $('#output').text(JSON.stringify(data, null, 1));
+////          });
+//    });
 
     //GET BY ID
 //    $("#get-btn").click(function () {
@@ -93,11 +93,11 @@ function addListenerGetBtn() {
 //    });
 
     //GET - SPECIAL QUERY - GET STUDENTS FOR EDUCATION X
-//    $("#get-btn").click(function () {
-//        STUDENT_REST.find(_findEduStud({name: 'suw18'}), function (data, textStatus, jqXHR) {
-//            $('#output').text(JSON.stringify(data, null, 1));
-//        });
-//    });
+    $("#get-btn").click(function () {
+        STUDENT_REST.find(_findEduStud({name: 'suw18'}), function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
 
     //GET - SPECIAL QUERY - GET BOOKINGS FOR EDUCATION X
 //     $("#get-btn").click(function () {
