@@ -5,7 +5,7 @@ module.exports = function JSONLoader(models) {
     this.teacherModel = this.models[2];
     this.bookingModel = this.models[3];
     this.classModel = this.models[4];
-    
+
     this.studentsJson = require('./students.json');
     this.educationsJson = require('./educations.json');
     this.teachersJson = require('./teachers.json');
@@ -14,19 +14,24 @@ module.exports = function JSONLoader(models) {
     this.loginsJson = require('./logins.json');
     this.accessJson = require('./access.json');
 
-    this.jsons = [this.studentsJson,this.educationsJson,this.teachersJson,this.bookingsJson,this.classroomsJson,this.loginsJson,this.accessJson];
-    
+    this.jsons = [this.studentsJson, this.educationsJson, this.teachersJson, this.bookingsJson, this.classroomsJson, this.loginsJson, this.accessJson];
 
-    this.fillData = function() {
+
+    this.fillData = function () {
         deleteAll(function (err, resp) {
             console.log(resp + " / " + err);
             //
             createFillSchemas(function (err, resp) {
                 console.log(resp + " / " + err);
                 //
-                bindKeys(function (err, resp) {
+                bindKeys(function () {
+
+                    bindCustom(function () {
+
+                    });
 
                 });
+
             });
         });
     };
@@ -52,6 +57,21 @@ module.exports = function JSONLoader(models) {
         });
     }
 
+    function bindCustom(cb) {
+        console.log("bind custom");
+        var me = this;
+        this.educationModel.findOne({name: 'suw16'}, function (err, edu) {
+            me.studentModel.findOne({epost: 'gmor@gmail.com'}, function (err, stud) {
+                stud._education = edu._id;
+                stud.save(function (err, doc) {
+//                    console.log("saved morge:", doc);
+                });
+            });
+
+        });
+
+    }
+
     function bindKeys(cb) {
         var me = this;
         //bind education to students
@@ -60,11 +80,19 @@ module.exports = function JSONLoader(models) {
                 studs.forEach(function (stud) {
                     var randomEdu = getRandom(educations);
                     stud._education = randomEdu._id;
-                    stud.save();
-                    console.log("A:_id set for: " + stud.name + " : " + randomEdu._id);
+                    stud.save(function (err, doc) {
+                        console.log("A:_id set for: " + stud.name + " : " + randomEdu._id);
+
+                    });
+
                 });
             });
+            cb();
         });
+
+
+
+
 
         //bind teachers to educations
 //        for(var i = 0; i < 2; i++){
@@ -92,7 +120,7 @@ module.exports = function JSONLoader(models) {
 //                });
 //            });
 //        });
-        
+
         //bind educations to booking 
 //        this.educationModel.find({}, function (err, educations) {
 //            me.bookingModel.find({}, function (err, bookings) {
@@ -104,7 +132,7 @@ module.exports = function JSONLoader(models) {
 //                });
 //            });
 //        });
-        
+
         //bind classrooms to booking 
 //        this.classModel.find({}, function (err, classrooms) {
 //            me.bookingModel.find({}, function (err, bookings) {
@@ -116,16 +144,16 @@ module.exports = function JSONLoader(models) {
 //                });
 //            });
 //        });
-        
+
     }
 
     function getRandom(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
     }
-    
-    
- 
-   //
-   return this;
+
+
+
+    //
+    return this;
 };
 
