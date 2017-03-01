@@ -600,18 +600,18 @@ function Table(
         return th_arr_b;
     };
 
-
+    this.table_invert;
+    
     this.transformTable = function () {
         var that = this;
         //
         var td_inverts_len = $('.' + this.uniquePrefix + '-invert-table>').children().length;
         //
-        var table_invert;
-        //
         if (td_inverts_len === 0) {
             table_invert = $("<div class='table-show-invert " + this.uniquePrefix + "-invert-table'>");
         } else {
-            table_invert = $('.' + this.uniquePrefix + '-invert-table>');
+//            table_invert = $('.' + this.uniquePrefix + '-invert-table>');
+//            console.log("Second: table_invert:",table_invert);
         }
         //
         var th_arr = $('.initial-th-' + this.uniquePrefix);
@@ -625,14 +625,13 @@ function Table(
         //
         $(tr_arr).each(function (i, tr) {
             var table_invert_entry = $("<div class='table-invert-entry'></div>");
-            $(table_invert_entry).addClass("table-invert-entry-" + that.uniquePrefix);
             var td_arr = $(tr).children('td');
 
             $(th_arr).each(function (x, th) {
                 var row_invert = $("<div class='row-invert'></div>");
                 //
                 var th_clone = th.cloneNode(true);
-                $(th_clone).removeClass('initial-th'); // OBS!
+                $(th_clone).removeClass('initial-th-' + that.uniquePrefix); // OBS!
                 $(row_invert).append(th_clone);
                 //
                 var td = $(td_arr[x]);
@@ -650,10 +649,11 @@ function Table(
             });
 
         });
-
+        
         // only at first attempt
         if (td_inverts_len === 0) {
             $(containerId).append(table_invert);
+             console.log("First: table_invert:",table_invert);
 
             var addNewBtn = $(".add-new-btn");
             that.canEdit ? $(containerId).prepend(addNewBtn) : undefined;
