@@ -120,7 +120,7 @@ function Table(
         var url;
         //
         this.specialUrl ? url = this.specialUrl : url = Table._find(this.searchOptions);
-
+        //
         this.REST.find(url, function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
                 //
@@ -609,9 +609,6 @@ function Table(
         //
         if (td_inverts_len === 0) {
             table_invert = $("<div class='table-show-invert " + this.uniquePrefix + "-invert-table'>");
-        } else {
-//            table_invert = $('.' + this.uniquePrefix + '-invert-table>');
-//            console.log("Second: table_invert:",table_invert);
         }
         //
         var th_arr = $('.initial-th-' + this.uniquePrefix);

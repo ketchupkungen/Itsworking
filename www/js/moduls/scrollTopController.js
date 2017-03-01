@@ -25,14 +25,16 @@ var IMAGE_PATH = "images/up.png";
  * @returns {undefined}
  */
 function addScrollTopListener() {
-    
+
     //OBS! Make sure that body, html is not set to height: 100%, use min-height instead
     $(window).on('scroll', function () {
-        if ($(window).scrollTop() > 400) {
+        if ($(window).scrollTop() > 800) {
             addScrollTopController();
-        } else if ($(window).scrollTop() === 0) {
+        } else if ($(window).scrollTop() < 400) {
             $("#scrollTopBtn").remove();
+            $("#scrollTopBtn").unbind('mouseenter mouseleave');
         }
+//        console.log("scroll top:",$(window).scrollTop());
     });
 
 
@@ -43,14 +45,23 @@ function addScrollTopListener() {
         //
         addEventScrollTopBtn();
         //
-        var html = "<img src='' alt='scrollToTop' id='scrollTopBtn'>";
-        var elem = $.parseHTML(html);
+        var elem = $("<img src='' alt='scrollToTop' id='scrollTopBtn'>");
+        $(elem).css('opacity', '0.5');
+        $(elem).css('cursor', 'pointer');
         $(elem).attr("src", IMAGE_PATH);
         $(elem).css("position", "fixed");
         $(elem).css("top", "80px");
         $(elem).css("right", "20px");
         $(elem).fadeIn(1000);
         $("body").append(elem);
+        //
+        $("#scrollTopBtn").mouseenter(function () {
+            $(this).css('opacity','1');
+        });
+        
+        $("#scrollTopBtn").mouseleave(function () {
+            $(this).css('opacity','0.5');
+        });
     }
 
     function addEventScrollTopBtn() {

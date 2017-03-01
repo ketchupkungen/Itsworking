@@ -54,7 +54,7 @@ if(mset.connect === 'true'){
     //Stop mongoose from using an old promise library
     mongoose.Promise = Promise;
     //
-    var Session = require('./session/session.model')(mongoose);
+    var Session = require('./session/models/session.model')(mongoose);
     this.app.use(new Sessionhandler(Session).middleware());
     //
     //Implements some basic functionality
@@ -65,7 +65,7 @@ if(mset.connect === 'true'){
     var teacherModel = require('./models/Teacher.model')(mongoose);
     var bookingModel = require('./models/Booking.model')(mongoose);
     var classModel = require('./models/Classroom.model')(mongoose);
-    var loginModel = require('./models/Login.model')(mongoose);
+    var loginModel = require('./session/models/login.model')(mongoose);
     var accessModel = require('./models/Access.model')(mongoose);
     global.accessModel = accessModel;
     //

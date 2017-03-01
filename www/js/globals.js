@@ -139,9 +139,10 @@ function createTablesAdmin() {
     );
 //
 //Adding 'select' options
-    TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5'], 'nr');
+    TABLE_ROOMS.addSelectOptions(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 'nr');
     TABLE_ROOMS.addSelectOptionsRest(CLASS_REST, {_fields: 'size', _sort: 'size', _skip: 0, _limit: 10}, 'size');
     TABLE_ROOMS.addSelectOptions(['true', 'false'], 'projector');
+//    TABLE_ROOMS.setShowAlwaysInvert();
 //
 //
     TABLE_TEACHER = new Table(
