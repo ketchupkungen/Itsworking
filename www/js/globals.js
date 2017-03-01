@@ -31,19 +31,6 @@ function openFirstPage() {
     });
 }
 //
-function show() {
-    getAccessLevel(function (level) {
-        if (level === 1) {//|| level === 3
-            showStudentInfo();
-        }
-        //
-        if (level === 3) {
-            createTablesAdmin();
-             TABLE_ACCESS.show(true);
-        }
-    });
-}
-//
 function loggedIn() {
     //
     $("body").empty();
@@ -51,25 +38,43 @@ function loggedIn() {
     //
     //
     getAccessLevel(function (level) {
-    console.log("ACCESS LEVEL:", level);
+        console.log("ACCESS LEVEL:", level);
 
         show();
 
-//        if (level < 3) {
-//            $('#access-admin-panel').css('display', 'none');
-//        }
-//        //
-//        if (level < 2) {
-//            $('#access-booking-panel').css('display', 'none');
-//        }
+        if (level < 3) {
+            $('#access-admin-panel').css('display', 'none');
+        }
+        //
+        if (level < 2) {
+            $('#access-booking-panel').css('display', 'none');
+        }
     });
 }
+//
+function show() {
+    getAccessLevel(function (level) {
+        if (level === 1) {//|| level === 3
+            showStudentInfo();
+        }
+        //
+        if (level === 2) {
+            displayBookedRooms();
+        }
+        //
+        if (level === 3) {
+            createTablesAdmin();
+            TABLE_ACCESS.show(true);
+        }
+    });
+}
+//
 
 
 function showStudentInfo() {
     getLoggedInEducation(function (actEdu) {
         console.log("act edu:", actEdu);
-        BOOKING_TABLE_CLASS = new Table(
+        var BOOKING_TABLE_CLASS = new Table(
                 'booking',
                 false,
                 BOOKING_REST,
@@ -85,7 +90,7 @@ function showStudentInfo() {
 
     setTimeout(function () {
         getLoggedInEducation(function (actEdu) {
-            STUD_EDU_TABLE = new Table(
+            var STUD_EDU_TABLE = new Table(
                     'studedu',
                     false,
                     STUDENT_REST,
@@ -100,6 +105,25 @@ function showStudentInfo() {
             STUD_EDU_TABLE.show(true);
         });
     }, 100);
+
+    setTimeout(function () {
+        getLoggedInEducation(function (actEdu) {
+            var TEACH_EDU_TABLE = new Table(
+                    'teachedu',
+                    false,
+                    TEACHERS_REST,
+                    'Dina lärare',
+                    '#start-page-content-c',
+                    ['Namn', 'epost'],
+                    ['name', 'epost'],
+                    {_fields: '', _sort: '', _skip: 0, _limit: 1}
+            );
+            TEACH_EDU_TABLE.setSpecialUrl(_findEduTeach({name: actEdu}));
+            TEACH_EDU_TABLE.setShowAlwaysInvert();
+            TEACH_EDU_TABLE.show(true);
+        });
+    }, 500);
+
 }
 
 function createTablesAdmin() {
@@ -332,6 +356,10 @@ function _find(obj) {
     return "find/" + JSON.stringify(obj);
 }
 
+function _findEduTeach(obj) {
+    return "findEduTeach/" + JSON.stringify(obj);
+}
+
 function _findEduStud(obj) {
     return "findEduStud/" + JSON.stringify(obj);
 }
@@ -396,56 +424,7 @@ $(document).ready(function () {
     addEventAdminModalPreviewElem();
 });
 
-/**
- * Automates preview of elements
- * @returns {undefined}
- */
-function addEventAdminModalPreviewElem() {
-    $('body').on("click", ".admin-modal-preview", function (e) {
-        e.stopPropagation();
-        var id = $(this).data('_id');
-        var rest = $(this).data('rest');
-        //
-        findById(rest, id, function (data) {
-            var cont = $("<div class='admin-modal-auto'></div>");
-            //
-            $.each(data, function (name, value) {
-                if (name.indexOf('_id') >= 0 || name.indexOf('__v') >= 0) {
-                    return true;
-                }
-                //
-                if (Array.isArray(value) === false) {
-                    var pName = $("<h3>" + name + "</h3>");
-                    var pValue = $("<p>" + value + "</p>");
-                    $(cont).append(pName);
-                    $(cont).append(pValue);
-                } else { //is array
-                    //Populating...
-                    $(value).each(function (index, value_) {
-                        //
-                        $(cont).append('<hr>');
-                        $.each(value_, function (key, val) {
-                            //
-                            if (Array.isArray(val) || key.indexOf('_id') >= 0 || key.indexOf('__v') >= 0) {
-                                return true;
-                            }
-                            //
-                            var pName = $("<h4>" + key + "</h4>");
-                            var pValue = $("<p>" + val + "</p>");
-                            $(cont).append(pName);
-                            $(cont).append(pValue);
-                        });
-                    });
-                    return true;
-                }
-                //
 
-            });
-
-            showInfoModal('', '', cont);
-        });
-    });
-}
 
 
 

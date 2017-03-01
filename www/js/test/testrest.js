@@ -12,6 +12,20 @@ $(document).ready(function () {
     addListenerGetLoginStatusBtn();
 });
 
+var STUDENT_REST = new REST('student');
+var EDUCATION_REST = new REST('edu');
+var TEACHERS_REST = new REST('teach');
+var BOOKING_REST = new REST('book');
+var CLASS_REST = new REST('class');
+var LOGIN_SHEMA_REST = new REST('shemalogin'); // make adjustments to the shema, not the login operations
+var ACCESS_REST = new REST('access');
+//
+var LOGIN_REST = new REST('login'); // FOR THE LOGIN OPERATIONS -> loginhandler.class.js
+
+
+
+
+
 //CREATE
 function addListenerPostBtn() {
 
@@ -51,14 +65,14 @@ function addListenerPutBtn() {
 function addListenerGetBtn() {
     //GET WITH OPTIONS  -- IMPORTANT
     $("#get-options-btn").click(function () {
-        STUDENT_REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 3}), function (data, textStatus, jqXHR) {
+        TEACHERS_REST.find(_find({_fields: '', _sort: 'name', _skip: 0, _limit: 0}), function (data, textStatus, jqXHR) {
             $('#output').text(JSON.stringify(data, null, 1));
         });
     });
 
     //GET ALL
 //    $("#get-btn").click(function () {
-//        ACCESS_REST.find('',function (data, textStatus, jqXHR) {
+//        EDUCATION_REST.find('',function (data, textStatus, jqXHR) {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
@@ -93,11 +107,11 @@ function addListenerGetBtn() {
 //    });
 
     //GET - SPECIAL QUERY - GET STUDENTS FOR EDUCATION X
-    $("#get-btn").click(function () {
-        STUDENT_REST.find(_findEduStud({name: 'suw18'}), function (data, textStatus, jqXHR) {
-            $('#output').text(JSON.stringify(data, null, 1));
-        });
-    });
+//    $("#get-btn").click(function () {
+//        STUDENT_REST.find(_findEduStud({name: 'suw18'}), function (data, textStatus, jqXHR) {
+//            $('#output').text(JSON.stringify(data, null, 1));
+//        });
+//    });
     
     
 
@@ -107,6 +121,13 @@ function addListenerGetBtn() {
 //            $('#output').text(JSON.stringify(data, null, 1));
 //        });
 //    });
+
+    //GET - SPECIAL QUERY - GET TEACHERS FOR EDUCATION X
+     $("#get-btn").click(function () {
+        TEACHERS_REST.find(_findEduTeach({name: 'suw18'}), function (data, textStatus, jqXHR) {
+            $('#output').text(JSON.stringify(data, null, 1));
+        });
+    });
 }
 
 
@@ -139,6 +160,10 @@ function _find(obj) {
     return "find/" + JSON.stringify(obj);
 }
 
+function _findEduTeach(obj) {
+    return "findEduTeach/" + JSON.stringify(obj);
+}
+
 function _findEduStud(obj) {
     return "findEduStud/" + JSON.stringify(obj);
 }
@@ -146,6 +171,7 @@ function _findEduStud(obj) {
 function _findEduBook(obj) {
     return "findEduBook/" + JSON.stringify(obj);
 }
+
 
 //==============================================================================
 

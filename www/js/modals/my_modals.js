@@ -179,6 +179,59 @@ function showConfirmModal(title, infoMsg, size, type, cb) {
 
 //------------------------------------------------------------------------------
 
+/**
+ * Automates preview of elements
+ * @returns {undefined}
+ */
+function addEventAdminModalPreviewElem() {
+    $('body').on("click", ".admin-modal-preview", function (e) {
+        e.stopPropagation();
+        var id = $(this).data('_id');
+        var rest = $(this).data('rest');
+        //
+        findById(rest, id, function (data) {
+            var cont = $("<div class='admin-modal-auto'></div>");
+            //
+            $.each(data, function (name, value) {
+                if (name.indexOf('_id') >= 0 || name.indexOf('__v') >= 0) {
+                    return true;
+                }
+                //
+                if (Array.isArray(value) === false) {
+                    var pName = $("<h3>" + name + "</h3>");
+                    var pValue = $("<p>" + value + "</p>");
+                    $(cont).append(pName);
+                    $(cont).append(pValue);
+                } else { //is array
+                    //Populating...
+                    $(value).each(function (index, value_) {
+                        //
+                        $(cont).append('<hr>');
+                        $.each(value_, function (key, val) {
+                            //
+                            if (Array.isArray(val) || key.indexOf('_id') >= 0 || key.indexOf('__v') >= 0) {
+                                return true;
+                            }
+                            //
+                            var pName = $("<h4>" + key + "</h4>");
+                            var pValue = $("<p>" + val + "</p>");
+                            $(cont).append(pName);
+                            $(cont).append(pValue);
+                        });
+                    });
+                    return true;
+                }
+                //
+
+            });
+
+            showInfoModal('', '', cont);
+        });
+    });
+}
+
+
+
 //function loadTemplate(url) {
 //    //
 //    var html = $.ajax({

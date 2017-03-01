@@ -125,6 +125,7 @@ function Table(
             $(data).each(function (i, value) {
                 //
                 var tr = $("<tr class='tbody-tr'>");
+                $(tr).addClass(that.uniquePrefix + "-tbody-tr");
                 //
                 that.buildRegular(value, tr);
                 //
@@ -158,7 +159,7 @@ function Table(
     this.maxTDinTR = 0;
 
     this.fillAllEmptyTrElems = function () {
-        var trArr = $('.tbody-tr');
+        var trArr = $("."+this.uniquePrefix + "-tbody-tr");
         maxTDinTR = this.findMaxTdInTr();
 
 
@@ -313,7 +314,7 @@ function Table(
 
 
     this.findMaxTdInTr = function () {
-        var trArr = $('.tbody-tr');
+        var trArr = $("."+this.uniquePrefix + "-tbody-tr");
         var max = 0;
         for (var i = 0; i < trArr.length; i++) {
             var ammount = $(trArr[i]).children('td').length;
@@ -534,6 +535,7 @@ function Table(
 
     this.setTableTitle = function () {
         var h3 = $(this.template).find('#table-title');
+        $(h3).addClass(this.uniquePrefix + "-table-title");
         $(h3).text(this.tableTitle);
     };
 
@@ -612,11 +614,18 @@ function Table(
             table_invert = $('.' + this.uniquePrefix + '-invert-table>');
         }
         //
-        var th_arr = $('.initial-th-' + that.uniquePrefix);
-        var tr_arr = $('.tbody-tr');
+        var th_arr = $('.initial-th-' + this.uniquePrefix);
+        //
+        if (this.maxTDinTR === 0) {
+            this.addTitleInvert();
+            return;
+        }
+        //
+        var tr_arr = $("."+this.uniquePrefix + "-tbody-tr");
         //
         $(tr_arr).each(function (i, tr) {
             var table_invert_entry = $("<div class='table-invert-entry'></div>");
+            $(table_invert_entry).addClass("table-invert-entry-" + that.uniquePrefix);
             var td_arr = $(tr).children('td');
 
             $(th_arr).each(function (x, th) {
@@ -648,13 +657,19 @@ function Table(
 
             var addNewBtn = $(".add-new-btn");
             that.canEdit ? $(containerId).prepend(addNewBtn) : undefined;
-
-            var title = $("#table-title");
-            $(containerId).prepend(title);
+            
+            this.addTitleInvert();
         }
         //
         this.removeEmptyRowsPopulation();
         //
+    };
+    
+    
+
+    this.addTitleInvert = function () {
+        var title = $("." + this.uniquePrefix + "-table-title");
+        $(containerId).prepend(title);
     };
 
     this.removeEmptyRowsPopulation = function () {
