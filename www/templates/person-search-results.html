@@ -1,18 +1,21 @@
 <div class="search-results">
+
     [repeat pages, no, results]
         <button 
             [if currentPage == no]style="background-color:teal"[endif]
             class="button btn goto-a-search-result-page">${no/1 + 1}
         </button>
     [endrepeat]
-    <div class="vertical-spacer"></div>    
+
+    <div class="vertical-spacer"></div>  
+
     [repeat pages, no, results]
         <div class="search-result-page" style="display:[if currentPage == no]block[else]none[endif]">
             [repeat results, result]
             <div class="well">
-                <div>Name: ${result.name}</div>
-                <div>Name: ${result.epost}</div>
-                <div>Name: ${result.pnr}</div>
+                <div>Namn: ${result.name}</div>
+                <div>Epost: ${result.epost}</div>
+                <div>Personnummer: ${result.pnr}</div>
             </div>
             [endrepeat]
         </div>
@@ -24,6 +27,5 @@
             class="button btn goto-a-search-result-page">${no/1 + 1}
         </button>
     [endrepeat]
-
 
 </div>
