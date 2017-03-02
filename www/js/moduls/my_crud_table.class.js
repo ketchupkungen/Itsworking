@@ -650,7 +650,6 @@ function Table(
         // only at first attempt
         if (td_inverts_len === 0) {
             $(containerId).append(table_invert);
-             console.log("First: table_invert:",table_invert);
 
             var addNewBtn = $(".add-new-btn");
             that.canEdit ? $(containerId).prepend(addNewBtn) : undefined;

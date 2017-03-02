@@ -1,3 +1,4 @@
+console.log = function() {};
 //
 var STUDENT_REST = new REST('student');
 var EDUCATION_REST = new REST('edu');
@@ -36,6 +37,7 @@ function loggedIn() {
     $("body").empty();
     $('body').template('basiclayout', {email: "något@något.com"});
     //
+    setWelcomeTitle();
     //
     getAccessLevel(function (level) {
         console.log("ACCESS LEVEL:", level);
@@ -51,6 +53,17 @@ function loggedIn() {
         }
     });
 }
+
+function setWelcomeTitle() {
+
+    getLoggedInUserName(function (name) {
+        console.log("NAMEEE",name);
+        var wt = $('#welcome');
+        name ? $(wt).text("Välkommen " + name) : undefined;
+    });
+
+}
+
 //
 function show() {
     getAccessLevel(function (level) {
@@ -184,8 +197,8 @@ function createTablesAdmin() {
             LOGIN_SHEMA_REST,
             'Administrera inloggningar',
             '#content-main',
-            ['Pnr', 'Epost', 'Nivå'],
-            ['pnr', 'epost', 'level'],
+            ['Pnr', 'Epost', 'Nivå', 'Lösenord'],
+            ['pnr', 'epost', 'level', 'password'],
             {_fields: '', _sort: 'level', _skip: 0, _limit: 15},
             'pnr'
             );
