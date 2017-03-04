@@ -2,10 +2,10 @@ module.exports = function (mongoose) {
 
     var shema = mongoose.Schema({
         basicroute:  {type:String,required: true},
-        get_:    {type:Number,min: 1, max: 3, default:1},
-        post_:   {type:Number,min: 1, max: 3, default:2},
-        put_:    {type:Number,min: 1, max: 3, default:2},
-        delete_: {type:Number,min: 1, max: 3, default:3}
+        get_:    {type:Number,min: 0, max: 3, default:1},
+        post_:   {type:Number,min: 0, max: 3, default:2},
+        put_:    {type:Number,min: 0, max: 3, default:2},
+        delete_: {type:Number,min: 0, max: 3, default:3}
         
     },
        {collection: 'access'} // sets the name of Collection in Database
