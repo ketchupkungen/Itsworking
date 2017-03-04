@@ -18,22 +18,22 @@ module.exports = function JSONLoader(models) {
 
 
     this.fillData = function () {
-//        deleteAll(function (err, resp) {
-//            console.log(resp + " / " + err);
-//            //
-//            createFillSchemas(function (err, resp) {
-//                console.log(resp + " / " + err);
-//                //
-//                bindKeys(function () {
-//
-//                    bindCustom(function () {
-//
-//                    });
-//
-//                });
-//
-//            });
-//        });
+        deleteAll(function (err, resp) {
+            console.log(resp + " / " + err);
+            //
+            createFillSchemas(function (err, resp) {
+                console.log(resp + " / " + err);
+                //
+                bindKeys(function () {
+
+                    bindCustom(function () {
+
+                    });
+
+                });
+
+            });
+        });
     };
 
     function deleteAll(cb) {
