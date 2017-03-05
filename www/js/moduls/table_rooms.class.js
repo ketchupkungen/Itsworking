@@ -6,13 +6,19 @@ class RoomTable extends Table {
     
     super(uniquePrefix,rest,tableTitle,containerId,headersArr,fieldsArr,searchOptions,modalPreviewCol,populate,fieldsHeadersSettingsPop,modalPreviewColPop);
   
-//      this.show = show;
-  
     }
   
   
   show(){
+//    super.show();
      console.log("extended");
+  }
+  
+  this.colNewElemMap = {};
+  
+  
+  setAddNewElementColumn(colName,elemToShow){
+      this.colNewElemMap[colName] = elemToShow;
   }
   
   

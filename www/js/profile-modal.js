@@ -11,17 +11,22 @@ $(document).on('click','.status-menu-choice',function(){
 		// (unless the relation is supposed to be identical emails in the
 		// login collection and the teacher/student collections..?)
 		// data.user.epost data.user.pnr data.user.level etc.
-		showModal(data.user); 
+		showModal(data.user);
 
 	});
 
 	function showModal(userData){
 
-		$('body').template('profile-modal',{
-			name: "?",
-			birthday: userData.pnr,
-			email: userData.epost,
-			education: "?"
+		getLoggedInEducation(function (education) {
+            getLoggedInUserName(function (getName) {
+			
+				$('body').template('profile-modal',{
+					name: getName,
+					birthday: userData.pnr,
+					email: userData.epost,
+					education: education
+				});
+			});
 		});
 
 		$('#profile-modal').modal('show');

@@ -355,7 +355,6 @@ function Table(
         this.buildCreateInput(function (input) {
             showInputModalB("Create new", "", input, 'sm', function (modalInput) {
                 if (!modalInput) {
-
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {

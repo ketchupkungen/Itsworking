@@ -46,6 +46,7 @@ function initializeHistoryRouter() {
         '/classroom-admin': function () {
 //            adminDisplayRooms();
             TABLE_ROOMS.show(true);
+            
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -87,7 +88,6 @@ function initializeHistoryRouter() {
         },
         '/profile-link': function () {
             showUserProfile();
-            //openLink("#content-main", "templates/userProfile.html");
         },
         '/thompa': function () {
             openLinkAlternate("#content-main", "example-template", {
