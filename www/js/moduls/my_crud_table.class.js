@@ -1,5 +1,6 @@
 function Table(
         uniquePrefix,
+        canEdit,
         rest,
         tableTitle,
         containerId,
@@ -14,6 +15,7 @@ function Table(
 
     this.REST = rest;
     this.uniquePrefix = uniquePrefix;
+    this.canEdit = canEdit;
     this.tableTitle = tableTitle;
     this.containerId = containerId; // the container where the table is inserted
     this.headers = headersArr;
@@ -31,17 +33,27 @@ function Table(
     this.offset = 0;
     this.initialLimit = searchOptions._limit;
     this.limit = 0;
+    this.newElemMap = {};
+    this.specialUrl;
+    this.alwaysInvert;
 
+    this.setShowAlwaysInvert = function () {
+        this.alwaysInvert = true;
+    };
 
     Table.prototype.show = function (initial) {
         var that = this;
+        this.maxPopDepth = 0;
+
+        if (this.alwaysInvert) {
+            that.showInvert();
+            return;
+        }
 
         if (initial) {
             this.SHOW_INVERT = false;
             this.SHOW_NORMAL = false;
         }
-
-        this.maxPopDepth = 0;
 
         check();
 
@@ -90,17 +102,30 @@ function Table(
         $(this.containerId).append(this.template);
     };
 
+    //#STATIC
+    Table._find = function (obj) {
+        return "find/" + JSON.stringify(obj);
+    };
+
+    this.setSpecialUrl = function (specialUrl) {
+        this.specialUrl = specialUrl;
+    };
 
     this.buildTable = function () {
         var that = this;
         var table = $(this.template).find('table');
         var tbody = $(this.template).find('tbody');
         $(this.template).find('table').addClass('.' + this.uniquePrefix + '-table');
-
-        this.REST.find(_find(this.searchOptions), function (data, textStatus, jqXHR) {
+        //
+        var url;
+        //
+        this.specialUrl ? url = this.specialUrl : url = Table._find(this.searchOptions);
+        //
+        this.REST.find(url, function (data, textStatus, jqXHR) {
             $(data).each(function (i, value) {
                 //
                 var tr = $("<tr class='tbody-tr'>");
+                $(tr).addClass(that.uniquePrefix + "-tbody-tr");
                 //
                 that.buildRegular(value, tr);
                 //
@@ -134,7 +159,7 @@ function Table(
     this.maxTDinTR = 0;
 
     this.fillAllEmptyTrElems = function () {
-        var trArr = $('.tbody-tr');
+        var trArr = $("."+this.uniquePrefix + "-tbody-tr");
         maxTDinTR = this.findMaxTdInTr();
 
 
@@ -184,10 +209,11 @@ function Table(
 
 
     this.addTableHeadersIfPopulated = function () {
+        var that = this;
         var thead_tr = $(this.template).find('#thead-tr');
         $.each(this.fieldsHeadersSettingsPop, function (colName, colHeader) {
             var th = $("<th class='th-population'>");
-            $(th).addClass('initial-th');
+            $(th).addClass('initial-th-' + that.uniquePrefix);
             $(th).append(colHeader);
             $(thead_tr).append(th);
         });
@@ -216,6 +242,10 @@ function Table(
 
 
     this.monitorLastRowVisible = function (uniquePrefix, that) {
+        if (this.canEdit === false) {
+            return;
+        }
+
         var last_tr = '.last-tr-' + uniquePrefix;
         var last_tr_invert = '.last-tr-invert-' + uniquePrefix;
 
@@ -284,7 +314,7 @@ function Table(
 
 
     this.findMaxTdInTr = function () {
-        var trArr = $('.tbody-tr');
+        var trArr = $("."+this.uniquePrefix + "-tbody-tr");
         var max = 0;
         for (var i = 0; i < trArr.length; i++) {
             var ammount = $(trArr[i]).children('td').length;
@@ -300,6 +330,11 @@ function Table(
     //This is launched only once uppon instantiation of class
     this.setListeners = function () {
         var that = this;
+        //
+        if (canEdit === false) {
+            return;
+        }
+        //
         $(document).ready(function () {
             //=============
             $('body').on('click', "." + that.EDIT, function () {
@@ -332,6 +367,7 @@ function Table(
         });
     };
 
+
     this.sort_asc = true;
     this.sort_map = {};
 
@@ -349,6 +385,42 @@ function Table(
         this.show(true);
     };
 
+    //#Static
+    Table.buildComboRest = function (rest, searchParams, colName, cb) {
+        rest.find(_find(searchParams), function (data, textStatus, jqXHR) {
+            var select = $('<select></select>');
+            $(data).each(function (index, obj) {
+                var option = $('<option value="' + obj[colName] + '">' + obj[colName] + "</option>");
+                $(select).append(option);
+            });
+            cb(select);
+        });
+    };
+
+    //#Static
+    Table.buildComboManual = function (arr, cb) {
+        var select = $('<select></select>');
+        $(arr).each(function (index, item) {
+            var option = $('<option value="' + item + '">' + item + "</option>");
+            $(select).append(option);
+        });
+        cb(select);
+    };
+
+    this.addSelectOptions = function (arr, colName) {
+        var that = this;
+        Table.buildComboManual(arr, function (elem) {
+            that.newElemMap[colName] = elem;
+        });
+    };
+
+    this.addSelectOptionsRest = function (rest, searchParams, colName) {
+        var that = this;
+        Table.buildComboRest(rest, searchParams, colName, function (elem) {
+            that.newElemMap[colName] = elem;
+        });
+    };
+
     this.create = function () {
         var that = this;
         var updateSettings = {};
@@ -358,7 +430,15 @@ function Table(
                     return;
                 }
                 $(that.fieldsArr).each(function (i, colName) {
-                    updateSettings[colName] = modalInput.find("#" + colName).val();
+
+                    if (modalInput.find("#" + colName).is('input')) {
+                        updateSettings[colName] = modalInput.find("#" + colName).val();
+                    } else if (modalInput.find("#" + colName).is('div')) {
+                        //
+                        if (modalInput.find("#" + colName).children('.special-input').length > 0) {
+                            updateSettings[colName] = modalInput.find("#" + colName).find('select').val();
+                        }
+                    }
 
                     console.log("settings: ", updateSettings);
                 });
@@ -375,11 +455,22 @@ function Table(
         var that = this;
         var form = $("<form class='table-basic-auto-create-form'>");
         $(this.fieldsArr).each(function (i, colName) {
+            //
             $(form).append("<p>" + that.headers[i] + "</p>");
-            $(form).append("<input type='text' id='" + colName + "'>");
+            //
+            if (that.newElemMap[colName]) {
+                var specialInput = $("<div id='" + colName + "'></div>");
+                $(that.newElemMap[colName]).addClass('special-input');
+                $(specialInput).append(that.newElemMap[colName]);
+                $(form).append(specialInput);
+            } else {
+                $(form).append("<input type='text' id='" + colName + "'>");
+            }
+            //
         });
         cb(form);
     };
+
 
     this.delete = function (_id) {
         var that = this;
@@ -397,21 +488,40 @@ function Table(
         });
     };
 
-    this.edit = function (_id, col, value) {
+    this.edit = function (_id, colName, value) {
         var that = this;
-//        console.log("td clicked:" + _id + " / " + col + " / " + value);
-
+        //
         var updateSetting = {};
-        var input = $("<input type='text' class='text-input' value='" + value + "'>");
-
-        showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (response) {
+        var input;
+        //
+        if (that.newElemMap[colName]) {
+            $(that.newElemMap[colName]).addClass('special-input');
+            input = that.newElemMap[colName];
+        } else {
+            input = $("<input type='text' class='text-input' value='" + value + "'>");
+        }
+        //
+        //
+        showCrudEditDeleteModal("Edit/Delete", "", input, 'sm', function (modalInput) {
             //
-            if (response === 'delete') {
-                that.delete(_id);
+            if (modalInput === false) {
+                return;
             }
             //
-            var input = $(response).find('.text-input').val();
-            updateSetting[col] = input;
+            if (modalInput === 'delete') {
+                that.delete(_id);
+                return;
+            }
+            //
+            var input;
+            //
+            if (modalInput.find('.special-input').length === 1) {
+                input = modalInput.find('.special-input').val();
+            } else {
+                input = $(modalInput).find('.text-input').val();
+            }
+            //
+            updateSetting[colName] = input;
             //
             if (input) {
                 that.REST.update(_id, updateSetting, function (data, textStatus, jqXHR) {
@@ -425,6 +535,7 @@ function Table(
 
     this.setTableTitle = function () {
         var h3 = $(this.template).find('#table-title');
+        $(h3).addClass(this.uniquePrefix + "-table-title");
         $(h3).text(this.tableTitle);
     };
 
@@ -443,7 +554,7 @@ function Table(
 
         $(this.headers).each(function (index, value) {
             var th = $("<th class=th-" + that.uniquePrefix + ">");
-            $(th).addClass('initial-th');
+            $(th).addClass('initial-th-' + that.uniquePrefix);
             var col = that.headersFieldsMap[value];
             $(th).attr('col', col);
             $(th).append(value);
@@ -489,22 +600,25 @@ function Table(
         return th_arr_b;
     };
 
-
+    this.table_invert;
+    
     this.transformTable = function () {
         var that = this;
         //
-        var td_inverts_len = $('.table-show-invert').children().length;
-        //
-        var table_invert;
+        var td_inverts_len = $('.' + this.uniquePrefix + '-invert-table>').children().length;
         //
         if (td_inverts_len === 0) {
-            table_invert = $("<div class='table-show-invert' " + this.uniquePrefix + '-invert-table>');
-        } else {
-            table_invert = $('.table-show-invert');
+            table_invert = $("<div class='table-show-invert " + this.uniquePrefix + "-invert-table'>");
         }
         //
-        var th_arr = $('.initial-th');
-        var tr_arr = $('.tbody-tr');
+        var th_arr = $('.initial-th-' + this.uniquePrefix);
+        //
+        if (this.maxTDinTR === 0) {
+            this.addTitleInvert();
+            return;
+        }
+        //
+        var tr_arr = $("."+this.uniquePrefix + "-tbody-tr");
         //
         $(tr_arr).each(function (i, tr) {
             var table_invert_entry = $("<div class='table-invert-entry'></div>");
@@ -514,11 +628,11 @@ function Table(
                 var row_invert = $("<div class='row-invert'></div>");
                 //
                 var th_clone = th.cloneNode(true);
-                $(th_clone).removeClass('initial-th'); // OBS!
+                $(th_clone).removeClass('initial-th-' + that.uniquePrefix); // OBS!
                 $(row_invert).append(th_clone);
                 //
                 var td = $(td_arr[x]);
-                $(td).addClass('td-invert');
+                $(td).addClass(that.uniquePrefix + '-td-invert');
                 $(row_invert).append(td);
                 //
                 $(table_invert_entry).append(row_invert);
@@ -532,20 +646,26 @@ function Table(
             });
 
         });
-
+        
         // only at first attempt
         if (td_inverts_len === 0) {
-            $("#content-main").append(table_invert);
+            $(containerId).append(table_invert);
 
             var addNewBtn = $(".add-new-btn");
-            $("#content-main").prepend(addNewBtn);
-
-            var title = $("#table-title");
-            $("#content-main").prepend(title);
+            that.canEdit ? $(containerId).prepend(addNewBtn) : undefined;
+            
+            this.addTitleInvert();
         }
         //
         this.removeEmptyRowsPopulation();
         //
+    };
+    
+    
+
+    this.addTitleInvert = function () {
+        var title = $("." + this.uniquePrefix + "-table-title");
+        $(containerId).prepend(title);
     };
 
     this.removeEmptyRowsPopulation = function () {
@@ -558,6 +678,7 @@ function Table(
     };
 
     //==========================================================================
+
     function scrolledToView(selector) {
         var docViewTop = $(window).scrollTop();
         var docViewBottom = docViewTop + $(window).height();

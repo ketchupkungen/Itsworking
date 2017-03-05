@@ -2,36 +2,44 @@
     {
         "name": "Tomas Klank",
         "education": "suw17",
-        "classroom": "1"
+        "classroom": "1",
+        "date":"2017-02-23"
     },
     {
         "name": "Benjamin Svensson",
-        "education": "suw16",
-        "classroom": "2"
+        "education": "suw18",
+        "classroom": "2",
+        "date":"2017-02-24"
     },
     {
         "name": "Benjamin Andersson",
         "education": "suw16",
-        "classroom": "3"
+        "classroom": "3",
+        "date":"2017-02-25"
     },
-    {
-        "name": "Tomas Frank",
-        "education": "suw18",
-        "classroom": "7"
-    },
+    
     {
         "name": "Kristin Andersson",
-        "education": "suw16",
-        "classroom": "3"
+        "education": "suw18",
+        "classroom": "3",
+        "date":"2017-02-26"
     },
     {
         "name": "Kalle Ohlsson",
         "education": "suw16",
-        "classroom": "6"
+        "classroom": "6",
+        "date":"2017-02-27"
     },
     {
         "name": "Stefan Andersson",
         "education": "suw16",
-        "classroom": "8"
+        "classroom": "8",
+         "date":"2017-02-28"
+    },
+    {
+        "name": "Tomas Frank",
+        "education": "suw16",
+        "classroom": "7",
+        "date":"2017-03-01"
     }
 ]

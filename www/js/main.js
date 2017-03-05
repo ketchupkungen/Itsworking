@@ -44,9 +44,8 @@ function initializeHistoryRouter() {
     // '/status-link' is a href of <a> tag
     new HistoryRouter({
         '/classroom-admin': function () {
-//            adminDisplayRooms();
             TABLE_ROOMS.show(true);
-            
+//            STUD_EDU_TABLE.show(true);
         },
         '/education-admin': function () {
             adminDisplayEducations();
@@ -98,19 +97,7 @@ function initializeHistoryRouter() {
 
     });
 
-    /*    // Example of rewriting openLink to use Thomas' templating system
-     function openLinkAlternate(selector,templateName,data){
-     
-     
-     // wait for the selector / (#content-main) to be available - ugly hack
-     // what we should do is add things to dom in the right order
-     if($(selector).length === 0){
-     setTimeout(()=>{openLinkAlternate(selector,templateName,data)},20);
-     }
-     
-     $(selector).empty().template(templateName,data);
-     }
-     */
+    
     function openLink(contentId, templatePath) {
         $(contentId).empty();
         includeHtml(templatePath, contentId);
@@ -121,8 +108,7 @@ function initializeHistoryRouter() {
 function go() {
     addEventLoginBtn();
     addEventLogOutBtn();
-    openFirstPage();
-
+    
 
     function addEventLogOutBtn() {
         $("body").on("click", "#log-out-btn-one", function (evt) {
@@ -147,7 +133,7 @@ function go() {
         });
     }
 }
-
+/*
 function initMenuItemClick() {
 
     // click on menu item
@@ -184,3 +170,5 @@ function hideMenu () {
      console.log('bob');
      });
 }
+
+*/

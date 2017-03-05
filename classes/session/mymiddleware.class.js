@@ -1,5 +1,4 @@
 'use strict';
-
 module.exports = class Mymiddleware {
     
   constructor(express){
@@ -54,4 +53,4 @@ module.exports = class Mymiddleware {
 //    });
 //  }
   
-}
+};
